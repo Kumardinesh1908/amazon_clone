@@ -5,6 +5,8 @@ import bannerImgThree from "./banner/bannerImgThree.jpg";
 import bannerImgFour from "./banner/bannerImgFour.jpg";
 import bannerImgFive from "./banner/bannerImgFive.jpg";
 import bdFlag from "./bdFlag.webp";
+import location from "./location.png"
+import shopping from "./shopping.png"
 
 export {
   logo,
@@ -14,4 +16,6 @@ export {
   bannerImgFour,
   bannerImgFive,
   bdFlag,
+  location,
+  shopping
 };

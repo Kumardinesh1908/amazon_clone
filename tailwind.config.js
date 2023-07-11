@@ -9,6 +9,7 @@ module.exports = {
         container : "1440px",
       },
       fontFamily :{
+        amazonFont : "amazon-ember",
         titleFont : "Roboto",
         bodyFont : "Poppins",
       },
@@ -23,7 +24,8 @@ module.exports = {
         xl :"1280px",
       },
       colors:{
-        amazon_light : "#232F3E",
+        amazon_light : "rgb(35,47,62)",
+        amazon_black : "rgb(19,25,33)",
         amazon_yellow : "#febd69",
         whiteText : "#ffffff",
         lightText : "#ccc",
