@@ -1,14 +1,26 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState } from 'react';
+import { useState,useEffect,useRef } from 'react';
+import { user } from '../assets';
+import { close } from '../assets';
 import SideNavContent from './sideNavContent';
+import { motion } from "framer-motion"
 
 export default function HeaderBottom() {
     const [sideBar, setSidebar] = useState(false);
+    const ref = useRef(null);
 
-    const handleClose=()=>{
+    const handleClose = () => {
         setSidebar(false);
     }
-    
+
+    useEffect(() => {
+        document.body.addEventListener("click", (e) => {
+            if (e.target.contains(ref.current)) {
+                setSidebar(false)
+            }
+        })
+    }, [ref, sideBar]);
+
     return (
         <div className="w-full px-4 h-[40px] flex items-center bg-amazon_light text-white">
 
@@ -34,7 +46,26 @@ export default function HeaderBottom() {
 
             {/* Side Navbar Component call starts*/}
             {
-                sideBar && ( <SideNavContent handleClose={handleClose} /> )
+                sideBar && (
+                    <div className='w-full h-full text-black fixed top-0 left-0  bg-amazon_black bg-opacity-90'>
+                        {/* <div className='w-full h-full relative '> */}
+                            <motion.div initial={{ x: -500, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -500, opacity: 0 }} transition={{ duration: 0.5 }} className='w-[365px] h-full bg-white'
+                            ref={ref}
+                            >
+                                <div className='bg-amazon_light cursor-pointer  text-white py-[11px] px-[36px] flex items-center gap-3'>
+                                    <img className="w-[26px]" src={user} alt='user' />
+                                    <h3 className='font-titleFont font-bold text-lg tracking-wider'>Hello, sign in</h3>
+                                </div>
+                                <SideNavContent />
+                                <span
+                                    onClick={handleClose} className='cursor-pointer absolute top-5 left-[380px] w-5 h-5
+          text-white flex items-center justify-center'>
+                                    <img src={close} alt="close" />
+                                </span>
+                            </motion.div>
+                        {/* </div> */}
+                    </div>
+                    )
             }
             {/* Side Navbar Component call ends */}
 
