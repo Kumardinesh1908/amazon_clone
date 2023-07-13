@@ -35,3 +35,35 @@ export const allItems = [
     {_id:34,title: "Watches"}
     
 ];
+
+export const sidebarData = [
+    {
+      category: 'Trending',
+      subcategories: ['Best Sellers', 'New Releases', 'Movers and Shakers'],
+    },
+    {
+      category: 'Digital Content And Devices',
+      subcategories: [
+        'Echo & Alexa',
+        'Fire TV',
+        'Kindle E-Readers & eBooks',
+        'Audible AudioBooks',
+        'Amazon Prime Video',
+        'Amazon Prime Music',
+      ],
+    },
+    {
+      category: 'Shop By Category',
+      subcategories: ['Mobiles, Computers', 'TV, Appliances, Electronics', "Men's Fashion", "Women's Fashion"],
+    },
+    {
+      category: 'Programs & Features',
+      subcategories: ['Gift Cards Mobile Recharges', 'Amazon Launchpad', 'Flight Tickets', 'Clearance store'],
+    },
+    {
+      category: 'Help & Settings',
+      subcategories: ['Your Account', 'Customer Service', 'Sign In'],
+    },
+  ];
+
+ 

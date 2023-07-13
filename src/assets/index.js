@@ -7,6 +7,8 @@ import bannerImgFive from "./banner/bannerImgFive.jpg";
 import bdFlag from "./bdFlag.webp";
 import location from "./location.png"
 import shopping from "./shopping.png"
+import user from "./user.png"
+import close from "./close.png"
 
 export {
   logo,
@@ -17,5 +19,7 @@ export {
   bannerImgFive,
   bdFlag,
   location,
-  shopping
+  shopping,
+  user,
+  close
 };

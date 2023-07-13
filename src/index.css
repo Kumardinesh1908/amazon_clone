@@ -6,6 +6,6 @@
 
 @layer components{
     .headerHover{
-        @apply px-2 h-[80%] flex items-center border border-transparent hover:border-white duration-100
+        @apply px-2 h-12 flex items-center border border-transparent hover:border-white duration-100
     }
 }
