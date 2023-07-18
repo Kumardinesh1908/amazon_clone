@@ -1,5 +1,5 @@
  
-//   alternative of line 19 to line 41 in  SideNavComponent
+//   alternative of line 12 to line 34 in  SideNavComponent
  
  {/* first category starts */}
             {/* <h3 className='text-lg font-titleFont font-bold pl-[36px] pt-[18px] mb-1 tracking-wider'>

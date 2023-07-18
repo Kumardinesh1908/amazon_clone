@@ -1,11 +1,11 @@
 
 import React from 'react'
 
-import { sidebarData } from '../constants';
+import { sidebarData } from '../../constants';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 
-const SideNavContent = ({ handleClose }) => {
+const SideNavContent = () => {
 
   return (
     <div className='w-[365px] h-[93%] overflow-y-scroll'>

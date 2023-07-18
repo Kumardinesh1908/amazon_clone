@@ -1,7 +1,7 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState,useEffect,useRef } from 'react';
-import { user } from '../assets';
-import { close } from '../assets';
+import { useState, useEffect, useRef } from 'react';
+import { user } from "../../assets"
+import { close } from '../../assets';
 import SideNavContent from './sideNavContent';
 import { motion } from "framer-motion"
 
@@ -16,8 +16,11 @@ export default function HeaderBottom() {
     useEffect(() => {
         document.body.addEventListener("click", (e) => {
             if (e.target.contains(ref.current)) {
-                setSidebar(false)
+                setSidebar(false);
             }
+            // if (ref.current &&  !ref.current.contains(e.target)) {
+            //     setSidebar(false);
+            // }
         })
     }, [ref, sideBar]);
 
@@ -47,25 +50,25 @@ export default function HeaderBottom() {
             {/* Side Navbar Component call starts*/}
             {
                 sideBar && (
-                    <div className='w-full h-full text-black fixed top-0 left-0  bg-amazon_black bg-opacity-90'>
-                        {/* <div className='w-full h-full relative '> */}
-                            <motion.div initial={{ x: -500, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -500, opacity: 0 }} transition={{ duration: 0.5 }} className='w-[365px] h-full bg-white'
+                    <div className='w-full h-full text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-90 '>
+                        <div className='w-full h-full relative '>
+                        <motion.div initial={{ x: -500, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -500, opacity: 0 }} transition={{ duration: 0.5 }} className='w-[365px] h-full bg-white'
                             ref={ref}
-                            >
-                                <div className='bg-amazon_light cursor-pointer  text-white py-[11px] px-[36px] flex items-center gap-3'>
-                                    <img className="w-[26px]" src={user} alt='user' />
-                                    <h3 className='font-titleFont font-bold text-lg tracking-wider'>Hello, sign in</h3>
-                                </div>
-                                <SideNavContent />
-                                <span
-                                    onClick={handleClose} className='cursor-pointer absolute top-5 left-[380px] w-5 h-5
-          text-white flex items-center justify-center'>
-                                    <img src={close} alt="close" />
-                                </span>
-                            </motion.div>
-                        {/* </div> */}
+                        >
+                            <div className='bg-amazon_light cursor-pointer  text-white py-[11px] px-[36px] flex items-center gap-3'>
+                                <img className="w-[26px]" src={user} alt='user' />
+                                <h3 className='font-titleFont font-bold text-lg tracking-wider'>Hello, sign in</h3>
+                            </div>
+                            <SideNavContent />
+                            <span
+                                onClick={handleClose} className='cursor-pointer absolute top-5 left-[380px] w-5 h-5
+                                   text-white flex items-center justify-center'>
+                                <img src={close} alt="close" />
+                            </span>
+                        </motion.div>
+                        </div>
                     </div>
-                    )
+                )
             }
             {/* Side Navbar Component call ends */}
 
