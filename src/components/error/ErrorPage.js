@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 const ErrorPage = () => {
 const navigate = useNavigate();
 useEffect(()=>(
-    setTimeout(()=>navigate(-1),3000)
+    setTimeout(()=>navigate("/"),3000)
 ));
   return (
     <div>
@@ -14,4 +14,4 @@ useEffect(()=>(
   )
 }
 
-export default ErrorPage
+export default ErrorPage;

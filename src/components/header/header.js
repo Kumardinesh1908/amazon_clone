@@ -18,7 +18,7 @@ export default function Header() {
         })
     }, [ref, showAll]);
     return (
-        <div className="w-full sticky top-0 z-10">
+        <div className="w-full sticky top-0 z-50">
             <div className="w-full bg-amazon_black text-white px-3 py-[6px] flex items-center">
 
                 {/* logo starts here */}

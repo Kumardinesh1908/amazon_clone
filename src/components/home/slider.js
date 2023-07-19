@@ -37,12 +37,16 @@ const Slider = () => {
     };
 
     return (
-        <div className='relative'>
+        <div className='relative z-0'>
+
             <img src={previous} onClick={handlePrevious} alt="previous"
-                className='w-12 h-24 absolute top-[25%] hover:text-black hover:opacity-50 hover:border-2 hover:border-gray-500 transition-opacity duration-300'/>
+                className='w-10 h-10 absolute top-[17%] left-[15px] text-black drop-shadow-white active:border-2 active:border-black active:shadow-white ' />
+
             <img src={images[currentImageIndex]} alt="Slider" className='w-full h-screen' />
+
             <img src={next} onClick={handleNext} alt="next"
-                className='w-12 h-24 absolute top-[25%] left-[96%] hover:text-black hover:opacity-50 hover:border-2 hover:border-gray-500 transition-opacity duration-300'/>
+                className='w-10 h-10 absolute top-[17%] left-[96%]  text-black active:border-2 active:border-black  ' />
+
         </div>
     );
 };

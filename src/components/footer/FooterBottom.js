@@ -5,8 +5,8 @@ const FooterBottom = () => {
     return (
         <div className='w-full bg-[#07101cf2] '>
             <div className='w-[80%] flex flex-row flex-wrap  ml-[178px] pt-8  '>
-                {footerBootmData.map((item) => (
-                    <div className='w-[176px] h-10 cursor-pointer group mr-8 mb-4'>
+                {footerBootmData.map((item,index) => (
+                    <div className='w-[176px] h-10 cursor-pointer group mr-8 mb-4' key={index}>
                         <h3 className='text-gray-200  group-hover:underline text-xs leading-[13px]' key={item.id}> {item.title} </h3>
                         {item.listItem.map((data, index) => (
                             <p className='group-hover:underline text-gray-400 text-xs leading-[13px]' key={index} > {data} </p>

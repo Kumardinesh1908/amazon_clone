@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&family=Roboto:wght@100;300;400&display=swap');
-@import url('https://fonts.cdnfonts.com/css/amazon-ember');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,4 +7,8 @@
     .headerHover{
         @apply px-2 h-12 flex items-center border border-transparent hover:border-white duration-100
     }
+}
+
+body{
+    background-color: rgb(220, 217, 217);
 }

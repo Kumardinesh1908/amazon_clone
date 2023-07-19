@@ -157,3 +157,54 @@ export const footerBootmData = [
       "100 million songs, ad-free", "Over 15 million podcast episodes",],
   },
 ];
+
+export const categoryData = [
+  {
+    id :"01",
+    plot : "Up to 70% off | Styles for men",
+    title : "Men's Clothing",
+    img : "https://m.media-amazon.com/images/G/31/img18/Fashion/September18/Flyouts/Men.jpg",
+  },
+  {
+    id :"02",
+    plot : "Up to 70% off | Styles for women",
+    title : "Women's Clothing",
+    img : "https://m.media-amazon.com/images/G/31/img19/Fashion/WA19/MAX/FLY_OUT/Sub-Nav-Women-2._CB439603748_.jpg",
+  },
+  {
+    id :"03",
+    plot : "The Best Jewellry Under One Roof.",
+    title : "Jewellary",
+    img : "https://m.media-amazon.com/images/I/612E8Vgbd9L._AC_UL400_.jpg",
+  },
+  {
+    id :"04",
+    plot : "We Make Technology Affordable",
+    title : "Electronics",
+    img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
+  },
+  // {
+  //   id :"05",
+  //   plot : "We Make Technology Affordable",
+  //   title : "Electronics",
+  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
+  // },
+  // {
+  //   id :"06",
+  //   plot : "We Make Technology Affordable",
+  //   title : "Electronics",
+  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
+  // },
+  // {
+  //   id :"07",
+  //   plot : "We Make Technology Affordable",
+  //   title : "Electronics",
+  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
+  // },
+  // {
+  //   id :"08",
+  //   plot : "We Make Technology Affordable",
+  //   title : "Electronics",
+  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
+  // },
+]
