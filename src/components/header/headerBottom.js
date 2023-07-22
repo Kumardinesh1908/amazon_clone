@@ -18,9 +18,6 @@ export default function HeaderBottom() {
             if (e.target.contains(ref.current)) {
                 setSidebar(false);
             }
-            // if (ref.current &&  !ref.current.contains(e.target)) {
-            //     setSidebar(false);
-            // }
         })
     }, [ref, sideBar]);
 

@@ -4,6 +4,7 @@ import { logo, location, shopping } from "../../assets";
 import { allItems } from "../../constants";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from '@mui/icons-material/Search';
+import { Link } from "react-router-dom";
 
 
 export default function Header() {
@@ -22,9 +23,11 @@ export default function Header() {
             <div className="w-full bg-amazon_black text-white px-3 py-[6px] flex items-center">
 
                 {/* logo starts here */}
-                <div className="headerHover">
-                    <img className="w-24 mt-2" src={logo} alt="logo" />
-                </div>
+                <Link to="/">
+                    <div className="headerHover">
+                        <img className="w-24 mt-2" src={logo} alt="logo" />
+                    </div>
+                </Link>
                 {/* logo ends here */}
 
                 {/* Delivery starts here */}
@@ -80,14 +83,16 @@ export default function Header() {
                 {/* Language ends here */}
 
                 {/* Sign in starts here */}
-                <div className="headerHover flex flex-col items-start justify-center">
-                    <p className="text-xs font-semibold">Hello, sign in</p>
-                    <p className="text-sm font-bold -mt-1">Accounts & Lists
-                        <span>
-                            <ArrowDropDownIcon />
-                        </span>
-                    </p>
-                </div>
+                <Link to="/signIn" preventScrollReset={true}>
+                    <div className="headerHover flex flex-col items-start justify-center">
+                        <p className="text-xs font-semibold">Hello, sign in</p>
+                        <p className="text-sm font-bold -mt-1">Accounts & Lists
+                            <span>
+                                <ArrowDropDownIcon />
+                            </span>
+                        </p>
+                    </div>
+                </Link>
                 {/* Sign in ends here */}
 
                 {/* Orders starts here */}

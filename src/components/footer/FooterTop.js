@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const FooterTop = () => {
   // const [showBackToTop, setShowBackToTop] = useState(false);
@@ -18,7 +19,7 @@ const FooterTop = () => {
 
   // // Add scroll event listener
   //   window.addEventListener('scroll', handleScroll);
-   
+
 
   return (
     <>
@@ -26,14 +27,20 @@ const FooterTop = () => {
         <div className='w-full border-[1px] rounded-md border-gray-200'>
           <div className='mx-auto w-60 text-center pt-10 pb-5'>
             <p className='text-sm'>See personalized recommendations</p>
-            <button
-              className='w-full bg-[#FFCF56] rounded-md py-1 font-semibold cursor-pointer hover:bg-yellow-500 active:bg-yellow-700 text-sm mt-[2px] mb-[2px]'
-            >
-              Sign in
-            </button>
+            <Link to="/signIn" preventScrollReset={true}>
+              <button
+                className='w-full bg-[#FFCF56] rounded-md py-1 font-semibold cursor-pointer hover:bg-yellow-500 active:bg-yellow-700 text-sm mt-[2px] mb-[2px]'
+              >
+                Sign in
+              </button>
+            </Link>
             <p className='text-xs'>
-              New customer?{' '}
-              <span className='text-xs text-blue-400 hover:text-red-500'>&nbsp; Start here.</span>
+              New customer? &nbsp;
+              <Link to="/createAccount" preventScrollReset={true}>
+                <span className='text-xs text-blue-400 hover:text-red-500 cursor-pointer'>
+                   Start here.
+                </span>
+              </Link>
             </p>
           </div>
         </div>

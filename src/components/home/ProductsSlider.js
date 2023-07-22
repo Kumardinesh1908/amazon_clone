@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLoaderData } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 import './scrollbar.css';
 import { useState,useRef } from 'react';
 
@@ -28,9 +28,11 @@ const ProductsSlider = () => {
         <span className='text-[21px] font-bold ml-5'>
           Today’s Deals
         </span>
-        <span className='text-sm text-cyan-700 hover:text-red-400 font-semibold ml-5'>
+        <Link to="/allProducts">
+          <span className='text-sm text-cyan-700 hover:text-red-400 font-semibold ml-5 cursor-pointer'>
           See all products
         </span>
+        </Link>
       </div>
 
       <div
