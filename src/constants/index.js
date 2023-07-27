@@ -160,51 +160,135 @@ export const footerBootmData = [
 
 export const categoryData = [
   {
-    id :"01",
-    plot : "Up to 70% off | Styles for men",
-    title : "Men's Clothing",
-    img : "https://m.media-amazon.com/images/G/31/img18/Fashion/September18/Flyouts/Men.jpg",
+    id: "01",
+    plot: "Up to 70% off | Styles for men",
+    title: "Men's Clothing",
+    category: "mens-shirts",
+    img: "https://m.media-amazon.com/images/G/31/img18/Fashion/September18/Flyouts/Men.jpg",
   },
   {
-    id :"02",
-    plot : "Up to 70% off | Styles for women",
-    title : "Women's Clothing",
-    img : "https://m.media-amazon.com/images/G/31/img19/Fashion/WA19/MAX/FLY_OUT/Sub-Nav-Women-2._CB439603748_.jpg",
+    id: "02",
+    plot: "Up to 70% off | Styles for women",
+    subcategories: [
+      {
+        title: "Clothing",
+        category: "womens-dresses",
+        img: "https://m.media-amazon.com/images/G/31/img19/Fashion/WA19/MAX/FLY_OUT/Sub-Nav-Women-2._CB439603748_.jpg",
+      },
+      {
+        title: "Footwear",
+        category: "womens-shoes",
+        img: "https://m.media-amazon.com/images/I/31qvgC-l0XL._AC_UF226,226_FMjpg_.jpg",
+      },
+      {
+        title: "HandBags",
+        category: "womens-bags",
+        img: "https://m.media-amazon.com/images/I/61g8tLRaU9L._AC_UF226,226_FMjpg_.jpg",
+      },
+      {
+        title: "Watches",
+        category: "womens-watches",
+        img: "https://m.media-amazon.com/images/I/5159txtY55L._AC_SY120_.jpg",
+      },
+    ]
   },
   {
-    id :"03",
-    plot : "The Best Jewellry Under One Roof.",
-    title : "Jewellary",
-    img : "https://m.media-amazon.com/images/I/612E8Vgbd9L._AC_UL400_.jpg",
+    id: "03",
+    plot: "Time is Precious, Wear It Well.",
+    title: "Men's Watches",
+    category: "mens-watches",
+    img: "https://i.dummyjson.com/data/products/62/thumbnail.jpg",
   },
   {
-    id :"04",
-    plot : "We Make Technology Affordable",
-    title : "Electronics",
-    img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
+    id: "04",
+    plot: "We Make Technology Affordable.",
+    subcategories: [
+      {
+        title: "Smart Phones",
+        category: "smartphones",
+        img: "https://m.media-amazon.com/images/I/71ZDY57yTQL._AC_UY218_.jpg",
+      },
+      {
+        title: "Laptops",
+        category: "laptops",
+        img: "https://m.media-amazon.com/images/I/81o11eS8pLL._AC_UL320_.jpg",
+      },
+      {
+        title: "Lighting",
+        category: "lighting",
+        img: "https://i.dummyjson.com/data/products/96/thumbnail.jpg",
+      },
+      {
+        title: "Automotive",
+        category: "automotive",
+        img: "https://i.dummyjson.com/data/products/86/thumbnail.jpg",
+      },
+    ]
   },
-  // {
-  //   id :"05",
-  //   plot : "We Make Technology Affordable",
-  //   title : "Electronics",
-  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
-  // },
-  // {
-  //   id :"06",
-  //   plot : "We Make Technology Affordable",
-  //   title : "Electronics",
-  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
-  // },
-  // {
-  //   id :"07",
-  //   plot : "We Make Technology Affordable",
-  //   title : "Electronics",
-  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
-  // },
-  // {
-  //   id :"08",
-  //   plot : "We Make Technology Affordable",
-  //   title : "Electronics",
-  //   img : "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Electronics/Clearance/Clearance_store_Desktop_CC_1x._SY304_CB628315133_.jpg",
-  // },
-]
+  {
+    id: "05",
+    plot: "The Best Jewellry Under One Roof.",
+    title: "Jewellary",
+    category: "womens-jewellery",
+    img: "https://m.media-amazon.com/images/I/612E8Vgbd9L._AC_UL400_.jpg",
+  },
+  {
+    id: "06",
+    plot: "Make Your Home Significantly Better.",
+    subcategories: [
+      {
+        title: "Home-Decoration",
+        category: "home-decoration",
+        img: "https://i.dummyjson.com/data/products/26/thumbnail.jpg",
+      },
+      {
+        title: "Furniture",
+        category: "furniture",
+        img: "https://i.dummyjson.com/data/products/31/thumbnail.jpg",
+      },
+      {
+        title: "Motorcycle",
+        category: "motorcycle",
+        img: "https://i.dummyjson.com/data/products/92/thumbnail.jpg",
+      },
+      {
+        title: "Groceries",
+        category: "groceries",
+        img: "https://m.media-amazon.com/images/I/71TIju5KrHL._AC_UL400_.jpg",
+      },
+    ]
+  },
+  {
+    id: "07",
+    plot: "Your Feet Will Never Look the Same Again.",
+    title: "Men's Footwear",
+    category: "mens-shoes",
+    img: "https://m.media-amazon.com/images/G/31/img21/shoes/2023/SS23/Newlaunch/Columbia._CB589992930_.jpg",
+  },
+  {
+    id: "08",
+    plot: "Stay Shady, Stay Cool and Fragrances Are Divine.",
+    subcategories: [
+      {
+        title: "Sunglasses",
+        category: "sunglasses",
+        img: "https://m.media-amazon.com/images/I/41lQQB4fA0L._AC_UL400_.jpg",
+      },
+      {
+        title: "Fragrances",
+        category: "fragrances",
+        img: "https://i.dummyjson.com/data/products/12/thumbnail.jpg",
+      },
+      {
+        title: "Skincare",
+        category: "skincare",
+        img: "https://i.dummyjson.com/data/products/19/thumbnail.jpg",
+      },
+      {
+        title: "Tops",
+        category: "tops",
+        img: "https://i.dummyjson.com/data/products/39/thumbnail.jpg",
+      },
+    ]
+  },
+];

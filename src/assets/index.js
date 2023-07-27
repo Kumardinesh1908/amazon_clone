@@ -23,9 +23,16 @@ import compare from "./compare.png";
 import cart from './cart.png';
 import wishlist from './wishlist.png';
 import details from './details.png';
+import offers from './offers.png';
+import delivery from './delivery.png';
+import cod from './cod.png';
+import exchange from './exchange.png';
+import transaction from './transaction.png';
+import delivered from './delivered.png';
+import  required from './required.png';
 
 export {
-  logo,
+  logo,cod,exchange, delivered, transaction,
   bannerImgOne,
   bannerImgTwo,
   bannerImgThree,
@@ -48,5 +55,8 @@ export {
   wishlist,
   details,
   halfStar,
-  emptyStar
+  emptyStar,
+  offers,
+  delivery,
+  required
 };

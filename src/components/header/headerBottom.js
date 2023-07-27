@@ -4,15 +4,14 @@ import { user } from "../../assets"
 import { close } from '../../assets';
 import SideNavContent from './sideNavContent';
 import { motion } from "framer-motion"
+import { Link } from 'react-router-dom';
 
 export default function HeaderBottom() {
     const [sideBar, setSidebar] = useState(false);
     const ref = useRef(null);
-
     const handleClose = () => {
         setSidebar(false);
     }
-
     useEffect(() => {
         document.body.addEventListener("click", (e) => {
             if (e.target.contains(ref.current)) {
@@ -36,7 +35,7 @@ export default function HeaderBottom() {
                 <li className='headerHover h-10'>Sell</li>
                 <li className='headerHover h-10'>Best Sellers</li>
                 <li className='headerHover h-10'>today's Deals</li>
-                <li className='headerHover h-10'>Mobiles</li>
+                <Link to="/smartphones"><li className='headerHover h-10'>Mobiles</li></Link>
                 <li className='headerHover h-10'>New Releases</li>
                 <li className='headerHover h-10'>Customer Service</li>
                 <li className='headerHover h-10'>Prime</li>

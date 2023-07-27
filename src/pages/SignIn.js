@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { logoBlack } from '../assets/index';
-import { Link, Outlet } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { right, down } from "../assets/index";
+import ScrollToTop from "../ScrollToTop";
 
 
 
@@ -114,7 +115,7 @@ const SignIn = () => {
             <div className='text-xs tracking-wider text-black flex justify-center mt-[4px] pb-16'>
                 © 1996-2023, Amazon.com, Inc. or its affiliates
             </div>
-            <Outlet />
+            <ScrollToTop />
         </div>
     )
 };

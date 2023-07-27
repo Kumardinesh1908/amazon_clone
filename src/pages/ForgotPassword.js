@@ -1,6 +1,7 @@
 import React from 'react';
 import { logoBlack } from '../assets';
 import { Link } from 'react-router-dom';
+import ScrollToTop from '../ScrollToTop';
 
 const ForgotPassword = () => {
     return (
@@ -47,6 +48,8 @@ const ForgotPassword = () => {
             <div className='text-xs tracking-wider text-black flex justify-center mt-[4px] pb-16'>
                 © 1996-2023, Amazon.com, Inc. or its affiliates
             </div>
+            <ScrollToTop />
+
 
         </div>
     )

@@ -1,23 +1,110 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import { logo, location, shopping } from "../../assets";
+import { logo, location, shopping, required } from "../../assets";
 import { allItems } from "../../constants";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 
 export default function Header() {
-    const ref = useRef(null);
-    const [showAll, setShowAll] = useState(false);
 
+    const allCategoryRef = useRef(null);
+    const [showAll, setShowAll] = useState(false);
     useEffect(() => {
         document.body.addEventListener("click", (e) => {
-            if (ref.current && !ref.current.contains(e.target)) {
+            if (allCategoryRef.current && !allCategoryRef.current.contains(e.target)) {
                 setShowAll(false);
             }
         })
-    }, [ref, showAll]);
+    }, [allCategoryRef, showAll]);
+
+    const [selectedLocation, setSelectedLocation] = useState(false);
+    const locationRef = useRef(null);
+    useEffect(() => {
+        document.body.addEventListener("click", (e) => {
+            if (e.target.contains(locationRef.current)) {
+                setSelectedLocation(false);
+                setWarning(false);
+            };
+            console.log(e.target.contains(locationRef.current))
+        })
+    }, [locationRef])
+
+
+    // const [userZipCode, setUserZipCode] = useState('');
+    // const [locationData, setLocationData] = useState(null);
+    // async function fetchLocationData() {
+    //     const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
+    //     if (response.data[0].PostOffice != null) {
+    //         setLocationData(response.data);
+    //         setWarning(false);
+    //     }
+    //     else{
+    //         setWarning(true);
+    //     }
+    // }
+    // const [locationName, setLocationName] = useState(null);
+    // const handleApply = () => {
+    //     if(locationData){
+    //         setSelectedLocation(false);
+    //         setLocationName(locationData);
+    //         // setWarning(false);
+    //     }
+    //     else {
+    //         setWarning(true);
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (userZipCode.length === 6) {
+    //         fetchLocationData();
+    //     }
+    // }, [userZipCode]);
+
+    // const [warning, setWarning] = useState(false);
+    // const handleSumit = (e) => {
+    // //     if (userZipCode.length === 6 && e.key === 'Enter') {
+    //     if(e.key === 'Enter'){
+    //         handleApply();
+    //     }
+
+    // }
+
+    const [userZipCode, setUserZipCode] = useState('');
+    const [locationData, setLocationData] = useState(null);
+    const [locationName, setLocationName] = useState(null);
+    const [warning, setWarning] = useState(false);
+    async function fetchLocationData() {
+        const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
+        if (response.data[0].PostOffice != null) {
+            setLocationData(response.data);
+            setWarning(false);
+        } 
+    }
+    const handleApply = () => {
+        if (locationData) {
+            setSelectedLocation(false);
+            setLocationName(locationData);
+            setLocationData(null)
+            setWarning(false);
+        } else {
+            setWarning(true);
+        }
+    };
+    const handleSumit = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleApply();
+        }
+    };
+    useEffect(() => {
+        if (userZipCode.length === 6) {
+            fetchLocationData();
+        }
+    }, [userZipCode]);
+
+
     return (
         <div className="w-full sticky top-0 z-50">
             <div className="w-full bg-amazon_black text-white px-3 py-[6px] flex items-center">
@@ -31,19 +118,47 @@ export default function Header() {
                 {/* logo ends here */}
 
                 {/* Delivery starts here */}
-                <div className="headerHover">
+                <div className="headerHover" onClick={() => setSelectedLocation(!selectedLocation)}>
                     <img className="w-6 h-5 mt-1" src={location} alt="locationIcon" />
                     <p className="text-xs text-lightText font-medium flex flex-col items-start">
-                        Hello {" "}
-                        <span className="text-sm font-bold -mt-1 text-whiteText">Select your address</span>
+                        {locationName ? 'Deliver to' : 'Hello'}
+                        <span className="text-sm font-bold -mt-1 text-whiteText">
+                            {locationName ? <p>{locationName[0].PostOffice[0].District} {locationName[0].PostOffice[0].Pincode}</p> : 'Select your address'}
+                        </span>
                     </p>
                 </div>
+                {selectedLocation &&
+                    <div className='w-full h-screen text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-90 flex items-center justify-center' >
+                        <div ref={locationRef} className=" w-[30%]   bg-white rounded-lg">
+                            <div className="w-full h-[30%] rounded-tr-lg rounded-tl-lg  bg-gray-100 border-b-[0.066rem] border-gray-200 p-4 font-bold">
+                                Choose your location
+                            </div>
+                            <div className="w-full h-[70%] p-4" >
+                                <p className="text-xs text-gray-400">Enter an Indian pincode to see pr=oduct availability and delivery options for your location.</p>
+                                <div className="flex justify-center" >
+                                    <input type="text" pattern="[0-9]{6}" placeholder="Enter a 6-digit ZIP code" className="w-[65%] mt-5 border-[1px] border-[#a6a6a6] rounded p-1 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500"
+                                        onChange={(e) => setUserZipCode(e.target.value)}
+                                        onKeyDown={handleSumit}
+                                    />
+                                    <button className="w-[33%] border-[0.066rem] mt-5 border-gray-200 rounded-lg p-2 ml-2 cursor-pointer"
+                                        onClick={() => { fetchLocationData(); handleApply(); }}>Apply</button>
+                                </div>
+                            </div>
+                            {
+                                warning && <div className="flex  items-center pl-4 -mt-3 pb-2">
+                                    <img src={required} className="w-4 h-4" alt="warning" />
+                                    <div className="text-zsm text-[#FF0000]">Please enter a valid pincode</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
                 {/* Delivery ends here */}
 
                 {/* Search starts here */}
-                <div className="h-10 rounded-md flex flex-grow relative ml-4" ref={ref}>
+                <div className="h-10 rounded-md flex flex-grow relative ml-4" ref={allCategoryRef}>
                     <span onClick={() => setShowAll(!showAll)}
-                        className="w-14 pl-2 h-full flex items-center justify-center text-xs text-amazon_black
+                        className="w-14 pl-2 h-full flex items-center justify-center text-xs text-amazon_black cursor-pointer
                       bg-gray-100 hover:bg-gray-300 rounded-tl-md rounded-bl-md duration-300 border-r-[1px] border-gray-300">All
                         <span>
                             <ArrowDropDownIcon />

@@ -5,7 +5,7 @@
 
 @layer components{
     .headerHover{
-        @apply px-2 h-12 flex items-center border border-transparent hover:border-white duration-100
+        @apply px-2 h-12 flex items-center border border-transparent hover:border-white duration-100 cursor-pointer
     }
     .productLi{
         @apply text-gray-600 hover:text-black text-sm font-medium border-b-[1px] border-b-gray-400
