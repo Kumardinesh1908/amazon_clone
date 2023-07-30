@@ -1,9 +1,24 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { logoBlack } from '../assets';
 import { Link } from 'react-router-dom';
 import ScrollToTop from '../ScrollToTop';
 
 const ForgotPassword = () => {
+
+    const [input,setInput] = useState("");
+    const [error,setError] = useState("");
+    const validate=()=>{
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const mobilePattern = /^[0-9]{10}$/;
+        if(!emailPattern.test(input) && !mobilePattern.test(input)){
+             setError("We're sorry. We weren't able to identify you given the information provided.")
+        }
+    }
+    const handleSubmit=(e)=>{
+        e.preventDefault();
+        validate();
+        setInput("");
+    }
     return (
         <div className='bg-white'>
             <div className='flex flex-col justify-center items-center '>
@@ -14,7 +29,7 @@ const ForgotPassword = () => {
                     </div>
                 </Link>
 
-                <div className='w-[26%] mt-4 border-[1px] rounded-lg '>
+                <div className='w-80 mt-4 border-[1px] rounded-lg '>
                     <div className='my-4 mx-5 '>
                         <span className='text-[28px] font-semibold'>
                             Password assistance
@@ -22,25 +37,27 @@ const ForgotPassword = () => {
                         <div className='text-[13px] font-medium tracking-wide mt-2 '>
                             Enter the email address or mobile phone number associated with your Amazon account.
                         </div>
-                        <div className='my-3'>
+                        <form onSubmit={handleSubmit} className='my-3'>
                             <label className='text-sm font-semibold'>
                                 Email or mobile phone number
-                                <input type="text" className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                                <input type="text" value={input} onChange={(e)=>{setInput(e.target.value);setError('')}} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
                             </label>
-                        </div>
-
-                        <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-4 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
-                        >Continue</button>
-
+                            <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-4 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
+                            >Continue</button>
+                        </form>
+                        {
+                            error && <div className='text-xs text-[#FF0000]'>{error}</div>
+                        }
                     </div>
                 </div>
-                <div className='w-[26%] mt-2 text-[17px] font-medium'>Has your email address or mobile phone number changed?</div>
-                <div className='w-[26%] text-[13px] font-medium tracking-wide mt-1 mb-8 '>
+                <div className='w-80 mt-2 text-md leading-5 pl-3 font-medium'>Has your email address or mobile phone number changed?</div>
+                <div className='w-80 text-sm  mx-auto mt-1 pl-3 mb-8 '>
                 If you no longer use the e-mail address associated with your Amazon account, you may contact Customer Service for help restoring access to your account.
                 </div>
 
             </div>
-            <div className="flex flex-row text-[11px] gap-4 mx-32 mt-10 text-white justify-center tracking-wide border-t-[2px] pt-5">
+            <hr className='w-11/12 mx-auto' />
+            <div className="flex flex-row text-[11px] gap-4 mx-auto mt-10 text-white justify-center tracking-wide  pt-5">
                 <a href="https://www.amazon.in/gp/help/customer/display.html/ref=ap_signin_notification_condition_of_use?ie=UTF8&nodeId=200545940" className='text-blue-500 hover:text-red-500 cursor-pointer'>Conditions of Use</a>
                 <a href="https://www.amazon.in/gp/help/customer/display.html/ref=ap_signin_notification_privacy_notice?ie=UTF8&nodeId=200534380" className='text-blue-500 hover:text-red-500 cursor-pointer'>Privacy Notice</a>
                 <p className='text-blue-500 hover:text-red-500 cursor-pointer'>Interest-Based Ads</p>

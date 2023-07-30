@@ -11,9 +11,15 @@
         @apply text-gray-600 hover:text-black text-sm font-medium border-b-[1px] border-b-gray-400
         hover:border-b-gray-700 flex items-center justify-end gap-3 hover:cursor-pointer duration-300 w-full 
     }
+    
 }
 
 .clicked {
     -webkit-box-shadow: 0 0 5px 3px rgb(135, 206, 235);
     border: 1px solid rgb(29, 177, 235);
+  }
+  
+  *{
+    margin: 0;
+    padding: 0;
   }

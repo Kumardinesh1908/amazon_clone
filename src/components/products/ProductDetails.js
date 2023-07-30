@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { ScrollRestoration, useLoaderData } from 'react-router-dom';
 import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, transaction } from "../../assets/index";
+import {  useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/amazonSlice';
 
 
 
 const ProductDetails = () => {
+  const dispatch = useDispatch();
   const data = useLoaderData();
   const productsData = data.data.products;
   const { title } = useParams();
@@ -136,6 +139,16 @@ const ProductDetails = () => {
           </select>
         </div>
         <button
+         onClick={() =>dispatch(addToCart({
+          id : product.id,
+          title : product.title,
+          price : product.price,
+          description : product.description,
+          category : product.category,
+          image : product.images,
+          thumbnail : product.thumbnail,
+          quantity : 1,
+        }))}
           className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Add to Cart
         </button>

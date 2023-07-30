@@ -6,9 +6,14 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from 'react-redux';
+
 
 
 export default function Header() {
+
+    const products = useSelector((state)=>state.amazon.products);
+    console.log(products);
 
     const allCategoryRef = useRef(null);
     const [showAll, setShowAll] = useState(false);
@@ -28,48 +33,9 @@ export default function Header() {
                 setSelectedLocation(false);
                 setWarning(false);
             };
-            console.log(e.target.contains(locationRef.current))
         })
     }, [locationRef])
 
-
-    // const [userZipCode, setUserZipCode] = useState('');
-    // const [locationData, setLocationData] = useState(null);
-    // async function fetchLocationData() {
-    //     const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
-    //     if (response.data[0].PostOffice != null) {
-    //         setLocationData(response.data);
-    //         setWarning(false);
-    //     }
-    //     else{
-    //         setWarning(true);
-    //     }
-    // }
-    // const [locationName, setLocationName] = useState(null);
-    // const handleApply = () => {
-    //     if(locationData){
-    //         setSelectedLocation(false);
-    //         setLocationName(locationData);
-    //         // setWarning(false);
-    //     }
-    //     else {
-    //         setWarning(true);
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (userZipCode.length === 6) {
-    //         fetchLocationData();
-    //     }
-    // }, [userZipCode]);
-
-    // const [warning, setWarning] = useState(false);
-    // const handleSumit = (e) => {
-    // //     if (userZipCode.length === 6 && e.key === 'Enter') {
-    //     if(e.key === 'Enter'){
-    //         handleApply();
-    //     }
-
-    // }
 
     const [userZipCode, setUserZipCode] = useState('');
     const [locationData, setLocationData] = useState(null);
@@ -128,13 +94,13 @@ export default function Header() {
                     </p>
                 </div>
                 {selectedLocation &&
-                    <div className='w-full h-screen text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-90 flex items-center justify-center' >
-                        <div ref={locationRef} className=" w-[30%]   bg-white rounded-lg">
+                    <div className='w-screen h-screen text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-50 flex items-center justify-center' >
+                        <div ref={locationRef} className=" w-[320px] bg-white rounded-lg">
                             <div className="w-full h-[30%] rounded-tr-lg rounded-tl-lg  bg-gray-100 border-b-[0.066rem] border-gray-200 p-4 font-bold">
                                 Choose your location
                             </div>
                             <div className="w-full h-[70%] p-4" >
-                                <p className="text-xs text-gray-400">Enter an Indian pincode to see pr=oduct availability and delivery options for your location.</p>
+                                <p className="text-xs text-gray-400">Enter an Indian pincode to see product availability and delivery options for your location.</p>
                                 <div className="flex justify-center" >
                                     <input type="text" pattern="[0-9]{6}" placeholder="Enter a 6-digit ZIP code" className="w-[65%] mt-5 border-[1px] border-[#a6a6a6] rounded p-1 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500"
                                         onChange={(e) => setUserZipCode(e.target.value)}
@@ -221,7 +187,9 @@ export default function Header() {
                 <div className="headerHover flex items-start justify-center relative">
                     <img className="w-12" src={shopping} alt="cart" />
                     <p className="text-sm font-bold mt-5">Cart
-                        <span className="text-base font-semibold p-2 h-6 bg-[#f3a847] text-amazon_black rounded-full absolute left-9 top-0 flex items-center justify-center" >0</span>
+                        <span className="text-base font-semibold p-2 h-6 bg-[#f3a847] text-amazon_black rounded-full absolute left-9 top-0 flex items-center justify-center" >
+                            {products.length > 0 ? products.length : 0}
+                        </span>
                     </p>
 
                 </div>

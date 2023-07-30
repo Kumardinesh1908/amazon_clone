@@ -3,7 +3,7 @@ import { footerBootmData } from '../../constants';
 
 const FooterBottom = () => {
     return (
-        <div className='w-full bg-[#07101cf2] '>
+        <div className='w-full h-full bg-[#07101cf2] '>
             <div className='w-[80%] flex flex-row flex-wrap  ml-[178px] pt-8  '>
                 {footerBootmData.map((item,index) => (
                     <div className='w-[176px] h-10 cursor-pointer group mr-8 mb-4' key={index}>
