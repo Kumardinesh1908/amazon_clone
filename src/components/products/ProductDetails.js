@@ -36,7 +36,7 @@ const ProductDetails = () => {
 
   return (
     <div className='flex bg-white justify-between'>
-
+    <ScrollRestoration />
       <div className='w-[5%] mt-10 ml-1'>
         {product.images.map((item, index) => (
           <div key={index} className='border-[1px] border-black rounded-lg mb-5'
@@ -164,8 +164,6 @@ const ProductDetails = () => {
           Add to Wish List
         </button>
       </div>
-
-      <ScrollRestoration />
     </div>
   )
 }

@@ -3,26 +3,22 @@ import HeaderBottom from "./components/header/headerBottom";
 import Products from "./components/products/Products";
 import Home from "./pages/Home";
 import Footer from "./components/footer/Footer";
-// import ErrorPage from "./components/error/ErrorPage";
+import ErrorPage from "./components/error/ErrorPage";
 import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
-import { productsData,jeweleryData,smartphonesData,mensData,womensDressData,laptopsData,womensWatchData, womensBagData,womensShoeData,mensWatchesData, groceriesData,homeDecorData,furnitureData,motorcycleData,lightingData,automotiveData,sunglassesData,fragrancesData,skincareData,topsData,mensShoeData } from "./api/api";
+import { productsData, jeweleryData, smartphonesData, mensData, womensDressData, laptopsData, womensWatchData, womensBagData, womensShoeData, mensWatchesData, groceriesData, homeDecorData, furnitureData, motorcycleData, lightingData, automotiveData, sunglassesData, fragrancesData, skincareData, topsData, mensShoeData } from "./api/api";
 import SignIn from "./pages/SignIn";
 import CreateAccount from "./pages/CreateAccount";
 import ForgotPassword from "./pages/ForgotPassword";
 import ProductDetails from "./components/products/ProductDetails";
 import Cart from "../src/pages/cart"
 
-
-
-
-
 // Layout component to combine components for main path("/") of routers which has to be rendered when website opens for the first time 
 const Layout = () => {
   return (
     <div className="bg-gray-200">
-      <ScrollRestoration />
       <Header />
       <HeaderBottom />
+      <ScrollRestoration />
       <Outlet />
       <Footer />
     </div>
@@ -34,7 +30,7 @@ function App() {
     {
       path: "/",
       element: <Layout />,
-      // errorElement: <ErrorPage />,
+      errorElement: <ErrorPage />,
       children: [
         {
           index: true,
@@ -60,33 +56,11 @@ function App() {
         {
           path: "/cart",
           loader: productsData,
-          children: [
-            {
-              index: true,
-              loader: productsData,
-              element: <Cart />
-            },
-            // {
-            //   path: "/allProducts",
-            //   loader: productsData,
-            //   children: [
-            //     {
-            //       index: true,
-            //       loader: productsData,
-            //       element: <Products />
-            //     },
-            //     {
-            //       path: ":title",
-            //       loader: productsData,
-            //       element: <ProductDetails />,
-            //     },
-            //   ]
-            // },
-          ],
-        },       
+          element: <Cart />
+        },
         {
           path: "/mens-shirts",
-          loader : mensData,
+          loader: mensData,
           children: [
             {
               index: true,
@@ -102,7 +76,7 @@ function App() {
         },
         {
           path: "/womens-dresses",
-          loader : womensDressData,
+          loader: womensDressData,
           children: [
             {
               index: true,
@@ -118,7 +92,7 @@ function App() {
         },
         {
           path: "/womens-watches",
-          loader : womensWatchData,
+          loader: womensWatchData,
           children: [
             {
               index: true,
@@ -134,7 +108,7 @@ function App() {
         },
         {
           path: "/womens-bags",
-          loader : womensBagData,
+          loader: womensBagData,
           children: [
             {
               index: true,
@@ -150,7 +124,7 @@ function App() {
         },
         {
           path: "/womens-shoes",
-          loader : womensShoeData,
+          loader: womensShoeData,
           children: [
             {
               index: true,
@@ -166,7 +140,7 @@ function App() {
         },
         {
           path: "/mens-watches",
-          loader : mensWatchesData,
+          loader: mensWatchesData,
           children: [
             {
               index: true,
@@ -182,7 +156,7 @@ function App() {
         },
         {
           path: "/smartphones",
-          loader : smartphonesData,
+          loader: smartphonesData,
           children: [
             {
               index: true,
@@ -198,7 +172,7 @@ function App() {
         },
         {
           path: "/laptops",
-          loader : laptopsData,
+          loader: laptopsData,
           children: [
             {
               index: true,
@@ -214,7 +188,7 @@ function App() {
         },
         {
           path: "/lighting",
-          loader : lightingData,
+          loader: lightingData,
           children: [
             {
               index: true,
@@ -230,7 +204,7 @@ function App() {
         },
         {
           path: "/automotive",
-          loader : automotiveData,
+          loader: automotiveData,
           children: [
             {
               index: true,
@@ -246,7 +220,7 @@ function App() {
         },
         {
           path: "/womens-jewellery",
-          loader : jeweleryData,
+          loader: jeweleryData,
           children: [
             {
               index: true,
@@ -262,7 +236,7 @@ function App() {
         },
         {
           path: "/home-decoration",
-          loader : homeDecorData,
+          loader: homeDecorData,
           children: [
             {
               index: true,
@@ -278,7 +252,7 @@ function App() {
         },
         {
           path: "/furniture",
-          loader : furnitureData,
+          loader: furnitureData,
           children: [
             {
               index: true,
@@ -294,7 +268,7 @@ function App() {
         },
         {
           path: "/motorcycle",
-          loader : motorcycleData,
+          loader: motorcycleData,
           children: [
             {
               index: true,
@@ -310,7 +284,7 @@ function App() {
         },
         {
           path: "/groceries",
-          loader : groceriesData,
+          loader: groceriesData,
           children: [
             {
               index: true,
@@ -326,7 +300,7 @@ function App() {
         },
         {
           path: "/mens-shoes",
-          loader : mensShoeData,
+          loader: mensShoeData,
           children: [
             {
               index: true,
@@ -342,7 +316,7 @@ function App() {
         },
         {
           path: "/sunglasses",
-          loader : sunglassesData,
+          loader: sunglassesData,
           children: [
             {
               index: true,
@@ -358,7 +332,7 @@ function App() {
         },
         {
           path: "/fragrances",
-          loader : sunglassesData,
+          loader: sunglassesData,
           children: [
             {
               index: true,
@@ -374,7 +348,7 @@ function App() {
         },
         {
           path: "/skincare",
-          loader : skincareData,
+          loader: skincareData,
           children: [
             {
               index: true,
@@ -390,7 +364,7 @@ function App() {
         },
         {
           path: "/tops",
-          loader : topsData,
+          loader: topsData,
           children: [
             {
               index: true,
