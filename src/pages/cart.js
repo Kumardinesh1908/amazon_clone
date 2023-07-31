@@ -121,15 +121,17 @@ const Cart = () => {
                             </button>
                             <div className='border-[1px] border-gray-200 mt-4 flex items-center justify-center py-2 '>EMI Available</div>
                         </div>
-                        <div ref={productImagesDivRef} className='w-full h-[400px] bg-white flex flex-col gap-3 py-3 custom-scrollbar overflow-y-scroll'> 
-                        <h1 className='font-semibold mx-auto '>Customers who bought other items</h1>
-                            {productsData.map((product) => (
-                                <Link to={`/allProducts/${product.title}`}>
-                                    <div className='w-11/12 mx-auto '>
-                                        <img src={product.thumbnail} alt="productImage" />
-                                    </div>
-                                </Link>
-                            ))}
+                        <div className='w-full  bg-white' >
+                            <h1 className='font-semibold mx-3 pt-3 '>Customers who bought other items</h1>
+                            <div ref={productImagesDivRef} className='w-full h-[370px] bg-white flex flex-col gap-3 py-3 custom-scrollbar overflow-y-scroll'>
+                                {productsData.map((product) => (
+                                    <Link to={`/allProducts/${product.title}`}>
+                                        <div className='w-11/12 mx-auto '>
+                                            <img src={product.thumbnail} alt="productImage" />
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
