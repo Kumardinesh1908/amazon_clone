@@ -16,21 +16,22 @@ const ProductDetails = () => {
   const product = productsData.find((product) =>
     product.title === title);
 
-  console.log(product.images)
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   // Automatically change images every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % product.images.length);
     }, 5000);
-
     return () => clearInterval(interval);
   }, [product.images.length]);
-
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
+  };
+
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const handleQuantityChange = (event) => {
+    const newQuantity = parseInt(event.target.value, 10);
+    setSelectedQuantity(newQuantity);
   };
 
   return (
@@ -130,7 +131,7 @@ const ProductDetails = () => {
         <p className='pt-3'>Sold by <span className='text-blue-500 capitalize '>{product.brand}</span> and <span className='text-blue-500'>Fulfilled by Amazon.</span></p>
         <div className='pt-3'>
           <span>Quantity: </span>
-          <select className='border-[1px] border-gray-200 rounded-md '>
+          <select className='border-[1px] border-gray-200 rounded-md ' value={selectedQuantity} onChange={handleQuantityChange}>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -148,7 +149,7 @@ const ProductDetails = () => {
             image: product.images,
             thumbnail: product.thumbnail,
             brand: product.brand,
-            quantity: 1,
+            quantity: selectedQuantity,
           }))}
           className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Add to Cart

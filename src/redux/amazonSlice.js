@@ -36,6 +36,9 @@ export const amazonSlice = createSlice({
       product.quantity--;
       }
     },
+    handleQuantity : (state,action)=>{
+      
+    }
   },
 })
 
