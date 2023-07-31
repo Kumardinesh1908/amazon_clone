@@ -29,10 +29,12 @@ import cod from './cod.png';
 import exchange from './exchange.png';
 import transaction from './transaction.png';
 import delivered from './delivered.png';
-import  required from './required.png';
+import required from './required.png';
+import correct from './correct.png';
+import emptyCart from './emptyCart.png'
 
 export {
-  logo,cod,exchange, delivered, transaction,
+  logo, cod, exchange, delivered, transaction,
   bannerImgOne,
   bannerImgTwo,
   bannerImgThree,
@@ -45,7 +47,7 @@ export {
   previous,
   next,
   world,
-  UpDown,logoBlack,
+  UpDown, logoBlack,
   right,
   down,
   i,
@@ -58,5 +60,7 @@ export {
   emptyStar,
   offers,
   delivery,
-  required
+  required,
+  correct,
+  emptyCart
 };

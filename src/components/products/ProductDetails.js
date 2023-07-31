@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { ScrollRestoration, useLoaderData } from 'react-router-dom';
 import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, transaction } from "../../assets/index";
-import {  useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/amazonSlice';
 
 
@@ -16,7 +16,7 @@ const ProductDetails = () => {
   const product = productsData.find((product) =>
     product.title === title);
 
-    console.log(product.images)
+  console.log(product.images)
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -39,7 +39,7 @@ const ProductDetails = () => {
       <div className='w-[5%] mt-10 ml-1'>
         {product.images.map((item, index) => (
           <div key={index} className='border-[1px] border-black rounded-lg mb-5'
-          onClick={() => handleImageClick(index)}>
+            onClick={() => handleImageClick(index)}>
             <img src={item} alt="allImages" className='rounded-lg' />
           </div>
         ))}
@@ -49,7 +49,7 @@ const ProductDetails = () => {
 
       <div className='w-[35%] mt-2 ' >
         <h1 className='text-[26px] font-bold'>{product.title}</h1>
-        <p className='text-blue-500 '>Brand : {product.brand}</p>
+        <p className='text-blue-500 capitalize '>Brand : {product.brand}</p>
         <div className='flex border-b-[1px] border-gray-200 pb-1'>
           <span>{product.rating}&nbsp;</span>
           <span className='flex items-center '>
@@ -127,7 +127,7 @@ const ProductDetails = () => {
         </div>
         <span className='text-blue-500'>Delivery&nbsp;</span><span>within Two Days.</span>
         <p className='text-green-600 text-xl font-bold pt-4'>In stock.</p>
-        <p className='pt-3'>Sold by <span className='text-blue-500 '>{product.brand}</span> and <span className='text-blue-500'>Fulfilled by Amazon.</span></p>
+        <p className='pt-3'>Sold by <span className='text-blue-500 capitalize '>{product.brand}</span> and <span className='text-blue-500'>Fulfilled by Amazon.</span></p>
         <div className='pt-3'>
           <span>Quantity: </span>
           <select className='border-[1px] border-gray-200 rounded-md '>
@@ -139,16 +139,17 @@ const ProductDetails = () => {
           </select>
         </div>
         <button
-         onClick={() =>dispatch(addToCart({
-          id : product.id,
-          title : product.title,
-          price : product.price,
-          description : product.description,
-          category : product.category,
-          image : product.images,
-          thumbnail : product.thumbnail,
-          quantity : 1,
-        }))}
+          onClick={() => dispatch(addToCart({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            description: product.description,
+            category: product.category,
+            image: product.images,
+            thumbnail: product.thumbnail,
+            brand: product.brand,
+            quantity: 1,
+          }))}
           className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Add to Cart
         </button>
@@ -156,7 +157,7 @@ const ProductDetails = () => {
           className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Buy Now
         </button>
-        <p className='text-blue-500 pt-3'>Secure transaction</p>  
+        <p className='text-blue-500 pt-3'>Secure transaction</p>
         <button
           className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Add to Wish List

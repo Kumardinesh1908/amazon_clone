@@ -23,11 +23,14 @@ const Product = (props) => {
                 category: product.category,
                 image: product.images,
                 thumbnail: product.thumbnail,
+                brand: product.brand,
                 quantity: 1,
               }))}
               className='productLi'>Add to Cart <img src={cart} alt="cart" className='w-4 h-4' /></li>
-            <Link to={`${product.title}`} > <li className='productLi w-full'>View Details <img src={details} alt="details" className='w-4 h-4' /></li></Link>
-            <li className='productLi'>Add to WishList <img src={wishlist} alt="wishlist" className='w-4 h-4' /></li>
+            <Link to={`${product.title}`} >
+              <li className=' productLi'>View Details <img src={details} alt="details" className='w-4 h-4' /></li>
+            </Link>
+            <li className='productLi '>Add to WishList <img src={wishlist} alt="wishlist" className='w-4 h-4' /></li>
           </ul>
         </div>
         <div className='p-2 '>
@@ -64,8 +67,8 @@ const Product = (props) => {
               category: product.category,
               image: product.images,
               thumbnail: product.thumbnail,
+              brand: product.brand,
               quantity: 1,
-
             }))}
             className={`text-lg font-medium w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
           >Add to Cart</button>

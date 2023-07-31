@@ -9,11 +9,6 @@ export const amazonSlice = createSlice({
   name: 'amazon',
   initialState,
   reducers: {
-    // Redux Toolkit allows us to write "mutating" logic in reducers. It
-    // doesn't actually mutate the state because it uses the Immer library,
-    // which detects changes to a "draft state" and produces a brand new
-    // immutable state based off those changes
-
     addToCart: (state, action) => {
       const product = state.products.find((product) => product.id === action.payload.id);
       if (product) {
@@ -22,10 +17,29 @@ export const amazonSlice = createSlice({
         state.products.push(action.payload);
       }
     },
+    deleteProduct: (state, action) => {
+      state.products = state.products.filter((product) => product.id !== action.payload);
+      
+    },
+    resetCart : (state)=>{
+      state.products=[];
+    },
+    increaseQuantity : (state,action)=>{
+      const product = state.products.find((product)=> product.id === action.payload);
+      product.quantity++;
+    },
+    decreaseQuantity : (state,action)=>{
+      const product = state.products.find((product)=> product.id === action.payload);
+      if(product.quantity===1){
+        product.quantity = 1;
+      }else{
+      product.quantity--;
+      }
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart } = amazonSlice.actions;
+export const { addToCart,deleteProduct,resetCart,decreaseQuantity,increaseQuantity} = amazonSlice.actions;
 
 export default amazonSlice.reducer;

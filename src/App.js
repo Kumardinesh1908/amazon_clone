@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import CreateAccount from "./pages/CreateAccount";
 import ForgotPassword from "./pages/ForgotPassword";
 import ProductDetails from "./components/products/ProductDetails";
+import Cart from "../src/pages/cart"
 
 
 
@@ -56,6 +57,33 @@ function App() {
             },
           ]
         },
+        {
+          path: "/cart",
+          loader: productsData,
+          children: [
+            {
+              index: true,
+              loader: productsData,
+              element: <Cart />
+            },
+            // {
+            //   path: "/allProducts",
+            //   loader: productsData,
+            //   children: [
+            //     {
+            //       index: true,
+            //       loader: productsData,
+            //       element: <Products />
+            //     },
+            //     {
+            //       path: ":title",
+            //       loader: productsData,
+            //       element: <ProductDetails />,
+            //     },
+            //   ]
+            // },
+          ],
+        },       
         {
           path: "/mens-shirts",
           loader : mensData,
@@ -376,23 +404,14 @@ function App() {
             },
           ],
         },
-        // {
-        //   path: "/:category",
-        //   loader: ({ params }) => productsData(params.category), // Data loader for all product categories
-        //   element: <Products />
-        // },
-        // {
-        //   path: "/:category/:title",
-        //   loader: productsData, // Data loader for all product categories
-        //   element: <ProductDetails />,
-        // },
+
       ],
     },
-    {
-      path: "/allProducts/:title",
-      loader: productsData,
-      element: <ProductDetails />,
-    },
+    // {
+    //   path: "/allProducts/:title",
+    //   loader: productsData,
+    //   element: <ProductDetails />,
+    // },
     {
       path: "/signIn",
       children: [

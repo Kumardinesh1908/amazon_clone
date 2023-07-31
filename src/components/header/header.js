@@ -12,8 +12,7 @@ import { useSelector } from 'react-redux';
 
 export default function Header() {
 
-    const products = useSelector((state)=>state.amazon.products);
-    console.log(products);
+    const products = useSelector((state) => state.amazon.products);
 
     const allCategoryRef = useRef(null);
     const [showAll, setShowAll] = useState(false);
@@ -46,7 +45,7 @@ export default function Header() {
         if (response.data[0].PostOffice != null) {
             setLocationData(response.data);
             setWarning(false);
-        } 
+        }
     }
     const handleApply = () => {
         if (locationData) {
@@ -73,7 +72,7 @@ export default function Header() {
 
     return (
         <div className="w-full sticky top-0 z-50">
-            <div className="w-full bg-amazon_black text-white px-3 py-[6px] flex items-center">
+            <div className="w-full bg-amazon_black text-white px-3 py-[8px] flex items-center">
 
                 {/* logo starts here */}
                 <Link to="/">
@@ -184,15 +183,16 @@ export default function Header() {
                 {/* Orders ends here */}
 
                 {/* Cart starts here */}
-                <div className="headerHover flex items-start justify-center relative">
-                    <img className="w-12" src={shopping} alt="cart" />
-                    <p className="text-sm font-bold mt-5">Cart
-                        <span className="text-base font-semibold p-2 h-6 bg-[#f3a847] text-amazon_black rounded-full absolute left-9 top-0 flex items-center justify-center" >
-                            {products.length > 0 ? products.length : 0}
-                        </span>
-                    </p>
-
-                </div>
+                <Link to="/cart">
+                    <div className="headerHover flex items-start justify-center relative">
+                        <img className="w-12" src={shopping} alt="cart" />
+                        <p className="text-sm font-bold mt-5">Cart
+                            <span className="text-base font-semibold p-2 h-6 bg-[#f3a847] text-amazon_black rounded-full absolute left-9 top-0 flex items-center justify-center" >
+                                {products.length > 0 ? products.length : 0}
+                            </span>
+                        </p>
+                    </div>
+                </Link>
                 {/* Cart ends here */}
 
             </div>

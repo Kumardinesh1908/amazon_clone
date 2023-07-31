@@ -9,7 +9,7 @@
     }
     .productLi{
         @apply text-gray-600 hover:text-black text-sm font-medium border-b-[1px] border-b-gray-400
-        hover:border-b-gray-700 flex items-center justify-end gap-3 hover:cursor-pointer duration-300 w-full 
+        hover:border-b-gray-700 flex flex-row items-center justify-end gap-3 hover:cursor-pointer duration-300 w-full 
     }
     
 }
@@ -19,7 +19,3 @@
     border: 1px solid rgb(29, 177, 235);
   }
   
-  *{
-    margin: 0;
-    padding: 0;
-  }
