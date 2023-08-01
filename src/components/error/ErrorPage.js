@@ -14,7 +14,7 @@ useEffect(() => {
 
   return (
     <div>
-        <h1 className="">OOPS!! Something went wrong. You will be re-directed to previous page in 3-seconds.</h1>
+        <h1 className="">OOPS!! Something went wrong. You will be re-directed to main page in 3-seconds.</h1>
     </div>
   )
 }

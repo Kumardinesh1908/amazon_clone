@@ -5,16 +5,17 @@ import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, 
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/amazonSlice';
 
-
-
 const ProductDetails = () => {
   const dispatch = useDispatch();
+
   const data = useLoaderData();
-  const productsData = data.data.products;
+  const productsData = data.data.products; //when productDetails open from products use this data
+
   const { title } = useParams();
 
   const product = productsData.find((product) =>
     product.title === title);
+  console.log(product)
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // Automatically change images every 3 seconds
@@ -24,6 +25,7 @@ const ProductDetails = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [product.images.length]);
+  
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
@@ -34,9 +36,12 @@ const ProductDetails = () => {
     setSelectedQuantity(newQuantity);
   };
 
+  if (!product) {
+    return <h1>Details of this page available in its category page. please go back to this product's category page then select this product to see its details.</h1>
+  }
   return (
     <div className='flex bg-white justify-between'>
-    <ScrollRestoration />
+      <ScrollRestoration />
       <div className='w-[5%] mt-10 ml-1'>
         {product.images.map((item, index) => (
           <div key={index} className='border-[1px] border-black rounded-lg mb-5'
@@ -146,10 +151,13 @@ const ProductDetails = () => {
             price: product.price,
             description: product.description,
             category: product.category,
-            image: product.images,
+            images: product.images,
             thumbnail: product.thumbnail,
             brand: product.brand,
             quantity: selectedQuantity,
+            discountPercentage: product.discountPercentage,
+            rating: product.rating,
+            stock: product.stock
           }))}
           className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Add to Cart

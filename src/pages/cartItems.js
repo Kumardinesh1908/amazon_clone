@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { correct } from '../assets/index';
 import { deleteProduct, resetCart, increaseQuantity, decreaseQuantity } from '../redux/amazonSlice';
 import { Link, useLoaderData, ScrollRestoration } from 'react-router-dom';
-// import { store } from '../redux/store';
+import { useNavigate } from 'react-router-dom';
 
 const CartItems = () => {
     const data = useLoaderData();
@@ -29,13 +29,18 @@ const CartItems = () => {
         const updateCartHeight = () => {
             if (cartRef.current) {
                 const cartHeight = cartRef.current.clientHeight;
-                const setHeight = cartHeight * 0.7;
+                const setHeight = cartHeight * 0.85;
                 setProductDivHeight(setHeight);
             }
         };
         // Call the function when cart items change
         updateCartHeight();
     }, [products]);
+
+    const navigate = useNavigate();
+    const handleCategoryClick = (category,title) => {
+        navigate(`/${category}/${title}`); // Navigate to the products page with the selected category as a URL parameter
+    };
 
     return (
         <div className='flex flex-row gap-5'>
@@ -48,13 +53,11 @@ const CartItems = () => {
                         {
                             products.map((product) => (
                                 <div key={product.id} className='w-full border-b-[1px] border-b-gray-200 p-4 flex gap-6'>
-                                    <div className='w-1/5'>
+                                    <div className='w-1/5 cursor-pointer' onClick={() => handleCategoryClick(product.category,product.title)}>
                                         <img className='w-48 h-48' src={product.thumbnail} alt="productImage" />
                                     </div>
                                     <div className='w-4/5 flex flex-col gap-2 -mt-2'>
-                                        <Link to={`/allProducts/${product.title}`} >
-                                            <h2 className='text-[23px] font-medium'>{product.title}</h2>
-                                        </Link>
+                                            <h2 className='text-[23px] font-medium cursor-pointer' onClick={() => handleCategoryClick(product.category,product.title)}>{product.title}</h2>
                                         <p className=''>{product.description}</p>
                                         <div className='flex items-center '>
                                             <p className='font-medium text-[20px] '>₹&nbsp;</p>

@@ -21,10 +21,13 @@ const Product = (props) => {
                 price: product.price,
                 description: product.description,
                 category: product.category,
-                image: product.images,
+                images: product.images,
                 thumbnail: product.thumbnail,
                 brand: product.brand,
                 quantity: 1,
+                discountPercentage: product.discountPercentage,
+                rating: product.rating,
+                stock: product.stock
               }))}
               className='productLi'>Add to Cart <img src={cart} alt="cart" className='w-4 h-4' /></li>
             <Link to={`${product.title}`} >
@@ -65,10 +68,13 @@ const Product = (props) => {
               price: product.price,
               description: product.description,
               category: product.category,
-              image: product.images,
+              images: product.images,
               thumbnail: product.thumbnail,
               brand: product.brand,
               quantity: 1,
+              discountPercentage: product.discountPercentage,
+              rating: product.rating,
+              stock: product.stock
             }))}
             className={`text-lg font-medium w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
           >Add to Cart</button>
