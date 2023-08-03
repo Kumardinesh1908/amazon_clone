@@ -110,7 +110,6 @@ const Products = () => {
         setSortedProducts(sortedProducts);
       } else {
         setSortedProducts([]); // Reset sortedProducts to empty array
-
         // Check if any filters are applied, and if not, show all products
         if (!priceRange && !starRange) {
           setFilteredProducts(productsData);

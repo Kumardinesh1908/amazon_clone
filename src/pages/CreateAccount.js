@@ -14,25 +14,26 @@ const CreateAccount = () => {
     const [mobileError, setMobileError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    
     const validate = () => {
         const reqName = /^[A-Za-z\s]+$/;
         const reqEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const reqMobile = /^[0-9]{10}$/;
         const reqPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
         if (!reqName.test(nameInput)) {
-            setNameError("Enter a valid Name");
+            setNameError("Enter your name");
         }
         if (!reqMobile.test(mobileInput)) {
-            setMobileError("Enter a valid mobile number");
+            setMobileError("Enter your mobile number");
         }
         if (emailInput === "") {
             setEmailError("");
         }
         else if(!reqEmail.test(emailInput)){
-            setEmailError("Enter a valid Email");
+            setEmailError("Enter a valid email address");
             }
         if (!reqPassword.test(passwordInput)) {
-            setPasswordError("Enter a valid password")
+            setPasswordError("Enter your password")
         }
     }
 
@@ -44,6 +45,7 @@ const CreateAccount = () => {
             setMobileInput("");
             setEmailInput("");
             setPasswordInput("");
+            // setPasswordError("");
         }
     }
 
@@ -159,4 +161,4 @@ const CreateAccount = () => {
     )
 }
 
-export default CreateAccount
+export default CreateAccount;

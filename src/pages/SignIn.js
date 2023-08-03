@@ -82,7 +82,7 @@ const SignIn = () => {
                             </label>
                             {
                                 warningEmail && <div className="flex  items-center  pt-1 pb-2">
-                                    <img src={required} className="w-4 h-4" alt="warning" />
+                                    <img src={required} className="w-4 h-4 mr-1" alt="warning" />
                                     <div className="text-xs text-[#FF0000]">Enter your email or mobile phone number</div>
                                 </div>
                             }
@@ -93,7 +93,7 @@ const SignIn = () => {
                             </label>
                             {
                                 warningPassword && <div className="flex  items-center pt-1 pb-2">
-                                    <img src={required} className="w-4 h-4" alt="warning" />
+                                    <img src={required} className="w-4 h-4 mr-1" alt="warning" />
                                     <div className="text-xs text-[#FF0000]">There was a problem.Your password is incorrect</div>
                                 </div>
                             }

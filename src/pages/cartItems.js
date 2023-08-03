@@ -29,7 +29,7 @@ const CartItems = () => {
         const updateCartHeight = () => {
             if (cartRef.current) {
                 const cartHeight = cartRef.current.clientHeight;
-                const setHeight = cartHeight * 0.85;
+                const setHeight = cartHeight * 0.9;
                 setProductDivHeight(setHeight);
             }
         };
@@ -45,8 +45,8 @@ const CartItems = () => {
     return (
         <div className='flex flex-row gap-5'>
             <ScrollRestoration />
-            <div className=' w-[74%] flex flex-col gap-6 my-10 ml-5' ref={cartRef}> {/* based on the height this div  */}
-                <div className='w-full  bg-white py-7 px-5 '>
+            <div className=' w-[74%] flex flex-col gap-6 my-10 ml-5' > 
+                <div className='w-full  bg-white py-7 px-5' ref={cartRef}>
                     <h1 className='text-3xl font-semibold mb-1'>Shopping Cart</h1>
                     <hr />
                     <div>
@@ -88,19 +88,19 @@ const CartItems = () => {
                           text-center p-[4px] mt-1 active:ring-2 active:ring-offset-1 active:ring-blue-600
                          '>Clear Cart</button>
                         <div className='text-[22px] font-medium flex justify-end'>SubTotal ({totalQty} items) :&nbsp;
-                            <div className='flex  '>
+                            <div className='flex justify-center items-center '>
                                 <p className='font-medium text-[19px] '>₹&nbsp;</p>
                                 <span className='text-[23px] font-bold'>{totalPrice}.00</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className='w-full bg-white '>
-                    <p className='text-sm p-5'>
+                <div className='w-full bg-white h-16'>   
+                </div>
+                <p className='text-sm p-5'>
                         The price and availability of items at Amazon.in are subject to change. The shopping cart is a temporary place to store a list of your items and reflects each item's most recent price.
                         Do you have a promotional code? We'll ask you to enter your claim code when it's time to pay.
-                    </p>
-                </div>
+                </p>
             </div>
             <div className=' w-[22%] flex flex-col gap-5 my-10 '>
                 <div className='w-full  bg-white py-6 px-5'>
@@ -123,14 +123,14 @@ const CartItems = () => {
                 </div>
                 <div className='w-full  bg-white' >
                     <h1 className='font-semibold mx-3 pt-3 '>Customers who bought other items</h1>
-                    <div style={{ height: productDivHeight }} className='bg-white flex flex-col gap-4 py-3 ml-3 custom-scrollbar overflow-y-scroll '>
+                    <div style={{ height: productDivHeight }} className='bg-white flex flex-col gap-4 py-3 ml-3 custom-scrollbar overflow-y-hidden hover:overflow-y-scroll '>
                         {productsData.map((product) => (
                             <div className='flex flex-row gap-2' key={product.id} >
                                 <Link to={`/allProducts/${product.title}`}>
                                     <img className='w-20 h-20' src={product.thumbnail} alt="productImage" />
                                 </Link>
                                 <div className=''>
-                                    <Link to={`/allProducts/${product.title}`}>
+                                    <Link to={`/${product.category}/${product.title}`}>
                                         <p className='text-blue-600 text-xl font-semibold'>{product.title.substring(0, 15)}</p>
                                     </Link>
                                     <p className='text-red-600 text-[20px] font-semibold mt-2'>₹ {product.price}.00</p>

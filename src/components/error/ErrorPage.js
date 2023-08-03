@@ -6,7 +6,7 @@ const ErrorPage = () => {
 const navigate = useNavigate();
 useEffect(() => {
   const redirect = () => {
-    navigate("/");
+    navigate(-1);
   };
   const timeoutId = setTimeout(redirect, 3000);
   return () => clearTimeout(timeoutId);

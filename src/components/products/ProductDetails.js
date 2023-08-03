@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { ScrollRestoration, useLoaderData } from 'react-router-dom';
+import { ScrollRestoration, useLoaderData,Link } from 'react-router-dom';
 import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, transaction } from "../../assets/index";
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/amazonSlice';
@@ -25,7 +25,7 @@ const ProductDetails = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [product.images.length]);
-  
+
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
@@ -36,8 +36,10 @@ const ProductDetails = () => {
     setSelectedQuantity(newQuantity);
   };
 
+  const [cartButton, setCartButton] = useState(false);
+
   if (!product) {
-    return <h1>Details of this page available in its category page. please go back to this product's category page then select this product to see its details.</h1>
+    return <h1>Details of this product available in its category page. please go back to this product's category page then select this product to see its details.</h1>
   }
   return (
     <div className='flex bg-white justify-between'>
@@ -144,24 +146,32 @@ const ProductDetails = () => {
             <option value="5">5</option>
           </select>
         </div>
-        <button
-          onClick={() => dispatch(addToCart({
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            description: product.description,
-            category: product.category,
-            images: product.images,
-            thumbnail: product.thumbnail,
-            brand: product.brand,
-            quantity: selectedQuantity,
-            discountPercentage: product.discountPercentage,
-            rating: product.rating,
-            stock: product.stock
-          }))}
-          className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
-          Add to Cart
-        </button>
+        {cartButton
+          ? <Link to="/cart">
+            <button className={`pt-2 w-full text-center text-blue-600 rounded-2xl  bg-gray-100 border-gray-200 p-[4px] mt-3 active:ring-2     active:ring-offset-1 active:ring-blue-600`}>
+                Go to Cart
+              </button>
+            </Link>
+          : <button
+            onClick={() => {dispatch(addToCart({
+              id: product.id,
+              title: product.title,
+              price: product.price,
+              description: product.description,
+              category: product.category,
+              images: product.images,
+              thumbnail: product.thumbnail,
+              brand: product.brand,
+              quantity: selectedQuantity,
+              discountPercentage: product.discountPercentage,
+              rating: product.rating,
+              stock: product.stock
+            }));
+            setCartButton(true);
+          }}
+            className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+            Add to Cart
+          </button>}
         <button
           className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
           Buy Now

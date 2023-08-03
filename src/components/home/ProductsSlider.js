@@ -24,13 +24,13 @@ const ProductsSlider = () => {
         </span>
         <Link to="/allProducts">
           <span className='text-sm text-cyan-700 hover:text-red-400 font-semibold ml-5 cursor-pointer'>
-          See all products
+          Shop today’s deals
         </span>
         </Link>
       </div>
 
       <div  ref={sliderRef}
-        className=" bg-white w-[97%] mx-auto flex flex-row gap-5 custom-scrollbar overflow-x-scroll overflow-y-hidden">
+        className=" bg-white w-[97%] h-[250px] mx-auto flex flex-row gap-5 custom-scrollbar overflow-x-hidden group-hover:overflow-x-scroll overflow-y-hidden">
         {
           productsData.map((product, index) => (
             <div key={index}  className='cursor-pointer'
