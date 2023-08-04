@@ -3,16 +3,23 @@ import { useRef } from "react";
 import { logo, location, shopping, required } from "../../assets";
 import { allItems } from "../../constants";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuth, signOut } from "firebase/auth";
+import { userSignOut } from "../../redux/amazonSlice";
 
 
 export default function Header() {
 
+    const auth = getAuth();
+
+    const dispatch = useDispatch();
     const products = useSelector((state) => state.amazon.products);
+    const userInfo = useSelector((state) => state.amazon.userInfo);
+
 
     const allCategoryRef = useRef(null);
     const [showAll, setShowAll] = useState(false);
@@ -68,6 +75,15 @@ export default function Header() {
             fetchLocationData();
         }
     }, [userZipCode]);
+
+    const handleLogout = () => {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            dispatch(userSignOut())
+        }).catch((error) => {
+            // An error happened.
+        });
+    }
 
 
     return (
@@ -165,7 +181,11 @@ export default function Header() {
                 {/* Sign in starts here */}
                 <Link to="/signIn" preventScrollReset={true}>
                     <div className="headerHover flex flex-col items-start justify-center">
-                        <p className="text-xs font-semibold">Hello, sign in</p>
+                        {
+                            userInfo
+                                ? <p className="text-sm font-semibold">Hello, {userInfo.name}</p>
+                                : <p className="text-xs font-semibold">Hello, sign in</p>
+                        }
                         <p className="text-sm font-bold -mt-1">Accounts & Lists
                             <span>
                                 <ArrowDropDownIcon />
@@ -195,8 +215,17 @@ export default function Header() {
                 </Link>
                 {/* Cart ends here */}
 
+                {/* Logout starts here */}
+                {
+                    userInfo && (
+                        <div onClick={handleLogout} className="headerHover flex flex-col justify-center items-center relative">
+                            <LogoutIcon />
+                            <p className="hidden mdl:inline-flex text-sm font-bold">Logout</p>
+                        </div>
+                    )
+                }
+                {/* Logout ends here */}
             </div>
-
         </div>
     );
 };

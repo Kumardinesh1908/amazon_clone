@@ -15,7 +15,6 @@ const ProductDetails = () => {
 
   const product = productsData.find((product) =>
     product.title === title);
-  console.log(product)
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // Automatically change images every 3 seconds

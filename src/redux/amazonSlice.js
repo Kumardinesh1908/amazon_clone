@@ -2,13 +2,14 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   products: [],
-  userTnfo: [],
-}
+  userInfo: null,
+};
 
 export const amazonSlice = createSlice({
   name: 'amazon',
   initialState,
   reducers: {
+    // Products Reducers Start Here
     addToCart: (state, action) => {
       const product = state.products.find((product) => product.id === action.payload.id);
       if (product) {
@@ -36,10 +37,22 @@ export const amazonSlice = createSlice({
       product.quantity--;
       }
     },
+    // Products Reducers End Here
+
+    // UserInfo Reducers Start Here
+    // User Authentication
+    setUserInfo : (state,action)=>{
+      state.userInfo = action.payload;
+    },
+    userSignOut : (state)=>{
+      state.userInfo = null;
+    },
+
+
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart,deleteProduct,resetCart,decreaseQuantity,increaseQuantity} = amazonSlice.actions;
+export const { addToCart,deleteProduct,resetCart,decreaseQuantity,increaseQuantity,setUserInfo,userSignOut} = amazonSlice.actions;
 
 export default amazonSlice.reducer;

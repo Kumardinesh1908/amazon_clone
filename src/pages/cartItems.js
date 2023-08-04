@@ -29,7 +29,7 @@ const CartItems = () => {
         const updateCartHeight = () => {
             if (cartRef.current) {
                 const cartHeight = cartRef.current.clientHeight;
-                const setHeight = cartHeight * 0.9;
+                const setHeight = cartHeight;
                 setProductDivHeight(setHeight);
             }
         };
@@ -46,13 +46,13 @@ const CartItems = () => {
         <div className='flex flex-row gap-5'>
             <ScrollRestoration />
             <div className=' w-[74%] flex flex-col gap-6 my-10 ml-5' > 
-                <div className='w-full  bg-white py-7 px-5' ref={cartRef}>
+                <div className='w-full  bg-white py-7 px-5' >
                     <h1 className='text-3xl font-semibold mb-1'>Shopping Cart</h1>
                     <hr />
-                    <div>
+                    <div ref={cartRef}>
                         {
                             products.map((product) => (
-                                <div key={product.id} className='w-full border-b-[1px] border-b-gray-200 p-4 flex gap-6'>
+                                <div key={product.id} className='w-full border-b-[1px] border-b-gray-200 p-4 flex gap-6' >
                                     <div className='w-1/5 cursor-pointer' onClick={() => handleCategoryClick(product.category,product.title)}>
                                         <img className='w-48 h-48' src={product.thumbnail} alt="productImage" />
                                     </div>

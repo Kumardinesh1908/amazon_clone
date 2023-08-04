@@ -11,8 +11,8 @@ const Category = () => {
     };
 
     return (
-        <div className='relative'>
-            <div className='w-full z-10 flex flex-row flex-wrap  justify-evenly -mt-[400px] '>
+        <div className='relative z-10'>
+            <div className='w-full flex flex-row flex-wrap  justify-evenly -mt-[400px] '>
                 {categoryData.map((item) => (
                     <div className='w-[310px] h-[435px] mb-7 bg-white ' key={item.id} >
                         <div className='m-[20px]'>
