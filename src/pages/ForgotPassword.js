@@ -40,7 +40,7 @@ const ForgotPassword = () => {
                         <form onSubmit={handleSubmit} className='my-3'>
                             <label className='text-sm font-semibold'>
                                 Email or mobile phone number
-                                <input type="text" value={input} onChange={(e)=>{setInput(e.target.value);setError('')}} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                                <input type="text" value={input}  autoComplete="true" onChange={(e)=>{setInput(e.target.value);setError('')}} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
                             </label>
                             <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-4 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
                             >Continue</button>

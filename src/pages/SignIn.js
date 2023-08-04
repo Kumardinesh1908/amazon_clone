@@ -127,7 +127,7 @@ const SignIn = () => {
                                 : <form className='my-3' onSubmit={handleSubmit}>
                                     <label className='text-sm font-semibold'>
                                         Email or mobile number
-                                        <input type="text" value={inputValue} onChange={(e) => {
+                                        <input type="text" autoComplete="true" value={inputValue} onChange={(e) => {
                                             setInputValue(e.target.value);
                                             setUserEmailError("");
                                         }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
@@ -140,7 +140,7 @@ const SignIn = () => {
                                     }
                                     <label className='text-sm font-semibold'>
                                         Password
-                                        <input type="password" value={passwordValue} onChange={(e) => {
+                                        <input type="password" autoComplete="true" value={passwordValue} onChange={(e) => {
                                             setPasswordValue(e.target.value);
                                             setWarningPassword("");
                                         }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />

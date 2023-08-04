@@ -71,7 +71,6 @@ const CreateAccount = () => {
                     // photoURL: "hi",
                 });
                 const user = userCredential.user;
-                console.log(user);
                  sendEmailVerification(auth.currentUser)
                     .then(() => {
                         console.log("verify")
@@ -115,7 +114,7 @@ const CreateAccount = () => {
                         <form className='my-3' onSubmit={handleSubmit}>
                             <label className='text-sm font-semibold'>
                                 Your name
-                                <input type="text" placeholder="First and last name" value={nameInput} onChange={(e) => {
+                                <input type="text" placeholder="First and last name" autoComplete="true" value={nameInput} onChange={(e) => {
                                     setNameInput(e.target.value);
                                     setNameError("");
                                 }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1 ' />
@@ -126,7 +125,7 @@ const CreateAccount = () => {
                             }
                             <label className='text-sm font-semibold mt-3'>
                                 Email
-                                <input type="text" value={emailInput} onChange={(e) => {
+                                <input type="text" value={emailInput} autoComplete="true" onChange={(e) => {
                                     setEmailInput(e.target.value);
                                     setEmailError("");
                                     setFirebaseError("");
@@ -140,7 +139,7 @@ const CreateAccount = () => {
                                 Mobile number (Optional)
                                 <div className='flex items-center justify-between mt-1'>
                                     <div className='w-[22%] border-[1px] rounded-md border-[#a6a6a6] p-1'>IN +91</div>
-                                    <input type="tel" maxLength="10" placeholder="Mobile number" value={mobileInput} onChange={(e) => {
+                                    <input type="tel" autoComplete="true" maxLength="10" placeholder="Mobile number" value={mobileInput} onChange={(e) => {
                                         setMobileInput(e.target.value);
                                         setMobileError("");
                                     }} className='w-[74%] border-[1px] border-[#a6a6a6] rounded p-1' />
@@ -151,7 +150,7 @@ const CreateAccount = () => {
                             }
                             <label className='text-sm font-semibold mt-3'>
                                 Password
-                                <input type="password" value={passwordInput} onChange={(e) => {
+                                <input type="password"  autoComplete="true" value={passwordInput} onChange={(e) => {
                                     setPasswordInput(e.target.value);
                                     setPasswordError("");
                                 }} placeholder="At least 6 characters" className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />

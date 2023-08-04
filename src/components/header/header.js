@@ -101,12 +101,12 @@ export default function Header() {
                 {/* Delivery starts here */}
                 <div className="headerHover" onClick={() => setSelectedLocation(!selectedLocation)}>
                     <img className="w-6 h-5 mt-1" src={location} alt="locationIcon" />
-                    <p className="text-xs text-lightText font-medium flex flex-col items-start">
+                    <div className="text-xs text-lightText font-medium flex flex-col items-start">
                         {locationName ? 'Deliver to' : 'Hello'}
                         <span className="text-sm font-bold -mt-1 text-whiteText">
                             {locationName ? <p>{locationName[0].PostOffice[0].District} {locationName[0].PostOffice[0].Pincode}</p> : 'Select your address'}
                         </span>
-                    </p>
+                    </div>
                 </div>
                 {selectedLocation &&
                     <div className='w-screen h-screen text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-50 flex items-center justify-center' >
@@ -179,7 +179,7 @@ export default function Header() {
                 {/* Language ends here */}
 
                 {/* Sign in starts here */}
-                <Link to="/signIn" preventScrollReset={true}>
+                <Link to="/signIn">
                     <div className="headerHover flex flex-col items-start justify-center">
                         {
                             userInfo
@@ -197,7 +197,7 @@ export default function Header() {
 
                 {/* Orders starts here */}
                 <div className="headerHover flex flex-col items-start justify-center">
-                    <p className="text-xs font-semibold">Returns</p>
+                    <p className="text-xs font-semibold">Returns rctgvhbjnkml,;.</p>
                     <p className="text-sm font-bold -mt-1">& Orders</p>
                 </div>
                 {/* Orders ends here */}
