@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9039cc93.css",
+    "main.js": "/static/js/main.0a15546f.js",
+    "static/media/bannerImgTwo.jpg": "/static/media/bannerImgTwo.bc1bdb910ead16c65197.jpg",
+    "static/media/bannerImgFour.jpg": "/static/media/bannerImgFour.8f7fc6b56e74dba2b6f9.jpg",
+    "static/media/bannerImgOne.jpg": "/static/media/bannerImgOne.efb3d39101f7ef77d616.jpg",
+    "static/media/bannerImgThree.jpg": "/static/media/bannerImgThree.c80809bb40bee5c34372.jpg",
+    "static/media/bannerImgFive.jpg": "/static/media/bannerImgFive.aa945e25375bfdee385f.jpg",
+    "static/media/delivered.png": "/static/media/delivered.5aba557342c0aad1402b.png",
+    "static/media/transaction.png": "/static/media/transaction.dcd8f98589041fd1c337.png",
+    "static/media/logo.png": "/static/media/logo.1c9be0b254d3ff1dc9e9.png",
+    "static/media/offers.png": "/static/media/offers.a41ac02de73f11fe45f2.png",
+    "static/media/exchange.png": "/static/media/exchange.3bf9a4417accd14dc37d.png",
+    "static/media/emptyStar.png": "/static/media/emptyStar.0f42d4716c27bb453572.png",
+    "static/media/cod.png": "/static/media/cod.e94ae61eb9297dac224a.png",
+    "static/media/delivery.png": "/static/media/delivery.501a813cb3eb25ac270c.png",
+    "static/media/correct.png": "/static/media/correct.9eb2ee85ffe0bb5233c3.png",
+    "static/media/halfStar.png": "/static/media/halfStar.761f4e2651b0bfab453b.png",
+    "static/media/star.png": "/static/media/star.fb21e4c6afd423fd0fc1.png",
+    "static/media/right.png": "/static/media/right.b733ae1cb520e96707d0.png",
+    "static/media/shopping.png": "/static/media/shopping.d7f17fca4e2b412ef05e.png",
+    "static/media/user.png": "/static/media/user.0b34679a6197d735b12c.png",
+    "static/media/required.png": "/static/media/required.3e382e0da87d681eef8c.png",
+    "static/media/location.png": "/static/media/location.2f053860cf1f23c59ed9.png",
+    "static/media/compare.png": "/static/media/compare.7fe636c0efcd2fb914f0.png",
+    "static/media/world.png": "/static/media/world.588db8556336e734cc96.png",
+    "static/media/UpDown.png": "/static/media/UpDown.cc6a7841bc365fc1b4e3.png",
+    "static/media/logoBlack.png": "/static/media/logoBlack.52d0bf32947cfc6f39d3.png",
+    "static/media/i.png": "/static/media/i.6294e41ad3551402323f.png",
+    "static/media/cart.png": "/static/media/cart.6f7f2d84b2f9c3400fcb.png",
+    "index.html": "/index.html",
+    "main.9039cc93.css.map": "/static/css/main.9039cc93.css.map",
+    "main.0a15546f.js.map": "/static/js/main.0a15546f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9039cc93.css",
+    "static/js/main.0a15546f.js"
+  ]
+}

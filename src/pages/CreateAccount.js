@@ -64,7 +64,6 @@ const CreateAccount = () => {
         }
         setLoading(true);
         createUserWithEmailAndPassword(auth, emailInput, passwordInput)
-
             .then((userCredential) => {
                 updateProfile(auth.currentUser, {
                     displayName: nameInput,
