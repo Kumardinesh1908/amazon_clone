@@ -197,7 +197,7 @@ export default function Header() {
 
                 {/* Orders starts here */}
                 <div className="headerHover flex flex-col items-start justify-center">
-                    <p className="text-xs font-semibold">Returns rctgvhbjnkml,;.</p>
+                    <p className="text-xs font-semibold">Returns</p>
                     <p className="text-sm font-bold -mt-1">& Orders</p>
                 </div>
                 {/* Orders ends here */}
