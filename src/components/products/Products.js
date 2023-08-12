@@ -35,7 +35,7 @@ const Products = () => {
     // Set the filtered products
     setFilteredProducts(selectedCategory === "" ? productsData : filteredProducts);
   };
-  
+
 
   const handleStarFilter = (selectedRange) => {
     // Determine the array to use for filtering based on the presence of priceRange
@@ -117,7 +117,7 @@ const Products = () => {
       }
     };
     applySorting();
-  }, [sortOrder, filteredProducts, priceRange, starRange,productsData]);
+  }, [sortOrder, filteredProducts, priceRange, starRange, productsData]);
 
   const handleSortingChange = (e) => {
     const selectedSortOrder = e.target.value;
@@ -151,7 +151,7 @@ const Products = () => {
             Over ₹1,000
           </p>
         </div>
-        
+
         <div className='px-5 py-[10px]'>
           <p className='text-[18px] underline font-bold mb-1'>Avg. Customer Review</p>
           <div className={`flex items-center font-medium mt-2 mb-1 cursor-pointer ${starRange === "4.5" ? "text-blue-500" : ""}`}
@@ -177,20 +177,20 @@ const Products = () => {
         </div>
 
         <div className='px-5 py-[10px] '>
-            <p className='text-[18px] underline font-bold mb-1'>Category</p>
-            <div className={`font-medium mb-[1px] cursor-pointer ${selectedCategory === "" ? "text-blue-500" : ""}`} 
+          <p className='text-[18px] underline font-bold mb-1'>Category</p>
+          <div className={`font-medium mb-[1px] cursor-pointer ${selectedCategory === "" ? "text-blue-500" : ""}`}
             onClick={() => handleCategoryFilter("")}
-            >
+          >
             All
           </div>
           {uniqueCategories.map((category) => (
-            <div key={category} className={`font-medium mb-[1px] cursor-pointer capitalize ${selectedCategory === category ? "text-blue-500" : ""}`} 
-            onClick={() => handleCategoryFilter(category)}
+            <div key={category} className={`font-medium mb-[1px] cursor-pointer capitalize ${selectedCategory === category ? "text-blue-500" : ""}`}
+              onClick={() => handleCategoryFilter(category)}
             >
               {category}
             </div>
           ))}
-          </div>
+        </div>
       </div>
 
       <div className='w-[82%] bg-white'>

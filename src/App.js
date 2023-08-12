@@ -426,12 +426,15 @@ import CreateAccount from "./pages/CreateAccount";
 import ForgotPassword from "./pages/ForgotPassword";
 import Products from "./components/products/Products";
 import ProductDetails from "./components/products/ProductDetails";
-import Cart from "../src/pages/cart"
+import Cart from "../src/pages/cart";
 import { useState, useEffect } from "react";
+import { UserCartProvider } from "./context/userCartContext";
+import { UserAddressProvider } from "./context/userAddressContext";
+import Checkout from "../src/pages/Checkout";
 
 const Layout = ({ children }) => {
   return (
-    <div className="bg-gray-200">
+    <div className="bg-gray-100">
       <Header />
       <HeaderBottom />
       <ScrollRestoration />
@@ -498,6 +501,7 @@ function getProductLoader(category) {
 
 
 function App() {
+
   const [categoryRoutes, setCategoryRoutes] = useState([]);
 
   useEffect(() => {
@@ -528,8 +532,8 @@ function App() {
     {
       path: "/",
       element: <Layout>
-      <Outlet />
-    </Layout>,
+        <Outlet />
+      </Layout>,
       errorElement: <ErrorPage />,
       children: [
         {
@@ -578,9 +582,21 @@ function App() {
       path: "/createAccount",
       element: <CreateAccount />,
     },
+    {
+      path: "/checkout",
+      element: <Checkout />,
+    },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+
+    <UserCartProvider>
+      < UserAddressProvider>
+        <RouterProvider router={router} />
+      </UserAddressProvider>
+    </UserCartProvider>
+
+  );
 }
 
 export default App;

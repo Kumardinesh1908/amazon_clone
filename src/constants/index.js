@@ -104,8 +104,13 @@ export const footerMiddleData = [
 ];
 
 export const countryList = [
-  "Australia", "Brazil", "Canada", "China", "France", "Germany", "Italy", "Japan", "Mexico", "Netherlands", "Poland", "Singapore", "Spain",
+  "Australia", "Brazil", "Canada", "China", "France", "Germany","India", "Italy", "Japan", "Mexico", "Netherlands", "Poland", "Singapore", "Spain",
   "Turkey", "United Arab Emirates", "United Kingdom", "United States",
+];
+
+export const states =[
+ "Andaman and Nicobar Islands","Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chandigarh","Chhattisgarh","Dadra and Nagar Haveli and Daman & Diu","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu & Kashmir","Jharkhand","Karnataka",
+"Kerala","Ladakh","Lakshadweep","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Puducherry","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttarakhand","Uttar Pradesh","West Bengal"
 ];
 
 export const footerBootmData = [

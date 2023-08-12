@@ -35,6 +35,7 @@ module.exports = {
       boxShadow : {
         testShadow : "0px 0px 32px 1px rgba(199,199,199,1)",
         amazonInput : " 0px 0px 3px 2px rgba(228 121 17 / 50%)",
+        innerBottom : 'inset 0 5px 5px -5px rgba(0, 0, 0, 0.3)',
       }
     },
   },

@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   products: [],
   userInfo: null,
+  isAuthenticated: false,
+  buyNowProduct: null,
 };
 
 export const amazonSlice = createSlice({
@@ -11,7 +13,7 @@ export const amazonSlice = createSlice({
   reducers: {
     // Products Reducers Start Here
     addToCart: (state, action) => {
-      const product = state.products.find((product) => product.id === action.payload.id);
+      const product = state.products.find((product) => product.title === action.payload.title);
       if (product) {
         product.quantity += action.payload.quantity;
       } else {
@@ -19,40 +21,50 @@ export const amazonSlice = createSlice({
       }
     },
     deleteProduct: (state, action) => {
-      state.products = state.products.filter((product) => product.id !== action.payload);
-      
+      state.products = state.products.filter((product) => product.title !== action.payload);
     },
-    resetCart : (state)=>{
-      state.products=[];
+    resetCart: (state) => {
+      state.products = [];
     },
-    increaseQuantity : (state,action)=>{
-      const product = state.products.find((product)=> product.id === action.payload);
+    increaseQuantity: (state, action) => {
+      const product = state.products.find((product) => product.title === action.payload);
       product.quantity++;
     },
-    decreaseQuantity : (state,action)=>{
-      const product = state.products.find((product)=> product.id === action.payload);
-      if(product.quantity===1){
+    decreaseQuantity: (state, action) => {
+      const product = state.products.find((product) => product.title === action.payload);
+      if (product.quantity === 1) {
         product.quantity = 1;
-      }else{
-      product.quantity--;
+      } else {
+        product.quantity--;
       }
     },
-    // Products Reducers End Here
 
     // UserInfo Reducers Start Here
-    // User Authentication
-    setUserInfo : (state,action)=>{
+    setUserInfo: (state, action) => {
       state.userInfo = action.payload;
     },
-    userSignOut : (state)=>{
+    userSignOut: (state) => {
       state.userInfo = null;
     },
 
+    // User Authentication
+    setUserAuthentication: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
+
+    // Buy Now Product Reducers
+    buyNow: (state,action)=>{
+      state.buyNowProduct = action.payload;
+    }, 
+    resetBuyNowProduct: (state) => {
+      state.buyNowProduct = null;
+    },
 
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart,deleteProduct,resetCart,decreaseQuantity,increaseQuantity,setUserInfo,userSignOut} = amazonSlice.actions;
+export const { addToCart, deleteProduct, resetCart, decreaseQuantity, increaseQuantity, setUserInfo, userSignOut, setUserAuthentication,buyNow,resetBuyNowProduct } = amazonSlice.actions;
+// addToUserCart, resetUserCart
 
 export default amazonSlice.reducer;

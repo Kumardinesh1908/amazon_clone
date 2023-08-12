@@ -5,10 +5,13 @@ import { i, right } from '../assets';
 import { RotatingLines } from "react-loader-spinner";
 import { motion } from "framer-motion";
 import ScrollToTop from '../ScrollToTop';
-import { getAuth, createUserWithEmailAndPassword, updateProfile,sendEmailVerification } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { db } from '../firebase/firebase.config';
+import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 
 const CreateAccount = () => {
     const navigate = useNavigate();
+    // Initialize Firebase auth
     const auth = getAuth();
 
     const [nameInput, setNameInput] = useState("");
@@ -24,31 +27,38 @@ const CreateAccount = () => {
     const [passwordError, setPasswordError] = useState("");
     const [firebaseError, setFirebaseError] = useState("");
 
+    // Function to validate user input
     const validate = () => {
+        // Regular expressions for input validation
         const reqName = /^[A-Za-z\s]+$/;
         const reqEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const reqMobile = /^[0-9]{10}$/;
-        const reqPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        // const reqPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+        const reqPassword = /^.{6,}$/;
         let isValid = true;
 
+        // Validate name
         if (!reqName.test(nameInput)) {
             setNameError("Enter your name");
             isValid = false;
         }
-        // if (mobileInput === "") {
-        //     setEmailError("");
-        //     isValid = true;
-        // }
+        if (mobileInput === "") {
+            setMobileError("");
+            isValid = true;
+        }
+        // Validate mobile number
         if (mobileInput) {
             if (!reqMobile.test(mobileInput)) {
-                setMobileError("Enter your mobile number");
+                setMobileError("Enter a valid mobile number");
                 isValid = false;
             }
         }
+        // Validate email
         if (!reqEmail.test(emailInput)) {
             setEmailError("Enter a valid email address");
             isValid = false;
         }
+        // Validate password
         if (!reqPassword.test(passwordInput)) {
             setPasswordError("Enter your password");
             isValid = false;
@@ -56,6 +66,39 @@ const CreateAccount = () => {
         return isValid;
     }
 
+    // Function to save user data to Firestore
+    const saveUserDataToFirebase = async (user) => {
+        // Firestore collections and documents
+        const usersCollectionRef = collection(db, "users");
+        const userRef = doc(usersCollectionRef, user.email);
+        try {
+            const userRefSnapshot = await getDoc(userRef);
+            if (!userRefSnapshot.exists()) {
+                const userDetailsRef = doc(userRef, "details", user.uid);
+                const userDetailsSnapshot = await getDoc(userDetailsRef);
+                if (!userDetailsSnapshot.exists()) {
+                    // If the user details don't exist, save them to Firestore
+                    await setDoc(userDetailsRef, {
+                        id: user.uid,
+                        name: user.displayName,
+                        email: user.email,
+                        image: user.photoURL,
+                        mobile: user.phoneNumber,
+                        createdOn: new Date(),
+                    });
+                    // console.log("User details saved to Firestore.");
+                } else {
+                    console.log("User details already exist in Firestore.");
+                }
+            } else {
+                console.log("User email already exists in Firestore.");
+            }
+        } catch (error) {
+            console.error("Error fetching user details:", error);
+        }
+    };
+
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -63,25 +106,30 @@ const CreateAccount = () => {
             return;
         }
         setLoading(true);
+        // Create user with email and password
         createUserWithEmailAndPassword(auth, emailInput, passwordInput)
             .then((userCredential) => {
                 updateProfile(auth.currentUser, {
                     displayName: nameInput,
-                    // phoneNumber : mobileInput,
-                    // photoURL: "hi",
-                });
-                const user = userCredential.user;
-                 sendEmailVerification(auth.currentUser)
-                    .then(() => {
-                        console.log("verify")
+                }).then(() => {
+                    // Save user data to Firestore here
+                    const user = userCredential.user;
+                    saveUserDataToFirebase(user);
+                    // Send mail to verify the user's email
+                    sendEmailVerification(auth.currentUser).then(() => {
                         // ...
-                    });
-                setLoading(false);
-                setSuccessMsg("Account Created Successfully!");
-                setTimeout(() => {
-                    navigate("/signIn");
-                    setSuccessMsg("");
-                }, 3000);
+                    })
+                    setLoading(false);
+                    setSuccessMsg("Account Created Successfully!");
+                    setTimeout(() => {
+                        navigate("/signIn");
+                        setSuccessMsg("");
+                    }, 3000);
+                }).catch((error) => {
+                    console.error("Error updating profile:", error);
+                    setLoading(false);
+                    setFirebaseError("Failed to create an account. Please try again later.");
+                });
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -90,6 +138,7 @@ const CreateAccount = () => {
                     setLoading(false);
                 }
             });
+        // Reset input fields
         setEmailInput("");
         setMobileInput("");
         setNameInput("");
@@ -118,7 +167,6 @@ const CreateAccount = () => {
                                     setNameInput(e.target.value);
                                     setNameError("");
                                 }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1 ' />
-
                             </label>
                             {
                                 nameError && <div className='text-sm text-[#FF0000]'>{nameError}</div>
@@ -150,7 +198,7 @@ const CreateAccount = () => {
                             }
                             <label className='text-sm font-semibold mt-3'>
                                 Password
-                                <input type="password"  autoComplete="true" value={passwordInput} onChange={(e) => {
+                                <input type="password" autoComplete="true" value={passwordInput} onChange={(e) => {
                                     setPasswordInput(e.target.value);
                                     setPasswordError("");
                                 }} placeholder="At least 6 characters" className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
@@ -168,7 +216,7 @@ const CreateAccount = () => {
                             <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-5 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
                             >Continue</button>
                             {
-                                loading && <div className='flex justify-center'>
+                                loading && <div className='flex justify-center mt-4'>
                                     <RotatingLines
                                         strokeColor="#febd69"
                                         strokeWidth="5"

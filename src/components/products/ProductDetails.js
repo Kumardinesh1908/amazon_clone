@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { ScrollRestoration, useLoaderData,Link } from 'react-router-dom';
+import { ScrollRestoration, useLoaderData, Link} from 'react-router-dom';
 import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, transaction } from "../../assets/index";
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/amazonSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, buyNow } from '../../redux/amazonSlice';
+import { db } from '../../firebase/firebase.config';
+import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
+import { useCart } from '../../context/userCartContext';
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
 
-  const data = useLoaderData();
+  const authenticated = useSelector((state) => state.amazon.isAuthenticated);
+  const userInfo = useSelector((state) => state.amazon.userInfo);
+
+  const [cartButton, setCartButton] = useState(false);
+
+  const data = useLoaderData(); // Load the data from the router context
   const productsData = data.data.products; //when productDetails open from products use this data
 
+  // Get the "title" parameter from the URL
   const { title } = useParams();
-
+  // Find the product based on the title from the URL parameters
   const product = productsData.find((product) =>
     product.title === title);
 
@@ -24,18 +33,103 @@ const ProductDetails = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [product.images.length]);
-
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
 
+  // Get the userCart and updateUserCart function from the context
+  const { userCart, updateUserCart } = useCart();
+
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+  // Function to handle quantity change
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
     setSelectedQuantity(newQuantity);
   };
 
-  const [cartButton, setCartButton] = useState(false);
+  // Function to save a product to Firebase cart
+  const saveProductToFirsebase = async (product) => {
+    const productWithDefaultQuantity = {
+      ...product,
+      quantity: selectedQuantity,
+    };
+    const usersCollectionRef = collection(db, "users");
+    const userRef = doc(usersCollectionRef, userInfo.email);
+    const userCartRef = collection(userRef, "cart");
+    const cartRef = doc(userCartRef, userInfo.id);
+    try {
+      const snap = await getDoc(cartRef);
+      if (snap.exists()) {
+        const cart = snap.data().cart || [];
+        const existingProductIndex = cart.findIndex(
+          (item) => item.title === product.title
+        );
+        if (existingProductIndex !== -1) {
+          // If the product already exists in the cart, increase its quantity
+          cart[existingProductIndex].quantity += selectedQuantity;
+        } else {
+          // If the product is not in the cart, add it to the cart
+          cart.push(productWithDefaultQuantity);
+        }
+        await setDoc(cartRef, { cart: cart }, { merge: true });
+        // Update the user's cart in context to reflect the change
+        updateUserCart(cart);
+      }
+      else {
+        await setDoc(cartRef, { cart: [productWithDefaultQuantity] }, { merge: true });
+        // Update the user's cart in context to reflect the change immeditely in our website
+        updateUserCart([...userCart, productWithDefaultQuantity]);
+      }
+    } catch (error) {
+      console.error('Error saving product to Firebase cart:', error);
+    }
+  }
+
+  // Function to handle Add to Cart button click
+  const handleAddToCart = (product) => {
+    // If user is not authenticated, add to Redux cart
+    if (!authenticated) {
+      dispatch(addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        description: product.description,
+        category: product.category,
+        images: product.images,
+        thumbnail: product.thumbnail,
+        brand: product.brand,
+        quantity: selectedQuantity,
+        discountPercentage: product.discountPercentage,
+        rating: product.rating,
+        stock: product.stock
+      }));
+    }
+    else {
+      // If user is authenticated, save to Firebase cart
+      saveProductToFirsebase(product);
+    }
+  }
+
+  // function to handle Buy Now button
+  const handleBuyNow = (product) => {
+    if (authenticated) {
+      dispatch(buyNow({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        description: product.description,
+        category: product.category,
+        images: product.images,
+        thumbnail: product.thumbnail,
+        brand: product.brand,
+        quantity: selectedQuantity,
+        discountPercentage: product.discountPercentage,
+        rating: product.rating,
+        stock: product.stock
+      }));
+    }
+  }
 
   if (!product) {
     return <h1>Details of this product available in its category page. please go back to this product's category page then select this product to see its details.</h1>
@@ -148,33 +242,34 @@ const ProductDetails = () => {
         {cartButton
           ? <Link to="/cart">
             <button className={`pt-2 w-full text-center text-blue-600 rounded-2xl  bg-gray-100 border-gray-200 p-[4px] mt-3 active:ring-2     active:ring-offset-1 active:ring-blue-600`}>
-                Go to Cart
-              </button>
-            </Link>
+              Go to Cart
+            </button>
+          </Link>
           : <button
-            onClick={() => {dispatch(addToCart({
-              id: product.id,
-              title: product.title,
-              price: product.price,
-              description: product.description,
-              category: product.category,
-              images: product.images,
-              thumbnail: product.thumbnail,
-              brand: product.brand,
-              quantity: selectedQuantity,
-              discountPercentage: product.discountPercentage,
-              rating: product.rating,
-              stock: product.stock
-            }));
-            setCartButton(true);
-          }}
+            onClick={() => {
+              handleAddToCart(product);
+              setCartButton(true);
+            }}
             className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
             Add to Cart
           </button>}
-        <button
-          className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
-          Buy Now
-        </button>
+        {
+          authenticated
+            ? <Link to="/checkout">
+              <button
+                onClick={() => handleBuyNow(product)}
+                className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+                Buy Now
+              </button>
+            </Link>
+            : <Link to="/signIn">
+              <button
+                className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+                Buy Now
+              </button>
+            </Link>
+        }
+
         <p className='text-blue-500 pt-3'>Secure transaction</p>
         <button
           className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>

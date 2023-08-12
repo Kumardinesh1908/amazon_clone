@@ -13,7 +13,7 @@ const SideNavContent = () => {
           return (
             <React.Fragment key={index} >
               <h3 className='text-lg font-sans font-bold pl-[36px] pt-[18px] mb-1'>
-                {console.log(item.category)}
+                {/* {console.log(item.category)} */}
               </h3>
               <ul className='pb-1 border-b-[1px] border-gray-400'>
                 {item.subcategories.map((subItem, subIndex) => {

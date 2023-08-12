@@ -55,7 +55,7 @@ export default function HeaderBottom() {
                                 ref={ref}
                             >
                                 <div className='bg-amazon_light cursor-pointer  text-white py-[11px] px-[36px] flex items-center gap-3'>
-                                    <img className="w-[26px]" src={user} alt='user' />
+                                <img className="w-[28px] rounded-xl" src={userInfo ? userInfo.image : user} alt='user' />
                                     {
                                         userInfo
                                             ? <h3 className='font-titleFont font-bold text-lg tracking-wider'>Hello, {userInfo.name}</h3>

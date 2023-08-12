@@ -31,7 +31,9 @@ import transaction from './transaction.png';
 import delivered from './delivered.png';
 import required from './required.png';
 import correct from './correct.png';
-import emptyCart from './emptyCart.png'
+import emptyCart from './emptyCart.png';
+import google from './google.png';
+import facebook from './facebook.png'
 
 export {
   logo, cod, exchange, delivered, transaction,
@@ -62,5 +64,7 @@ export {
   delivery,
   required,
   correct,
-  emptyCart
+  emptyCart,
+  google,
+  facebook
 };

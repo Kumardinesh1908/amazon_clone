@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { logoBlack } from '../assets/index';
 import { Link, useNavigate } from 'react-router-dom';
-import { right, down, required } from "../assets/index";
+import { right, down, required, google, facebook } from "../assets/index";
 import { RotatingLines } from "react-loader-spinner";
 import { motion } from "framer-motion";
 import ScrollToTop from "../ScrollToTop";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import {  useDispatch } from 'react-redux';
-import { setUserInfo } from "../redux/amazonSlice";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, linkWithCredential, FacebookAuthProvider, fetchSignInMethodsForEmail } from "firebase/auth";
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserInfo, setUserAuthentication, resetCart } from "../redux/amazonSlice";
+import { db } from '../firebase/firebase.config';
+import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
+import { useCart } from "../context/userCartContext";
 
 const SignIn = () => {
     const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.amazon.products)
 
     const auth = getAuth();
+    const googleProvider = new GoogleAuthProvider();
+    const facebookProvider = new FacebookAuthProvider();
     const navigate = useNavigate();
 
     const [isClicked, setIsClicked] = useState(false);
@@ -53,6 +59,80 @@ const SignIn = () => {
         return isValid;
     }
 
+    const [loading, setLoading] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
+
+    const saveUserDataToFirebase = async (user) => {
+        const usersCollectionRef = collection(db, "users");
+        const userRef = doc(usersCollectionRef, user.email);
+        try {
+            const userRefSnapshot = await getDoc(userRef);
+            // console.log(userRefSnapshot.exists())       
+            // console.log(userRefSnapshot)           
+            if (!userRefSnapshot.exists()) {
+                const userDetailsRef = doc(userRef, "details", user.uid);
+                const userDetailsSnapshot = await getDoc(userDetailsRef);
+                // console.log(userDetailsSnapshot.exists())       
+                // console.log(userDetailsSnapshot)            
+                if (!userDetailsSnapshot.exists()) {
+                    // If the user details don't exist, save them to Firestore
+                    await setDoc(userDetailsRef, {
+                        id: user.uid,
+                        name: user.displayName,
+                        email: user.email,
+                        image: user.photoURL,
+                        mobile: user.phoneNumber,
+                        createdOn: new Date(),
+                    }, { merge: true });
+                    // console.log("User details saved to Firestore.");
+                } else {
+                    console.log("User details already exist in Firestore.");
+                }
+            } else {
+                console.log("User email already exists in Firestore.");
+            }
+        } catch (error) {
+            console.error("Error fetching user details:", error);
+        }
+    };
+
+    // Use the updateUserCart function from custom hook created in userCartContext.js
+    const { updateUserCart } = useCart();
+
+    const saveLocalCartToFirebase = async (user) => {
+        const usersCollectionRef = collection(db, "users");
+        const userRef = doc(usersCollectionRef, user.email);
+        const userCartRef = collection(userRef, "cart");
+        const cartRef = doc(userCartRef, user.uid);
+        const docSnapshot = await getDoc(cartRef);
+        const firebaseCartItems = docSnapshot.exists() ? docSnapshot.data().cart : [];
+        const localCartItems = cartItems;
+        // Create a map to track items using their unique identifiers (e.g., product title)
+        const mergedItemsMap = new Map();
+        // Add Firebase cart items to the mergedItemsMap using set function
+        firebaseCartItems.forEach((item) => {
+            mergedItemsMap.set(item.title, item);
+        });
+        localCartItems.forEach((item) => {
+            if (mergedItemsMap.has(item.title)) {
+                // If the item already exists in the Firebase cart, update its quantity
+                const existingItem = mergedItemsMap.get(item.title);
+                existingItem.quantity += item.quantity; // Update the quantity
+            } else {
+                // If the item doesn't exist in the Firebase cart, add it to the mergedItemsMap
+                mergedItemsMap.set(item.title, item);
+            }
+        });
+        // Convert the mergedItemsMap back to an array of items
+        const mergedCartItems = Array.from(mergedItemsMap.values());
+        // Update the cart in Firestore with the merged cart items
+        await setDoc(cartRef, { cart: mergedCartItems });
+        // Update the cart context with the merged cart items
+        updateUserCart(mergedCartItems);
+        // After successfully saving to Firebase, clear the local cart
+        dispatch(resetCart());
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -64,17 +144,19 @@ const SignIn = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 dispatch(setUserInfo({
-                    id : user.uid,
-                    name : user.displayName,
-                    email : user.email,
-                    image : user.photoURL
-                }))
+                    id: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    image: user.photoURL
+                }));
+                dispatch(setUserAuthentication(true));
+                saveLocalCartToFirebase(user);
                 setLoading(false);
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
                     navigate("/");
                     setSuccessMsg("");
-                }, 3000);
+                }, 2000);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -94,8 +176,153 @@ const SignIn = () => {
         setPasswordValue("");
     }
 
-    const [loading, setLoading] = useState(false);
-    const [successMsg, setSuccessMsg] = useState("");
+    const handleGoogle = (e) => {
+        e.preventDefault();
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                const user = result.user;
+                dispatch(setUserInfo({
+                    id: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    image: user.photoURL
+                }));
+                dispatch(setUserAuthentication(true));
+                saveLocalCartToFirebase(user);
+                const userRef = doc(db, "users", user.email);
+                getDoc(userRef)
+                    .then((docSnapshot) => {
+                        // console.log(docSnapshot);
+                        // console.log("!docSnapshot.exists()",!docSnapshot.exists());
+                        if (!docSnapshot.exists()) {
+                            // If the user data doesn't exist, save it to Firestore
+                            saveUserDataToFirebase(user);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error checking user data:", error);
+                    });
+                setLoading(false);
+                setSuccessMsg("Successfully Logged-in! Welcome back.");
+                setTimeout(() => {
+                    navigate("/");
+                    setSuccessMsg("");
+                }, 2000);
+            }).catch((error) => {
+                const errorCode = error.code;
+                console.log("error", errorCode)
+                // The email of the user's account used.
+                const email = error.customData.email;
+                console.log(email)
+            });
+    }
+
+    const handleFacebook = () => {
+        signInWithPopup(auth, facebookProvider)
+            .then((result) => {
+                const user = result.user;
+                user.emailVerified = true;
+                dispatch(setUserInfo({
+                    id: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    image: user.photoURL
+                }));
+                dispatch(setUserAuthentication(true));
+                saveLocalCartToFirebase(user);
+                const userRef = doc(db, "users", user.email);
+                getDoc(userRef)
+                    .then((docSnapshot) => {
+                        if (!docSnapshot.exists()) {
+                            // If the user data doesn't exist, save it to Firestore
+                            saveUserDataToFirebase(user);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error checking user data:", error);
+                    });
+                setLoading(false);
+                setSuccessMsg("Successfully Logged-in! Welcome back.");
+                setTimeout(() => {
+                    navigate("/");
+                    setSuccessMsg("");
+                }, 2000);
+            })
+            .catch((error) => {
+                // Check if the error is due to account linking
+                if (error.code === "auth/account-exists-with-different-credential") {
+                    const pendingCred = FacebookAuthProvider.credentialFromError(error);
+                    const email = error.customData.email;
+                    fetchSignInMethodsForEmail(auth, email)
+                        .then((methods) => {
+                            console.log(methods)
+                            if (methods[0] === 'google.com') {
+                                signInWithPopup(auth, googleProvider)
+                                    .then((userCredential) => {
+                                        const data = userCredential.user
+                                        linkWithCredential(data, pendingCred)
+                                            .then((result) => {
+                                                const user = result.user;
+                                                user.emailVerified = true;
+                                                dispatch(setUserInfo({
+                                                    id: user.uid,
+                                                    name: user.displayName,
+                                                    email: user.email,
+                                                    image: user.photoURL
+                                                }));
+                                                dispatch(setUserAuthentication(true));
+                                                saveLocalCartToFirebase(user);
+                                                const userRef = doc(db, "users", user.email);
+                                                getDoc(userRef)
+                                                    .then((docSnapshot) => {
+                                                        if (!docSnapshot.exists()) {
+                                                            // If the user data doesn't exist, save it to Firestore
+                                                            saveUserDataToFirebase(user);
+                                                        }
+                                                    })
+                                                    .catch((error) => {
+                                                        console.error("Error checking user data:", error);
+                                                    });
+                                                setLoading(false);
+                                                setSuccessMsg("Successfully Logged-in! Welcome back.");
+                                                setTimeout(() => {
+                                                    navigate("/");
+                                                    setSuccessMsg("");
+                                                }, 2000);
+                                            });
+                                    })
+                            }
+                            if (methods[0] === 'password') {
+                                var password = prompt("Email associated with your Facebook has already account on Amazon. Please enter your Amazon password to link your Facebook account to your Amazon account."); // Replace with your custom password prompt logic.
+                                signInWithEmailAndPassword(auth, email, password)
+                                    .then((userCredential) => {
+                                        const data = userCredential.user
+                                        linkWithCredential(data, pendingCred)
+                                            .then((result) => {
+                                                const user = result.user;
+                                                user.emailVerified = true;
+                                                dispatch(setUserInfo({
+                                                    id: user.uid,
+                                                    name: user.displayName,
+                                                    email: user.email,
+                                                    image: user.photoURL
+                                                }));
+                                                dispatch(setUserAuthentication(true));
+                                                saveUserDataToFirebase(user);
+                                                saveLocalCartToFirebase(user);
+                                                setLoading(false);
+                                                setSuccessMsg("Successfully Logged-in! Welcome back.");
+                                                setTimeout(() => {
+                                                    navigate("/");
+                                                    setSuccessMsg("");
+                                                }, 2000);
+                                            });
+                                    })
+                            }
+                        });
+                };
+            });
+    }
 
     return (
         <div className='bg-white w-full h-full'>
@@ -124,48 +351,63 @@ const SignIn = () => {
                                         {successMsg}
                                     </motion.p>
                                 </div>
-                                : <form className='my-3' onSubmit={handleSubmit}>
-                                    <label className='text-sm font-semibold'>
-                                        Email or mobile number
-                                        <input type="text" autoComplete="true" value={inputValue} onChange={(e) => {
-                                            setInputValue(e.target.value);
-                                            setUserEmailError("");
-                                        }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
-                                    </label>
-                                    {
-                                        userEmailError && <div className="flex  items-center  pt-1 pb-2">
-                                            <img src={required} className="w-4 h-4 mr-1" alt="warning" />
-                                            <div className="text-xs text-[#FF0000]">{userEmailError}</div>
-                                        </div>
-                                    }
-                                    <label className='text-sm font-semibold'>
-                                        Password
-                                        <input type="password" autoComplete="true" value={passwordValue} onChange={(e) => {
-                                            setPasswordValue(e.target.value);
-                                            setWarningPassword("");
-                                        }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
-                                    </label>
-                                    {
-                                        warningPassword && <div className="flex  items-center pt-1 pb-2">
-                                            <img src={required} className="w-4 h-4 mr-1" alt="warning" />
-                                            <div className="text-xs text-[#FF0000]">{warningPassword}</div>
-                                        </div>
-                                    }
-                                    <button className={`${isClicked ? "clicked" : ""} text-sm my-4 w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px]`}
-                                        onClick={(e) => { handleNewClickEffect(e) }}>Continue</button>
-                                    {
-                                        loading && <div className='flex justify-center'>
-                                            <RotatingLines
-                                                strokeColor="#febd69"
-                                                strokeWidth="5"
-                                                animationDuration="0.75"
-                                                width="50"
-                                                visible={true}
-                                            />
-                                        </div>
-                                    }
+                                : <div>
+                                    <div onClick={handleGoogle} className=" cursor-pointer flex flex-row items-center my-3 border-[1px] p-[6px] border-black rounded-md hover:bg-slate-100 active:ring-2 active:ring-offset-1 active:ring-blue-600 active:border-transparent">
+                                        <img src={google} alt="google" className="w-5 h-5 mx-5" />
+                                        <p className="text-sm font-semibold">Continue with Google</p>
+                                    </div>
+                                    <div onClick={handleFacebook} className="cursor-pointer flex flex-row items-center  my-3 border-[1px] p-[6px] border-black rounded-md hover:bg-slate-100 active:ring-2 active:ring-offset-1 active:ring-blue-600 active:border-transparent">
+                                        <img src={facebook} alt="facebook" className="w-5 mx-5 h-5" />
+                                        <p className="text-sm font-semibold">Continue with Facebook</p>
+                                    </div>
+                                    <div className="flex items-center justify-between ">
+                                        <div className="w-[45%]"><hr /></div>
+                                        <p className="text-sm font-semibold">Or</p>
+                                        <div className="w-[45%]"><hr /></div>
+                                    </div>
+                                    <form className='mt-2 mb-3' onSubmit={handleSubmit}>
+                                        <label className='text-sm font-semibold'>
+                                            Email or mobile number
+                                            <input type="text" autoComplete="true" value={inputValue} onChange={(e) => {
+                                                setInputValue(e.target.value);
+                                                setUserEmailError("");
+                                            }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                                        </label>
+                                        {
+                                            userEmailError && <div className="flex  items-center  pt-1 pb-2">
+                                                <img src={required} className="w-4 h-4 mr-1" alt="warning" />
+                                                <div className="text-xs text-[#FF0000]">{userEmailError}</div>
+                                            </div>
+                                        }
+                                        <label className='text-sm font-semibold'>
+                                            Password
+                                            <input type="password" autoComplete="true" value={passwordValue} onChange={(e) => {
+                                                setPasswordValue(e.target.value);
+                                                setWarningPassword("");
+                                            }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                                        </label>
+                                        {
+                                            warningPassword && <div className="flex  items-center pt-1 pb-2">
+                                                <img src={required} className="w-4 h-4 mr-1" alt="warning" />
+                                                <div className="text-xs text-[#FF0000]">{warningPassword}</div>
+                                            </div>
+                                        }
+                                        <button className={`${isClicked ? "clicked" : ""} text-sm my-4 w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px]`}
+                                            onClick={(e) => { handleNewClickEffect(e) }}>Continue</button>
+                                        {
+                                            loading && <div className='flex justify-center'>
+                                                <RotatingLines
+                                                    strokeColor="#febd69"
+                                                    strokeWidth="5"
+                                                    animationDuration="0.75"
+                                                    width="50"
+                                                    visible={true}
+                                                />
+                                            </div>
+                                        }
 
-                                </form>
+                                    </form>
+                                </div>
                         }
 
                         <div className='text-xs tracking-wide '>

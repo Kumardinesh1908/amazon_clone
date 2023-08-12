@@ -9,19 +9,27 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth, signOut } from "firebase/auth";
-import { userSignOut } from "../../redux/amazonSlice";
+import { userSignOut, setUserAuthentication } from "../../redux/amazonSlice";
+import { useCart } from "../../context/userCartContext";
 
 
 export default function Header() {
 
+    // Initialize Firebase authentication
     const auth = getAuth();
 
     const dispatch = useDispatch();
     const products = useSelector((state) => state.amazon.products);
     const userInfo = useSelector((state) => state.amazon.userInfo);
+    const authenticated = useSelector((state) => state.amazon.isAuthenticated);
 
 
+    // Access cart total quantity from the context
+    const { cartTotalQty } = useCart();
+
+    // Ref for the "All Categories" dropdown
     const allCategoryRef = useRef(null);
+    // Effect to close the "All Categories" dropdown when clicking outside
     const [showAll, setShowAll] = useState(false);
     useEffect(() => {
         document.body.addEventListener("click", (e) => {
@@ -32,7 +40,9 @@ export default function Header() {
     }, [allCategoryRef, showAll]);
 
     const [selectedLocation, setSelectedLocation] = useState(false);
+    // Ref for the location dropdown
     const locationRef = useRef(null);
+    // Effect to close the location when clicking outside
     useEffect(() => {
         document.body.addEventListener("click", (e) => {
             if (e.target.contains(locationRef.current)) {
@@ -41,12 +51,11 @@ export default function Header() {
             };
         })
     }, [locationRef])
-
-
-    const [userZipCode, setUserZipCode] = useState('');
+    const [userZipCode, setUserZipCode] = useState(''); // State for the user's entered ZIP code
     const [locationData, setLocationData] = useState(null);
     const [locationName, setLocationName] = useState(null);
     const [warning, setWarning] = useState(false);
+    // Fetch location data from API based on user's ZIP code
     async function fetchLocationData() {
         const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
         if (response.data[0].PostOffice != null) {
@@ -54,6 +63,7 @@ export default function Header() {
             setWarning(false);
         }
     }
+    // Handle apply button click for location selection
     const handleApply = () => {
         if (locationData) {
             setSelectedLocation(false);
@@ -64,27 +74,40 @@ export default function Header() {
             setWarning(true);
         }
     };
+    // Handle Enter key press on the input
     const handleSumit = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             handleApply();
         }
     };
+    // Effect to fetch location data when userZipCode changes
     useEffect(() => {
         if (userZipCode.length === 6) {
             fetchLocationData();
         }
     }, [userZipCode]);
 
+    const [totalQty, setTotalQty] = useState(0);
+    // Calculate total quantity of products in the cart
+    useEffect(() => {
+        let allQty = 0;
+        products.forEach((product) => {
+            allQty += product.quantity;
+        });
+        setTotalQty(allQty);
+    }, [products]);
+
+    // Handle user logout
     const handleLogout = () => {
         signOut(auth).then(() => {
             // Sign-out successful.
-            dispatch(userSignOut())
+            dispatch(userSignOut());
+            dispatch(setUserAuthentication(false));
         }).catch((error) => {
             // An error happened.
         });
     }
-
 
     return (
         <div className="w-full sticky top-0 z-50">
@@ -98,7 +121,7 @@ export default function Header() {
                 </Link>
                 {/* logo ends here */}
 
-                {/* Delivery starts here */}
+                {/* DeliveryLocation starts here */}
                 <div className="headerHover" onClick={() => setSelectedLocation(!selectedLocation)}>
                     <img className="w-6 h-5 mt-1" src={location} alt="locationIcon" />
                     <div className="text-xs text-lightText font-medium flex flex-col items-start">
@@ -134,7 +157,7 @@ export default function Header() {
                         </div>
                     </div>
                 }
-                {/* Delivery ends here */}
+                {/* DeliveryLocation ends here */}
 
                 {/* Search starts here */}
                 <div className="h-10 rounded-md flex flex-grow relative ml-4" ref={allCategoryRef}>
@@ -196,10 +219,19 @@ export default function Header() {
                 {/* Sign in ends here */}
 
                 {/* Orders starts here */}
-                <div className="headerHover flex flex-col items-start justify-center">
-                    <p className="text-xs font-semibold">Returns</p>
-                    <p className="text-sm font-bold -mt-1">& Orders</p>
-                </div>
+                {
+                    authenticated
+                        ? <div className="headerHover flex flex-col items-start justify-center">
+                            <p className="text-xs font-semibold">Returns</p>
+                            <p className="text-sm font-bold -mt-1">& Orders</p>
+                        </div>
+                        : <Link to="/signIn">
+                            <div className="headerHover flex flex-col items-start justify-center">
+                                <p className="text-xs font-semibold">Returns</p>
+                                <p className="text-sm font-bold -mt-1">& Orders</p>
+                            </div>
+                        </Link>
+                }
                 {/* Orders ends here */}
 
                 {/* Cart starts here */}
@@ -208,7 +240,7 @@ export default function Header() {
                         <img className="w-12" src={shopping} alt="cart" />
                         <p className="text-sm font-bold mt-5">Cart
                             <span className="text-base font-semibold p-2 h-6 bg-[#f3a847] text-amazon_black rounded-full absolute left-9 top-0 flex items-center justify-center" >
-                                {products.length > 0 ? products.length : 0}
+                                {cartTotalQty > 0 ? cartTotalQty : totalQty}
                             </span>
                         </p>
                     </div>
