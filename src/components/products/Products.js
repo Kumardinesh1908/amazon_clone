@@ -2,14 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { ScrollRestoration, useLoaderData } from 'react-router-dom';
 import { star } from "../../assets/index";
 import Product from './Product';
+import { useParams } from 'react-router-dom';
 
 
 const Products = () => {
   const data = useLoaderData();
   const productsData = data.data.products;  // getting array of available products
+
+  const { category } = useParams(); // Get the category parameter from the URL
+
+  // Filter products based on the selected category
+  const categoryProducts = category
+    ? productsData.filter(product => product.category === category)
+    : productsData;
+
   const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
 
-  const [filteredProducts, setFilteredProducts] = useState(productsData);
+  const [filteredProducts, setFilteredProducts] = useState(categoryProducts);
   const [priceRange, setPriceRange] = useState(""); // State for the selected price range
   const [starRange, setStarRange] = useState(""); // State for the selected star range
   const [selectedCategory, setSelectedCategory] = useState(""); // State for the selected category
@@ -192,7 +201,6 @@ const Products = () => {
           ))}
         </div>
       </div>
-
       <div className='w-[82%] bg-white'>
         <div className=' flex items-center justify-between mx-7 mt-2 text-[18px] font-bold'>
           <h1>Results </h1>
@@ -205,15 +213,12 @@ const Products = () => {
           <h1>Total : {filteredProducts.length}</h1>
         </div>
         <div className='w-full flex flex-wrap justify-evenly '>
-
-          <Product productsData={sortedProducts.length > 0 ? sortedProducts : filteredProducts} />
-
+          {/* <Product productsData={sortedProducts.length > 0 ? sortedProducts : filteredProducts} /> */}
+          <Product productsData ={categoryProducts} />
         </div>
       </div>
-
       <ScrollRestoration />
     </div>
   )
 }
-
 export default Products;

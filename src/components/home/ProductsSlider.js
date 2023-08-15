@@ -10,9 +10,9 @@ const ProductsSlider = () => {
   const sliderRef = useRef(null);
   const handleScroll = (direction) => {
     if (direction === 'left') {
-      sliderRef.current.scrollLeft -= 208;
+      sliderRef.current.scrollLeft -= 624;
     } else if (direction === 'right') {
-      sliderRef.current.scrollLeft += 208;
+      sliderRef.current.scrollLeft += 624;
     }
   };
   

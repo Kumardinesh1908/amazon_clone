@@ -5,6 +5,7 @@ const initialState = {
   userInfo: null,
   isAuthenticated: false,
   buyNowProduct: null,
+  allProducts:[],
 };
 
 export const amazonSlice = createSlice({

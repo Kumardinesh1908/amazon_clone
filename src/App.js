@@ -1,421 +1,5 @@
-// import Header from "./components/header/header";
-// import HeaderBottom from "./components/header/headerBottom";
-// import Products from "./components/products/Products";
-// import Home from "./pages/Home";
-// import Footer from "./components/footer/Footer";
-// import ErrorPage from "./components/error/ErrorPage";
-// import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
-// import { productsData, jeweleryData, smartphonesData, mensData, womensDressData, laptopsData, womensWatchData, womensBagData, womensShoeData, mensWatchesData, groceriesData, homeDecorData, furnitureData, motorcycleData, lightingData, automotiveData, sunglassesData, fragrancesData, skincareData, topsData, mensShoeData } from "./api/api";
-// import SignIn from "./pages/SignIn";
-// import CreateAccount from "./pages/CreateAccount";
-// import ForgotPassword from "./pages/ForgotPassword";
-// import ProductDetails from "./components/products/ProductDetails";
-// import Cart from "../src/pages/cart"
-
-// // Layout component to combine components for main path("/") of routers which has to be rendered when website opens for the first time 
-// const Layout = () => {
-//   return (
-//     <div className="bg-gray-200">
-//       <Header />
-//       <HeaderBottom />
-//       <ScrollRestoration />
-//       <Outlet />
-//       <Footer />
-//     </div>
-//   );
-// }
-
-// function App() {
-//   const router = createBrowserRouter([
-//     {
-//       path: "/",
-//       element: <Layout />,
-//       errorElement: <ErrorPage />,
-//       children: [
-//         {
-//           index: true,
-//           loader: productsData,
-//           element: <Home />,
-//         },
-//         {
-//           path: "/allProducts",
-//           loader: productsData,
-//           children: [
-//             {
-//               index: true,
-//               loader: productsData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: productsData,
-//               element: <ProductDetails />,
-//             },
-//           ]
-//         },
-//         {
-//           path: "/cart",
-//           loader: productsData,
-//           element: <Cart />
-//         },
-//         {
-//           path: "/mens-shirts",
-//           loader: mensData,
-//           children: [
-//             {
-//               index: true,
-//               loader: mensData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: mensData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/womens-dresses",
-//           loader: womensDressData,
-//           children: [
-//             {
-//               index: true,
-//               loader: womensDressData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: womensDressData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/womens-watches",
-//           loader: womensWatchData,
-//           children: [
-//             {
-//               index: true,
-//               loader: womensWatchData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: womensWatchData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/womens-bags",
-//           loader: womensBagData,
-//           children: [
-//             {
-//               index: true,
-//               loader: womensBagData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: womensBagData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/womens-shoes",
-//           loader: womensShoeData,
-//           children: [
-//             {
-//               index: true,
-//               loader: womensShoeData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: womensShoeData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/mens-watches",
-//           loader: mensWatchesData,
-//           children: [
-//             {
-//               index: true,
-//               loader: mensWatchesData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: mensWatchesData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/smartphones",
-//           loader: smartphonesData,
-//           children: [
-//             {
-//               index: true,
-//               loader: smartphonesData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: smartphonesData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/laptops",
-//           loader: laptopsData,
-//           children: [
-//             {
-//               index: true,
-//               loader: laptopsData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: laptopsData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/lighting",
-//           loader: lightingData,
-//           children: [
-//             {
-//               index: true,
-//               loader: lightingData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: lightingData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/automotive",
-//           loader: automotiveData,
-//           children: [
-//             {
-//               index: true,
-//               loader: automotiveData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: automotiveData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/womens-jewellery",
-//           loader: jeweleryData,
-//           children: [
-//             {
-//               index: true,
-//               loader: jeweleryData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: jeweleryData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/home-decoration",
-//           loader: homeDecorData,
-//           children: [
-//             {
-//               index: true,
-//               loader: homeDecorData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: homeDecorData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/furniture",
-//           loader: furnitureData,
-//           children: [
-//             {
-//               index: true,
-//               loader: furnitureData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: furnitureData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/motorcycle",
-//           loader: motorcycleData,
-//           children: [
-//             {
-//               index: true,
-//               loader: motorcycleData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: motorcycleData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/groceries",
-//           loader: groceriesData,
-//           children: [
-//             {
-//               index: true,
-//               loader: groceriesData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: groceriesData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/mens-shoes",
-//           loader: mensShoeData,
-//           children: [
-//             {
-//               index: true,
-//               loader: mensShoeData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: mensShoeData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/sunglasses",
-//           loader: sunglassesData,
-//           children: [
-//             {
-//               index: true,
-//               loader: sunglassesData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: sunglassesData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/fragrances",
-//           loader: sunglassesData,
-//           children: [
-//             {
-//               index: true,
-//               loader: fragrancesData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: fragrancesData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/skincare",
-//           loader: skincareData,
-//           children: [
-//             {
-//               index: true,
-//               loader: skincareData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: skincareData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-//         {
-//           path: "/tops",
-//           loader: topsData,
-//           children: [
-//             {
-//               index: true,
-//               loader: topsData,
-//               element: <Products />
-//             },
-//             {
-//               path: ":title",
-//               loader: topsData,
-//               element: <ProductDetails />,
-//             },
-//           ],
-//         },
-
-//       ],
-//     },
-//     // {
-//     //   path: "/allProducts/:title",
-//     //   loader: productsData,
-//     //   element: <ProductDetails />,
-//     // },
-//     {
-//       path: "/signIn",
-//       children: [
-//         {
-//           index: true,
-//           element: <SignIn />
-//         },
-//         {
-//           path: "forgotPassword",
-//           element: <ForgotPassword />,
-//         },
-//       ],
-//     },
-//     {
-//       path: "/createAccount",
-//       element: <CreateAccount />,
-//     },
-//   ]);
-//   return (
-
-//     <RouterProvider router={router} />
-
-//   );
-// }
-
-// export default App;
-
-
 import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
-import { AllCategoryData, productsData, jeweleryData, mensData, womensDressData, mensWatchesData, smartphonesData, laptopsData, lightingData, automotiveData, womensWatchData, womensBagData, womensShoeData, homeDecorData, furnitureData, motorcycleData, groceriesData, mensShoeData, sunglassesData, fragrancesData, skincareData, topsData } from "./api/api";
+import { productsData } from "./api/api";
 import Header from "./components/header/header";
 import HeaderBottom from "./components/header/headerBottom";
 import Footer from "./components/footer/Footer";
@@ -427,113 +11,28 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Products from "./components/products/Products";
 import ProductDetails from "./components/products/ProductDetails";
 import Cart from "../src/pages/cart";
-import { useState, useEffect } from "react";
 import { UserCartProvider } from "./context/userCartContext";
 import { UserAddressProvider } from "./context/userAddressContext";
 import Checkout from "../src/pages/Checkout";
 
-const Layout = ({ children }) => {
+// Layout component to combine components for main path("/") of routers which has to be rendered when website opens for the first time 
+const Layout = () => {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-200">
       <Header />
       <HeaderBottom />
       <ScrollRestoration />
-      {children}
+      <Outlet />
       <Footer />
     </div>
   );
 }
 
-const ProductRoute = ({ category, title }) => {
-  const productLoader = getProductLoader(category);
-  const product = productLoader(title);
-  return <ProductDetails product={product} />;
-};
-
-function getProductLoader(category) {
-  switch (category) {
-    case "allProducts":
-      return productsData;
-    case "womens-jewellery":
-      return jeweleryData;
-    case "mens-shirts":
-      return mensData;
-    case "womens-dresses":
-      return womensDressData;
-    case "mens-watches":
-      return mensWatchesData;
-    case "smartphones":
-      return smartphonesData;
-    case "laptops":
-      return laptopsData;
-    case "lighting":
-      return lightingData;
-    case "automotive":
-      return automotiveData;
-    case "womens-watches":
-      return womensWatchData;
-    case "womens-bags":
-      return womensBagData;
-    case "womens-shoes":
-      return womensShoeData;
-    case "home-decoration":
-      return homeDecorData;
-    case "furniture":
-      return furnitureData;
-    case "motorcycle":
-      return motorcycleData;
-    case "groceries":
-      return groceriesData;
-    case "mens-shoes":
-      return mensShoeData;
-    case "sunglasses":
-      return sunglassesData;
-    case "fragrances":
-      return fragrancesData;
-    case "skincare":
-      return skincareData;
-    case "tops":
-      return topsData;
-    default:
-      throw new Error("Unknown category!");
-  }
-}
-
-
 function App() {
-
-  const [categoryRoutes, setCategoryRoutes] = useState([]);
-
-  useEffect(() => {
-    async function fetchRoutes() {
-      const categories = await AllCategoryData();
-      const routes = categories.data.map((category) => ({
-        path: `/${category}`,
-        loader: getProductLoader(category),
-        children: [
-          {
-            index: true,
-            loader: getProductLoader(category),
-            element: <Products />
-          },
-          {
-            path: ":title",
-            loader: getProductLoader(category),
-            element: <ProductRoute category={category} />,
-          },
-        ],
-      }));
-      setCategoryRoutes(routes);
-    }
-    fetchRoutes();
-  }, []);
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout>
-        <Outlet />
-      </Layout>,
+      element: <Layout />,
       errorElement: <ErrorPage />,
       children: [
         {
@@ -558,13 +57,32 @@ function App() {
           ]
         },
         {
+          path: ':category',
+          children: [
+            {
+              index: true,
+              loader: productsData,
+              element: <Products />,
+            },
+            {
+              path: ":title",
+              loader: productsData,
+              element: <ProductDetails />,
+            },
+          ],
+        },
+        {
           path: "/cart",
           loader: productsData,
           element: <Cart />
         },
-        ...categoryRoutes, // Now we can use the fetched category routes here.
       ],
     },
+    // {
+    //   path: "/allProducts/:title",
+    //   loader: productsData,
+    //   element: <ProductDetails />,
+    // },
     {
       path: "/signIn",
       children: [
@@ -600,3 +118,4 @@ function App() {
 }
 
 export default App;
+
