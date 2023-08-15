@@ -33,6 +33,7 @@ const AddressForm = ({setShowAddressForm}) => {
     const [pincodeError, setPincodeError] = useState("");
     const [cityError, setCityError] = useState("");
     const [addressError, setAddressError] = useState("");
+    const [stateError, setStateError] = useState("");
 
     const [loading, setLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState("");
@@ -98,6 +99,11 @@ const AddressForm = ({setShowAddressForm}) => {
         // Validate address - 1
         if (addressInput === "") {
             setAddressError("Please enter an address.");
+            isValid = false;
+        }
+        // validate state
+        if(stateInput === ""){
+            setStateError("please select your state");
             isValid = false;
         }
 
@@ -241,6 +247,9 @@ const AddressForm = ({setShowAddressForm}) => {
                                         ))
                                     }
                                 </select>
+                                {
+                                    stateError && <div className='text-sm text-[#d14444]  pl-5'>{stateError}</div>
+                                }
                             </label>
                         </div>
                         <label className='text-sm font-semibold flex flex-col gap-[2px]'>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import { logo, location, shopping, required } from "../../assets";
+import { logo,shopping } from "../../assets";
 import { allItems } from "../../constants";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth, signOut } from "firebase/auth";
 import { userSignOut, setUserAuthentication } from "../../redux/amazonSlice";
 import { useCart } from "../../context/userCartContext";
+import Location from "./location";
 
 
 export default function Header() {
@@ -23,12 +23,12 @@ export default function Header() {
     const userInfo = useSelector((state) => state.amazon.userInfo);
     const authenticated = useSelector((state) => state.amazon.isAuthenticated);
 
-
     // Access cart total quantity from the context
     const { cartTotalQty } = useCart();
 
     // Ref for the "All Categories" dropdown
     const allCategoryRef = useRef(null);
+
     // Effect to close the "All Categories" dropdown when clicking outside
     const [showAll, setShowAll] = useState(false);
     useEffect(() => {
@@ -39,54 +39,6 @@ export default function Header() {
         })
     }, [allCategoryRef, showAll]);
 
-    const [selectedLocation, setSelectedLocation] = useState(false);
-    // Ref for the location dropdown
-    const locationRef = useRef(null);
-    // Effect to close the location when clicking outside
-    useEffect(() => {
-        document.body.addEventListener("click", (e) => {
-            if (e.target.contains(locationRef.current)) {
-                setSelectedLocation(false);
-                setWarning(false);
-            };
-        })
-    }, [locationRef])
-    const [userZipCode, setUserZipCode] = useState(''); // State for the user's entered ZIP code
-    const [locationData, setLocationData] = useState(null);
-    const [locationName, setLocationName] = useState(null);
-    const [warning, setWarning] = useState(false);
-    // Fetch location data from API based on user's ZIP code
-    async function fetchLocationData() {
-        const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
-        if (response.data[0].PostOffice != null) {
-            setLocationData(response.data);
-            setWarning(false);
-        }
-    }
-    // Handle apply button click for location selection
-    const handleApply = () => {
-        if (locationData) {
-            setSelectedLocation(false);
-            setLocationName(locationData);
-            setLocationData(null)
-            setWarning(false);
-        } else {
-            setWarning(true);
-        }
-    };
-    // Handle Enter key press on the input
-    const handleSumit = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleApply();
-        }
-    };
-    // Effect to fetch location data when userZipCode changes
-    useEffect(() => {
-        if (userZipCode.length === 6) {
-            fetchLocationData();
-        }
-    }, [userZipCode]);
 
     const [totalQty, setTotalQty] = useState(0);
     // Calculate total quantity of products in the cart
@@ -122,41 +74,7 @@ export default function Header() {
                 {/* logo ends here */}
 
                 {/* DeliveryLocation starts here */}
-                <div className="headerHover" onClick={() => setSelectedLocation(!selectedLocation)}>
-                    <img className="w-6 h-5 mt-1" src={location} alt="locationIcon" />
-                    <div className="text-xs text-lightText font-medium flex flex-col items-start">
-                        {locationName ? 'Deliver to' : 'Hello'}
-                        <span className="text-sm font-bold -mt-1 text-whiteText">
-                            {locationName ? <p>{locationName[0].PostOffice[0].District} {locationName[0].PostOffice[0].Pincode}</p> : 'Select your address'}
-                        </span>
-                    </div>
-                </div>
-                {selectedLocation &&
-                    <div className='w-screen h-screen text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-50 flex items-center justify-center' >
-                        <div ref={locationRef} className=" w-[320px] bg-white rounded-lg">
-                            <div className="w-full h-[30%] rounded-tr-lg rounded-tl-lg  bg-gray-100 border-b-[0.066rem] border-gray-200 p-4 font-bold">
-                                Choose your location
-                            </div>
-                            <div className="w-full h-[70%] p-4" >
-                                <p className="text-xs text-gray-400">Enter an Indian pincode to see product availability and delivery options for your location.</p>
-                                <div className="flex justify-center" >
-                                    <input type="text" pattern="[0-9]{6}" placeholder="Enter a 6-digit ZIP code" className="w-[65%] mt-5 border-[1px] border-[#a6a6a6] rounded p-1 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500"
-                                        onChange={(e) => setUserZipCode(e.target.value)}
-                                        onKeyDown={handleSumit}
-                                    />
-                                    <button className="w-[33%] border-[0.066rem] mt-5 border-gray-200 rounded-lg p-2 ml-2 cursor-pointer"
-                                        onClick={() => { fetchLocationData(); handleApply(); }}>Apply</button>
-                                </div>
-                            </div>
-                            {
-                                warning && <div className="flex  items-center pl-4 -mt-3 pb-2">
-                                    <img src={required} className="w-4 h-4" alt="warning" />
-                                    <div className="text-zsm text-[#FF0000]">Please enter a valid pincode</div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                }
+                <Location />
                 {/* DeliveryLocation ends here */}
 
                 {/* Search starts here */}

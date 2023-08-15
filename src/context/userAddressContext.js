@@ -11,7 +11,7 @@ const UserAddressContext = createContext();
 export const UserAddressProvider = ({ children }) => {
     // State to hold the user's address information
     const [userAddress, setUserAddress] = useState([]);
-
+    
     // Get user info and authentication status from Redux store
     const userInfo = useSelector((state) => state.amazon.userInfo);
     const authenticated = useSelector((state) => state.amazon.isAuthenticated);
@@ -55,12 +55,19 @@ export const UserAddressProvider = ({ children }) => {
     // Function to update the user Selected Address in the context
     const updateSelectedAddress = (updatedSelectedAddress) => {
         setSelectedAddress(updatedSelectedAddress);
+    };
 
+    // state to hold user's payment method
+    const [selectedPayment, setSelectedPayment] = useState("");
+
+    // function to update user' payment state in the context
+    const updateSelectedPayment = (updatedSelectedPayment) => {
+        setSelectedPayment(updatedSelectedPayment);
     };
 
     // Provide the userAddress state and the updateUserAddress function to children components
     return (
-        <UserAddressContext.Provider value={{ userAddress, updateUserAddress,selectedAddress,updateSelectedAddress }}>
+        <UserAddressContext.Provider value={{ userAddress, updateUserAddress,selectedAddress,updateSelectedAddress,selectedPayment,updateSelectedPayment }}>
             {children}
         </UserAddressContext.Provider>
     );

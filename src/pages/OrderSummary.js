@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCart } from '../context/userCartContext';
+import { useAddress } from '../context/userAddressContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetBuyNowProduct } from '../redux/amazonSlice';
 
@@ -15,12 +16,11 @@ const OrderSummary = () => {
   }
   // getting all cart products
   const { cartTotalQty, cartTotalPrice } = useCart(); //userCart, updateUserCart,
+  const { selectedAddress, selectedPayment } = useAddress();
+  console.log(selectedAddress, selectedPayment);
 
   let deliveryCharges = 0;
   if ((productTotalPrice || cartTotalPrice) < 499) {
-    deliveryCharges = 40;
-  }
-  if((productTotalPrice || cartTotalPrice) === 0) {
     deliveryCharges = 40;
   }
 
@@ -49,20 +49,8 @@ const OrderSummary = () => {
     <div>
       <div className=" mx-auto border-[1px] border-gray-400 rounded-lg mt-3">
 
-        <div className='px-[18px]'>
-          <button className={`w-full text-center text-sm rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[7px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
-            Place your order
-          </button>
-          <p className="text-xs text-gray-600  mt-1 text-center">
-            By placing your order, you agree to Amazon's
-            <a href="https://www.amazon.in/gp/help/customer/display.html?nodeId=200522700" className='text-blue-500 hover:text-red-500 cursor-pointer'> privacy notice </a>
-            and
-            <a href="https://www.amazon.in/gp/help/customer/display.html?nodeId=200545940" className='text-blue-500 hover:text-red-500 cursor-pointer'> conditions of use</a>.
-          </p>
-        </div>
-
         <div className=" mt-2 px-[18px]">
-          <h3 className="border-t border-gray-400 text-xl font-semibold pt-2 mb-3">Order Summary</h3>
+          <h3 className=" text-xl font-semibold pt-2 mb-3">Order Summary</h3>
           <div className="flex justify-between mb-[2px] text-sm">
             <p>Total Items:</p>
             <p>{product ? productQty : cartTotalQty}</p>
@@ -79,7 +67,44 @@ const OrderSummary = () => {
             <p>Order Total:</p>
             <p>₹{product ? (productTotalPrice + deliveryCharges).toFixed(2) : (cartTotalPrice + deliveryCharges).toFixed(2)}</p>
           </div>
+
+          {selectedAddress &&
+            <div >
+              <h3 className="border-t border-gray-400 text-lg font-semibold py-2">Selected Address</h3>
+              <div className="mb-2 text-sm">
+                <p className='font-semibold'>Name : {selectedAddress.name}</p>
+                <span>{selectedAddress.address}, {selectedAddress.area}, {selectedAddress.landmark}, {selectedAddress.city}, {selectedAddress.pincode}, {selectedAddress.state}, {selectedAddress.country}</span>
+              </div>
+            </div>
+          }
+
+          {selectedPayment &&
+            <div >
+              <h3 className="border-t border-gray-400 text-lg font-semibold py-2">Selected Payment Method</h3>
+              <div className="mb-2 text-sm">
+                <p className='font-semibold capitalize'> {selectedPayment}</p>
+              </div>
+            </div>
+          }
+
+
         </div>
+
+        <div className='mx-[18px] border-t border-gray-400'>
+          {(selectedAddress && selectedPayment) &&
+            <button className="w-full text-center text-sm rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[7px] mt-2 active:ring-2 active:ring-offset-1 active:ring-blue-500">
+              Place your order
+            </button>
+          }
+          <p className="text-xs text-gray-600  my-2 text-center">
+            By placing your order, you agree to Amazon's
+            <a href="https://www.amazon.in/gp/help/customer/display.html?nodeId=200522700" className='text-blue-500 hover:text-red-500 cursor-pointer'> privacy notice </a>
+            and
+            <a href="https://www.amazon.in/gp/help/customer/display.html?nodeId=200545940" className='text-blue-500 hover:text-red-500 cursor-pointer'> conditions of use</a>.
+          </p>
+        </div>
+
+
 
         <div className="flex justify-between border-t border-gray-400 rounded-br-lg rounded-bl-lg bg-gray-200">
           <p onClick={toggleDeliveryInfo} className="pl-[18px] my-4 text-xs tracking-wide text-blue-500 hover:underline hover:text-red-700 hover:cursor-pointer">

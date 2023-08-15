@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from "react-redux";
 import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
@@ -10,22 +10,14 @@ const UserAddresses = ({ setShowAddressForm }) => {
     // state to hold userInfo from redustoolkit 
     const userInfo = useSelector((state) => state.amazon.userInfo);
 
+    // get updateSelectedAddress from userAddressContext to update Selected Address 
     const { userAddress, updateUserAddress, updateSelectedAddress } = useAddress();
-
-    // state to hold the selected address index
-    const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
-
-    // Access the selected address details using the index
-    const selectedAddress = userAddress[selectedAddressIndex];
-
-    // // Updating selected address in userAddressContext
-    // updateSelectedAddress(selectedAddress);
 
     // Function to find the index of selected address
     const handleAddressSelect = (index) => {
-        setSelectedAddressIndex(index);
-        // Updating selected address in userAddressContext
-        updateSelectedAddress(selectedAddress);
+        // setSelectedAddressIndex(index);
+        const selectedAddress = userAddress[index]; // Get the updated selected address
+    updateSelectedAddress(selectedAddress); // Pass the updated selected address to the context
     };
 
     // function to delete selected address from Firebase
