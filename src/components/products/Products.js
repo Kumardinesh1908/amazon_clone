@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollRestoration, useLoaderData } from 'react-router-dom';
+import { ScrollRestoration, useLoaderData, useNavigate, Link } from 'react-router-dom';
 import { star } from "../../assets/index";
 import Product from './Product';
 import { useParams } from 'react-router-dom';
 
 
 const Products = () => {
+  const navigate = useNavigate();
+
+  // Function to handle click event when a category is selected
+  const handleCategoryClick = (category) => {
+    navigate(`/${category}`); // Navigate to the products page with the selected category as a URL parameter
+  };
+
   const data = useLoaderData();
   const productsData = data.data.products;  // getting array of available products
 
   const { category } = useParams(); // Get the category parameter from the URL
-
   // Filter products based on the selected category
   const categoryProducts = category
     ? productsData.filter(product => product.category === category)
@@ -21,30 +27,28 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState(categoryProducts);
   const [priceRange, setPriceRange] = useState(""); // State for the selected price range
   const [starRange, setStarRange] = useState(""); // State for the selected star range
-  const [selectedCategory, setSelectedCategory] = useState(""); // State for the selected category
 
-  const handleCategoryFilter = (selectedCategory) => {
-    setSelectedCategory(selectedCategory);
-    // Combine all active filters
-    const activeCategoryFilter = selectedCategory;
-    const activePriceRange = priceRange;
-    const activeStarRange = starRange;
-    // Apply all filters simultaneously
-    const filteredProducts = productsData.filter(product => {
-      const productCategory = product.category.toLowerCase();
-      const productPrice = parseFloat(product.price);
-      const productRating = parseFloat(product.rating);
-      // Check if the product matches the selected category, price range, and star range
-      const categoryFilterMatch = activeCategoryFilter === "" || productCategory === activeCategoryFilter.toLowerCase();
-      const priceFilterMatch = !activePriceRange || (productPrice >= parseFloat(activePriceRange.split(" - ")[0].replace(/,/g, ""), 10) &&
-        productPrice <= parseFloat(activePriceRange.split(" - ")[1].replace(/,/g, ""), 10));
-      const starFilterMatch = !activeStarRange || productRating >= parseFloat(activeStarRange);
-      return categoryFilterMatch && priceFilterMatch && starFilterMatch;
-    });
-    // Set the filtered products
-    setFilteredProducts(selectedCategory === "" ? productsData : filteredProducts);
-  };
-
+  // const handleCategoryFilter = (selectedCategory) => {
+  //   setSelectedCategory(selectedCategory);
+  //   // Combine all active filters
+  //   const activeCategoryFilter = selectedCategory;
+  //   const activePriceRange = priceRange;
+  //   const activeStarRange = starRange;
+  //   // Apply all filters simultaneously
+  //   const filteredProducts = productsData.filter(product => {
+  //     const productCategory = product.category.toLowerCase();
+  //     const productPrice = parseFloat(product.price);
+  //     const productRating = parseFloat(product.rating);
+  //     // Check if the product matches the selected category, price range, and star range
+  //     const categoryFilterMatch = activeCategoryFilter === "" || productCategory === activeCategoryFilter.toLowerCase();
+  //     const priceFilterMatch = !activePriceRange || (productPrice >= parseFloat(activePriceRange.split(" - ")[0].replace(/,/g, ""), 10) &&
+  //       productPrice <= parseFloat(activePriceRange.split(" - ")[1].replace(/,/g, ""), 10));
+  //     const starFilterMatch = !activeStarRange || productRating >= parseFloat(activeStarRange);
+  //     return categoryFilterMatch && priceFilterMatch && starFilterMatch;
+  //   });
+  //   // Set the filtered products
+  //   setFilteredProducts(selectedCategory === "" ? productsData : filteredProducts);
+  // };
 
   const handleStarFilter = (selectedRange) => {
     // Determine the array to use for filtering based on the presence of priceRange
@@ -73,7 +77,6 @@ const Products = () => {
       setFilteredProducts(starFilteredProducts);
     }
   };
-
 
   const handlePriceFilter = (selectedRange) => {
     const productsToFilter = starRange ? filteredProducts : productsData;
@@ -106,27 +109,27 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState("default"); // "default", "lowToHigh", "highToLow"
   const [sortedProducts, setSortedProducts] = useState([]);
 
-  useEffect(() => {
-    const applySorting = () => {
-      if (sortOrder === "lowToHigh") {
-        const sortedProducts = filteredProducts.slice().sort((a, b) => a.price - b.price);
-        setSortedProducts(sortedProducts);
-      } else if (sortOrder === "highToLow") {
-        const sortedProducts = filteredProducts.slice().sort((a, b) => b.price - a.price);
-        setSortedProducts(sortedProducts);
-      } else if (sortOrder === "avgReview") {
-        const sortedProducts = filteredProducts.slice().sort((a, b) => b.rating - a.rating);
-        setSortedProducts(sortedProducts);
-      } else {
-        setSortedProducts([]); // Reset sortedProducts to empty array
-        // Check if any filters are applied, and if not, show all products
-        if (!priceRange && !starRange) {
-          setFilteredProducts(productsData);
-        }
-      }
-    };
-    applySorting();
-  }, [sortOrder, filteredProducts, priceRange, starRange, productsData]);
+  // useEffect(() => {
+  //   const applySorting = () => {
+  //     if (sortOrder === "lowToHigh") {
+  //       const sortedProducts = filteredProducts.slice().sort((a, b) => a.price - b.price);
+  //       setSortedProducts(sortedProducts);
+  //     } else if (sortOrder === "highToLow") {
+  //       const sortedProducts = filteredProducts.slice().sort((a, b) => b.price - a.price);
+  //       setSortedProducts(sortedProducts);
+  //     } else if (sortOrder === "avgReview") {
+  //       const sortedProducts = filteredProducts.slice().sort((a, b) => b.rating - a.rating);
+  //       setSortedProducts(sortedProducts);
+  //     } else {
+  //       setSortedProducts([]); // Reset sortedProducts to empty array
+  //       // Check if any filters are applied, and if not, show all products
+  //       if (!priceRange && !starRange) {
+  //         setFilteredProducts(productsData);
+  //       }
+  //     }
+  //   };
+  //   applySorting();
+  // }, [sortOrder, filteredProducts, priceRange, starRange, productsData]);
 
   const handleSortingChange = (e) => {
     const selectedSortOrder = e.target.value;
@@ -187,16 +190,16 @@ const Products = () => {
 
         <div className='px-5 py-[10px] '>
           <p className='text-[18px] underline font-bold mb-1'>Category</p>
-          <div className={`font-medium mb-[1px] cursor-pointer ${selectedCategory === "" ? "text-blue-500" : ""}`}
-            onClick={() => handleCategoryFilter("")}
-          >
-            All
-          </div>
-          {uniqueCategories.map((category) => (
-            <div key={category} className={`font-medium mb-[1px] cursor-pointer capitalize ${selectedCategory === category ? "text-blue-500" : ""}`}
-              onClick={() => handleCategoryFilter(category)}
+          <Link to="/allProducts">
+            <div className={`font-medium mb-[1px] cursor-pointer ${category === "" ? "text-blue-500" : ""}`}>
+              All
+            </div>
+          </Link>
+          {uniqueCategories.map((item) => (
+            <div key={item} className={`font-medium mb-[1px] cursor-pointer capitalize ${category === item ? "text-blue-500" : ""}`}
+              onClick={() => handleCategoryClick(item)}
             >
-              {category}
+              {item}
             </div>
           ))}
         </div>
@@ -210,11 +213,11 @@ const Products = () => {
             <option value="highToLow">Price : High to Low</option>
             <option value="avgReview">Avg. Customer Review</option>
           </select>
-          <h1>Total : {filteredProducts.length}</h1>
+          <h1>Total : {categoryProducts.length}</h1>
         </div>
         <div className='w-full flex flex-wrap justify-evenly '>
           {/* <Product productsData={sortedProducts.length > 0 ? sortedProducts : filteredProducts} /> */}
-          <Product productsData ={categoryProducts} />
+          <Product productsData={categoryProducts} />
         </div>
       </div>
       <ScrollRestoration />

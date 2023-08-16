@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import { logo,shopping } from "../../assets";
+import { logo, shopping } from "../../assets";
 import { allItems } from "../../constants";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -11,6 +11,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { userSignOut, setUserAuthentication } from "../../redux/amazonSlice";
 import { useCart } from "../../context/userCartContext";
 import Location from "./location";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 
 export default function Header() {
@@ -49,6 +50,18 @@ export default function Header() {
         });
         setTotalQty(allQty);
     }, [products]);
+
+    const data = useLoaderData();
+    const productsData = data.data.products;  // getting array of available products
+    const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
+    const navigate = useNavigate();
+
+    // Function to handle click event when a category is selected
+    const handleCategoryClick = (category) => {
+        navigate(`/${category}`); // Navigate to the products page with the selected category as a URL parameter
+        setShowAll(false);
+    };
+
 
     // Handle user logout
     const handleLogout = () => {
@@ -89,13 +102,13 @@ export default function Header() {
                     {showAll && (
                         <div>
                             <ul
-                                className="absolute top-8 left-0 w-48 h-96 ml-[1px] text-black bg-white 
+                                className="absolute top-8 left-0 w-48 h-80 ml-[1px] text-black bg-white 
                                 border-[1px] border-gray-400 overflow-y-scroll overflow-x-hidden  flex-col 
                                 z-50">
                                 {
-                                    allItems.map((item) => (
-                                        <li className="hover:bg-blue-500 hover:text-white pl-1 text-[#0f1111] text-sm flex flex-col items-start cursor-pointer"
-                                            key={item._id}>{item.title}</li>
+                                    uniqueCategories.map((category, index) => (
+                                        <li className="hover:bg-blue-500 hover:text-white pl-1 text-[#0f1111] text-sm flex flex-col items-start cursor-pointer capitalize" onClick={() => handleCategoryClick(category)}
+                                            key={index}>{category}</li>
                                     ))
                                 }
                             </ul>

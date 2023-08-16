@@ -15,7 +15,7 @@ const Location = () => {
     const [userZipCode, setUserZipCode] = useState(''); // State for the user's entered ZIP code
     const [locationName, setLocationName] = useState(null);
 
-    const [warning, setWarning] = useState(false);
+    const [warning, setWarning] = useState("");
 
     const [loading, setLoading] = useState(false);
 
@@ -32,12 +32,22 @@ const Location = () => {
 
     // Fetch location data from API based on user's ZIP code
     async function fetchLocationData(userZipCode) {
-        const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
-        if (response.data[0].PostOffice != null) {
-            setLocationName(response.data);
-            setWarning(false);
+        try {
+            const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
+            if (response.data[0].PostOffice != null) {
+                setLocationName(response.data);
+                setWarning("");
+                setLoading(false);
+                setSelectedLocation(false);
+            } else {
+                setLoading(false);
+                setUserZipCode("");
+                setWarning("Location not found");
+            }
+        } catch (error) {
             setLoading(false);
-            setSelectedLocation(false)
+            setUserZipCode("");
+            setWarning(error.message);
         }
     }
 
@@ -94,8 +104,7 @@ const Location = () => {
                             <p className="text-xs text-gray-400">Enter an Indian pincode to see product availability and delivery options for your location.</p>
                             <div className="flex justify-center" >
                                 <input type="text" maxLength={6} placeholder="Enter a 6-digit ZIP code" className="w-[65%] mt-5 border-[1px] border-[#a6a6a6] rounded p-1 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500"
-                                    onChange={(e) => setUserZipCode(e.target.value)}
-                                />
+                                    onChange={(e) => {setUserZipCode(e.target.value);setWarning("")}} />
                                 <button className="w-[33%] border-[0.066rem] mt-5 border-gray-200 rounded-lg p-2 ml-2 cursor-pointer"> Apply</button>
                             </div>
                             {
