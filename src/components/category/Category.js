@@ -12,7 +12,7 @@ const Category = () => {
 
     return (
         <div className='relative z-10'>
-            <div className='w-full flex flex-row flex-wrap  justify-evenly -mt-[400px] '>
+            <div className='w-full flex flex-row flex-wrap  justify-evenly -mt-[300px] '>
                 {categoryData.map((item) => (
                     <div className='w-[310px] h-[435px] mb-7 bg-white ' key={item.id} >
                         <div className='m-[20px]'>

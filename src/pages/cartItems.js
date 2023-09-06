@@ -9,8 +9,11 @@ import { db } from "../firebase/firebase.config";
 import { useCart } from '../context/userCartContext';
 
 const CartItems = () => {
-    const data = useLoaderData();
-    const productsData = data.data.products;
+    // const data = useLoaderData();
+    // const productsData = data.data.products;
+    const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
+    const productsData = allProducts.products;
+    console.log(productsData);
 
     const dispatch = useDispatch();
     const products = useSelector((state) => state.amazon.products);

@@ -13,11 +13,14 @@ const ProductDetails = () => {
 
   const authenticated = useSelector((state) => state.amazon.isAuthenticated);
   const userInfo = useSelector((state) => state.amazon.userInfo);
+  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
+  const productsData = allProducts.products;
+  console.log(productsData);
 
   const [cartButton, setCartButton] = useState(false);
 
-  const data = useLoaderData(); // Load the data from the router context
-  const productsData = data.data.products; //when productDetails open from products use this data
+  // const data = useLoaderData(); // Load the data from the router context
+  // const productsData = data.data.products; //when productDetails open from products use this data
 
   // Get the "title" parameter from the URL
   const { title } = useParams();

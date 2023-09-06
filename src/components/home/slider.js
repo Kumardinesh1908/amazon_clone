@@ -9,7 +9,6 @@ const Slider = () => {
         bannerImgThree,
         bannerImgFour,
         bannerImgFive
-        // Add more image URLs here
     ];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -38,14 +37,13 @@ const Slider = () => {
 
     return (
         <div className='relative z-0'>
-
             <img src={previous} onClick={handlePrevious} alt="previous"
-                className='w-10 h-10 absolute top-[17%] left-[15px] text-black drop-shadow-white active:border-2 active:border-black active:shadow-white ' />
+                className='w-10 h-10 absolute top-[135px] left-[15px] text-black active:border-2 active:border-black' />
 
             <img src={images[currentImageIndex]} alt="Slider" className='w-full h-screen' />
 
             <img src={next} onClick={handleNext} alt="next"
-                className='w-10 h-10 absolute top-[17%] left-[96%]  text-black active:border-2 active:border-black  ' />
+                className='w-10 h-10 absolute top-[135px] left-[96%] text-black active:border-2 active:border-black' />
 
         </div>
     );

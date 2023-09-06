@@ -3,6 +3,7 @@ import { ScrollRestoration, useLoaderData, useNavigate, Link } from 'react-route
 import { star } from "../../assets/index";
 import Product from './Product';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Products = () => {
   const navigate = useNavigate();
@@ -12,14 +13,16 @@ const Products = () => {
     navigate(`/${category}`); // Navigate to the products page with the selected category as a URL parameter
   };
 
-  const data = useLoaderData();
-  const productsData = data.data.products;  // getting array of available products
+  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
+  const productsData = allProducts.products;
+  console.log(productsData);
+
+  // const data = useLoaderData();
+  // const productsData = data.data.products;  // getting array of available products
 
   const { category } = useParams(); // Get the category parameter from the URL
   // Filter products based on the selected category
-  const categoryProducts = category
-    ? productsData.filter(product => product.category === category)
-    : productsData;
+  const categoryProducts = category ? productsData.filter((product) => product.category === category): productsData;
 
   const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
 

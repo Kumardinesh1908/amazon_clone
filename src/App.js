@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
 import { productsData } from "./api/api";
 import Header from "./components/header/header";
@@ -14,6 +15,9 @@ import Cart from "../src/pages/cart";
 import { UserCartProvider } from "./context/userCartContext";
 import { UserAddressProvider } from "./context/userAddressContext";
 import Checkout from "../src/pages/Checkout";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "./redux/amazonSlice"; // Import your fetchProducts action
+
 
 // Layout component to combine components for main path("/") of routers which has to be rendered when website opens for the first time 
 const Layout = () => {
@@ -43,16 +47,13 @@ function App() {
         },
         {
           path: "/allProducts",
-          loader: productsData,
           children: [
             {
               index: true,
-              loader: productsData,
-              element: <Products />
+              element: <Products />,
             },
             {
               path: ":title",
-              loader: productsData,
               element: <ProductDetails />,
             },
           ]
@@ -62,24 +63,16 @@ function App() {
           children: [
             {
               index: true,
-              loader: productsData,
               element: <Products />,
             },
             {
               path: ":title",
-              loader: productsData,
               element: <ProductDetails />,
             },
           ],
         },
-        // {
-        //   path: ":title",
-        //   loader: productsData,
-        //   element: <ProductDetails />,
-        // },
         {
           path: "/cart",
-          loader: productsData,
           element: <Cart />
         },
       ],
@@ -106,6 +99,12 @@ function App() {
       element: <Checkout />,
     },
   ]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts()); // Fetch products when the app loads
+  }, [dispatch]);
 
   return (
 
