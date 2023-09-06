@@ -72,6 +72,11 @@ function App() {
             },
           ],
         },
+        // {
+        //   path: ":title",
+        //   loader: productsData,
+        //   element: <ProductDetails />,
+        // },
         {
           path: "/cart",
           loader: productsData,
@@ -79,11 +84,6 @@ function App() {
         },
       ],
     },
-    // {
-    //   path: "/allProducts/:title",
-    //   loader: productsData,
-    //   element: <ProductDetails />,
-    // },
     {
       path: "/signIn",
       children: [

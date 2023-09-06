@@ -17,7 +17,6 @@ const OrderSummary = () => {
   // getting all cart products
   const { cartTotalQty, cartTotalPrice } = useCart(); //userCart, updateUserCart,
   const { selectedAddress, selectedPayment } = useAddress();
-  console.log(selectedAddress, selectedPayment);
 
   let deliveryCharges = 0;
   if ((productTotalPrice || cartTotalPrice) < 499) {

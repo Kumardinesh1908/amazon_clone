@@ -16,9 +16,9 @@ const PaymentMethod = () => {
         updateSelectedPayment(event.target.value);
     };
 
-    const handleAddPaymentMethod = () => {
-        // TODO: Add a new payment method
-    };
+    // const handleAddPaymentMethod = () => {
+    //     // TODO: Add a new payment method
+    // };
 
     return (
         <div>

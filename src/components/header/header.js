@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useRef } from "react";
 import { logo, shopping } from "../../assets";
-import { allItems } from "../../constants";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth, signOut } from "firebase/auth";
 import { userSignOut, setUserAuthentication } from "../../redux/amazonSlice";
 import { useCart } from "../../context/userCartContext";
 import Location from "./location";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import Search from "./search";
 
 
 export default function Header() {
@@ -27,20 +24,6 @@ export default function Header() {
     // Access cart total quantity from the context
     const { cartTotalQty } = useCart();
 
-    // Ref for the "All Categories" dropdown
-    const allCategoryRef = useRef(null);
-
-    // Effect to close the "All Categories" dropdown when clicking outside
-    const [showAll, setShowAll] = useState(false);
-    useEffect(() => {
-        document.body.addEventListener("click", (e) => {
-            if (allCategoryRef.current && !allCategoryRef.current.contains(e.target)) {
-                setShowAll(false);
-            }
-        })
-    }, [allCategoryRef, showAll]);
-
-
     const [totalQty, setTotalQty] = useState(0);
     // Calculate total quantity of products in the cart
     useEffect(() => {
@@ -50,17 +33,6 @@ export default function Header() {
         });
         setTotalQty(allQty);
     }, [products]);
-
-    const data = useLoaderData();
-    const productsData = data.data.products;  // getting array of available products
-    const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
-    const navigate = useNavigate();
-
-    // Function to handle click event when a category is selected
-    const handleCategoryClick = (category) => {
-        navigate(`/${category}`); // Navigate to the products page with the selected category as a URL parameter
-        setShowAll(false);
-    };
 
 
     // Handle user logout
@@ -91,38 +63,7 @@ export default function Header() {
                 {/* DeliveryLocation ends here */}
 
                 {/* Search starts here */}
-                <div className="h-10 rounded-md flex flex-grow relative ml-4" ref={allCategoryRef}>
-                    <span onClick={() => setShowAll(!showAll)}
-                        className="w-14 pl-2 h-full flex items-center justify-center text-xs text-amazon_black cursor-pointer
-                      bg-gray-100 hover:bg-gray-300 rounded-tl-md rounded-bl-md duration-300 border-r-[1px] border-gray-300">All
-                        <span>
-                            <ArrowDropDownIcon />
-                        </span>
-                    </span>
-                    {showAll && (
-                        <div>
-                            <ul
-                                className="absolute top-8 left-0 w-48 h-80 ml-[1px] text-black bg-white 
-                                border-[1px] border-gray-400 overflow-y-scroll overflow-x-hidden  flex-col 
-                                z-50">
-                                {
-                                    uniqueCategories.map((category, index) => (
-                                        <li className="hover:bg-blue-500 hover:text-white pl-1 text-[#0f1111] text-sm flex flex-col items-start cursor-pointer capitalize" onClick={() => handleCategoryClick(category)}
-                                            key={index}>{category}</li>
-                                    ))
-                                }
-                            </ul>
-                        </div>
-                    )}
-                    <input onClick={() => setShowAll(false)}
-                        className="h-full text-base text-amazon_black flex-grow  px-2 border-none outline-none   placeholder:text-[#817e7e] font-[400]"
-                        type="text" placeholder="Search Amazon.in"
-                    />
-                    <span onClick={() => setShowAll(false)}
-                        className="w-12 h-full flex items-center justify-center bg-amazon_yellow hover:bg-[#f3a847] text-amazon_black cursor-pointer rounded-tr-md rounded-br-md duration-300">
-                        <SearchIcon />
-                    </span>
-                </div>
+                <Search />
                 {/* Search ends here */}
 
                 {/* Language starts here */}

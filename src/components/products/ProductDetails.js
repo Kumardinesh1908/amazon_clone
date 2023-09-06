@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { ScrollRestoration, useLoaderData, Link} from 'react-router-dom';
+import { ScrollRestoration, useLoaderData, Link } from 'react-router-dom';
 import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, transaction } from "../../assets/index";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, buyNow } from '../../redux/amazonSlice';
@@ -33,6 +33,7 @@ const ProductDetails = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, [product.images.length]);
+
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
@@ -271,10 +272,12 @@ const ProductDetails = () => {
         }
 
         <p className='text-blue-500 pt-3'>Secure transaction</p>
-        <button
-          className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
-          Add to Wish List
-        </button>
+        {userInfo &&
+          <button
+            className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+            Add to Wish List
+          </button>
+        }
       </div>
     </div>
   )
