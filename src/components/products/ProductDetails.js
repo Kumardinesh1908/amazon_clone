@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { ScrollRestoration, useLoaderData, Link } from 'react-router-dom';
+import { ScrollRestoration, Link } from 'react-router-dom';
 import { star, halfStar, emptyStar, offers, delivery, cod, exchange, delivered, transaction } from "../../assets/index";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, buyNow } from '../../redux/amazonSlice';
@@ -15,7 +15,6 @@ const ProductDetails = () => {
   const userInfo = useSelector((state) => state.amazon.userInfo);
   const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
   const productsData = allProducts.products;
-  console.log(productsData);
 
   const [cartButton, setCartButton] = useState(false);
 

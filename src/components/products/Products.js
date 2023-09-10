@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollRestoration, useLoaderData, useNavigate, Link } from 'react-router-dom';
+import { ScrollRestoration, useNavigate, Link } from 'react-router-dom';
 import { star } from "../../assets/index";
 import Product from './Product';
 import { useParams } from 'react-router-dom';
@@ -15,8 +15,7 @@ const Products = () => {
 
   const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
   const productsData = allProducts.products;
-  console.log(productsData);
-
+  
   // const data = useLoaderData();
   // const productsData = data.data.products;  // getting array of available products
 
