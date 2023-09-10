@@ -2,7 +2,9 @@ import React, { useEffect, useState,useCallback } from "react";
 import { useRef } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
 
 
 const Search = () => {
@@ -15,8 +17,8 @@ const Search = () => {
     const [searchResults, setSearchResults] = useState([]); // To store search results
 
     const navigate = useNavigate();
-    const data = useLoaderData();
-    const productsData = data.data.products;  // getting array of available products
+    const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
+    const productsData = allProducts.products;
 
     const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
 
