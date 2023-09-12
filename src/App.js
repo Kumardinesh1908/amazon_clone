@@ -43,20 +43,30 @@ function App() {
           element: <Home />,
         },
         {
-          path: "/allProducts", 
-          element: <Products />,
+          path: "/allProducts",
+          children: [
+            {
+              index: true,
+              element: <Products />,
+            },
+            {
+              path: ":title",
+              element: <ProductDetails />,
+            },
+          ]
         },
         {
-          path: "/allProducts/:title",
-          element: <ProductDetails />,
-        },
-        {
-          path: "/:category", 
-          element: <Products />,
-        },
-        {
-          path: "/:category/:title",
-          element: <ProductDetails />,
+          path: ':category',
+          children: [
+            {
+              index: true,
+              element: <Products />,
+            },
+            {
+              path: ":title",
+              element: <ProductDetails />,
+            },
+          ],
         },
         {
           path: "/cart",
@@ -105,4 +115,3 @@ function App() {
 }
 
 export default App;
-

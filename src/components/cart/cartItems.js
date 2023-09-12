@@ -9,24 +9,18 @@ import { db } from "../../firebase/firebase.config";
 import { useCart } from '../../context/userCartContext';
 
 const CartItems = () => {
-    // const data = useLoaderData();
-    // const productsData = data.data.products;
     const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
     const productsData = allProducts.products;
-
     const dispatch = useDispatch();
     const localCartProducts = useSelector((state) => state.amazon.localCartProducts);
     const userInfo = useSelector((state) => state.amazon.userInfo);
     const authenticated = useSelector((state) => state.amazon.isAuthenticated);
-
-
     const { userCart, updateUserCart, cartTotalQty, cartTotalPrice } = useCart();
-
-
     const [totalQty, setTotalQty] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const cartRef = useRef(null);
     const [productDivHeight, setProductDivHeight] = useState(0);
+    
     useEffect(() => {
         let allPrice = 0;
         let allQty = 0;
