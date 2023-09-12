@@ -12,9 +12,7 @@ export default function HeaderBottom() {
 
     const [sideBar, setSidebar] = useState(false);
     const ref = useRef(null);
-    const handleClose = () => {
-        setSidebar(false);
-    }
+
     useEffect(() => {
         document.body.addEventListener("click", (e) => {
             if (e.target.contains(ref.current)) {
@@ -61,11 +59,10 @@ export default function HeaderBottom() {
                                             ? <h3 className='font-titleFont font-bold text-lg tracking-wider'>Hello, {userInfo.name}</h3>
                                             : <h3 className='font-titleFont font-bold text-lg tracking-wider'>Hello, sign in</h3>
                                     }
-                                    
                                 </div>
                                 <SideNavContent />
                                 <span
-                                    onClick={handleClose} className='cursor-pointer absolute top-5 left-[380px] w-5 h-5
+                                    onClick={() => setSidebar(false)} className='cursor-pointer absolute top-5 left-[380px] w-5 h-5
                                    text-white flex items-center justify-center'>
                                     <img src={close} alt="close" />
                                 </span>

@@ -12,10 +12,6 @@ const FooterMiddle = () => {
             {/* Middle-Top starts here */}
             <div className='w-full border-b-[1px] border-gray-600 pb-9'>
                 <div className="flex flew-row gap-[120px] ml-[197px] pt-11">
-                    {/* <FooterMiddleList />
-                    <FooterMiddleList />
-                    <FooterMiddleList />
-                    <FooterMiddleList /> */}
                     {
                         footerMiddleData.map((item) => (
                             <FooterMiddleList key={item.id} title={item.title} listItem={item.listItem} />

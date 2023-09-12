@@ -17,7 +17,7 @@ export default function Header() {
     const auth = getAuth();
 
     const dispatch = useDispatch();
-    const products = useSelector((state) => state.amazon.products);
+    const localCartProducts = useSelector((state) => state.amazon.localCartProducts);
     const userInfo = useSelector((state) => state.amazon.userInfo);
     const authenticated = useSelector((state) => state.amazon.isAuthenticated);
 
@@ -25,14 +25,14 @@ export default function Header() {
     const { cartTotalQty } = useCart();
 
     const [totalQty, setTotalQty] = useState(0);
-    // Calculate total quantity of products in the cart
+    // Calculate total quantity of localCartProducts in the cart
     useEffect(() => {
         let allQty = 0;
-        products.forEach((product) => {
+        localCartProducts.forEach((product) => {
             allQty += product.quantity;
         });
         setTotalQty(allQty);
-    }, [products]);
+    }, [localCartProducts]);
 
 
     // Handle user logout

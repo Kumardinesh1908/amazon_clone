@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from "react-redux";
 import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase.config";
-import { useAddress } from '../context/userAddressContext';
+import { db } from "../../firebase/firebase.config";
+import { useAddress } from '../../context/userAddressContext';
 
 
 const UserAddresses = ({ setShowAddressForm }) => {

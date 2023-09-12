@@ -1,7 +1,7 @@
 import React from 'react';
-import Slider from '../components/home/slider';
-import Category from "../components/category/Category";
-import ProductsSlider from "../components/home/ProductsSlider";
+import Slider from './slider';
+import Category from "../category/Category";
+import ProductsSlider from "./ProductsSlider";
 import { ScrollRestoration } from 'react-router-dom';
 
 

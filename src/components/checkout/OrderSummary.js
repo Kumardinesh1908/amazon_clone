@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useCart } from '../context/userCartContext';
-import { useAddress } from '../context/userAddressContext';
+import { useCart } from '../../context/userCartContext';
+import { useAddress } from '../../context/userAddressContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetBuyNowProduct } from '../redux/amazonSlice';
+import { resetBuyNowProduct } from '../../redux/amazonSlice';
 
 const OrderSummary = () => {
   const dispatch = useDispatch();

@@ -8,7 +8,6 @@ import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { useCart } from '../../context/userCartContext';
 
 
-
 const Product = (props) => {
   const { productsData } = props;
 

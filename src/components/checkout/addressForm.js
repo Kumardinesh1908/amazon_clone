@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { countryList, states } from "../constants/index";
+import { countryList, states } from "../../constants/index";
 import { RotatingLines } from "react-loader-spinner";
 import { motion } from "framer-motion";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase.config";
+import { db } from "../../firebase/firebase.config";
 import { useSelector } from "react-redux";
-import { useAddress } from '../context/userAddressContext';
+import { useAddress } from '../../context/userAddressContext';
 
 
 const AddressForm = ({setShowAddressForm}) => {

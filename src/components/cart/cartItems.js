@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { correct } from '../assets/index';
-import { deleteProduct, resetCart, increaseQuantity, decreaseQuantity } from '../redux/amazonSlice';
-import { Link, useLoaderData, ScrollRestoration } from 'react-router-dom';
+import { correct } from '../../assets/index';
+import { deleteProduct, resetCart, increaseQuantity, decreaseQuantity } from '../../redux/amazonSlice';
+import { Link, ScrollRestoration } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase/firebase.config";
-import { useCart } from '../context/userCartContext';
+import { db } from "../../firebase/firebase.config";
+import { useCart } from '../../context/userCartContext';
 
 const CartItems = () => {
     // const data = useLoaderData();
     // const productsData = data.data.products;
     const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
     const productsData = allProducts.products;
-    console.log(productsData);
 
     const dispatch = useDispatch();
-    const products = useSelector((state) => state.amazon.products);
+    const localCartProducts = useSelector((state) => state.amazon.localCartProducts);
     const userInfo = useSelector((state) => state.amazon.userInfo);
     const authenticated = useSelector((state) => state.amazon.isAuthenticated);
 
@@ -31,7 +30,7 @@ const CartItems = () => {
     useEffect(() => {
         let allPrice = 0;
         let allQty = 0;
-        products.forEach((product) => {
+        localCartProducts.forEach((product) => {
             allPrice += product.quantity * product.price;
             allQty += product.quantity;
         });
@@ -47,7 +46,7 @@ const CartItems = () => {
         };
         // Call the function when cart items change
         updateCartHeight();
-    }, [products, userCart]);
+    }, [localCartProducts, userCart]);
 
     const navigate = useNavigate();
     const handleCategoryClick = (category, title) => {
@@ -188,7 +187,7 @@ const CartItems = () => {
                         :
                         <div ref={cartRef}>
                             {
-                                products.map((product, index) => (
+                                localCartProducts.map((product, index) => (
                                     <div key={index} className='w-full border-b-[1px] border-b-gray-200 p-4 flex gap-6' >
                                         <div className='w-1/5 cursor-pointer' onClick={() => handleCategoryClick(product.category, product.title)}>
                                             <img className='w-48 h-48' src={product.thumbnail} alt="productImage" />

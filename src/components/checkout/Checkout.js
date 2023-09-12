@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
-import { logoBlack } from '../assets/index';
-import { resetBuyNowProduct } from '../redux/amazonSlice';
-import { useAddress } from '../context/userAddressContext';
+import { logoBlack } from '../../assets/index';
+import { resetBuyNowProduct } from '../../redux/amazonSlice';
+import { useAddress } from '../../context/userAddressContext';
 import AddressForm from './addressForm';
 import UserAddresses from './userAddresses';
 import PaymentMethod from './paymentMethod';

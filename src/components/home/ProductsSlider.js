@@ -1,13 +1,15 @@
 import React from 'react'
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './scrollbar.css';
 import { useRef } from 'react';
 
 const ProductsSlider = () => {
-  const products = useLoaderData();
-  const productsData = products.data.products;
+  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
+  const productsData = allProducts.products;
 
   const sliderRef = useRef(null);
+  
   const handleScroll = (direction) => {
     if (direction === 'left') {
       sliderRef.current.scrollLeft -= 624;

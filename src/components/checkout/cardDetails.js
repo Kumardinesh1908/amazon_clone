@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { months, years } from "../constants";
+import { months, years } from "../../constants";
 
 function CardDetails() {
     const [cardNumber, setCardNumber] = useState('');

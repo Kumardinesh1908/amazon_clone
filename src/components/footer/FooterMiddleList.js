@@ -1,5 +1,4 @@
 import React from 'react';
-// import { footerData } from "../../constants/index";
 
 const FooterMiddleList = ({ title, listItem }) => {
   return (
@@ -10,16 +9,16 @@ const FooterMiddleList = ({ title, listItem }) => {
       </h3>
       <ul className="text-sm my-[7px]">
         {
-          listItem.map((item) => 
-            item.listData.map((data, index)=>(
-                <li className="mb-[7px] tracking-wide hover:underline cursor-pointer" key={index}>{data}</li>
-              )
-              )
-              )
+          listItem.map((item) =>
+            item.listData.map((data, index) => (
+              <li className="mb-[7px] tracking-wide hover:underline cursor-pointer" key={index}>{data}</li>
+            )
+            )
+          )
         }
       </ul>
     </div>
-    
+
   );
 }
 

@@ -97,15 +97,15 @@ const Location = () => {
             {selectedLocation &&
                 <div className='w-screen h-screen text-black fixed z-50 top-0 left-0  bg-amazon_black bg-opacity-50 flex items-center justify-center' >
                     <div ref={locationRef} className=" w-[320px] bg-white rounded-lg">
-                        <div className="w-full h-[30%] rounded-tr-lg rounded-tl-lg  bg-gray-100 border-b-[0.066rem] border-gray-200 p-4 font-bold">
+                        <div className="rounded-tr-lg rounded-tl-lg  bg-gray-100 border-b-[0.066rem] border-gray-200 p-4 font-bold">
                             Choose your location
                         </div>
-                        <form className="w-full h-[70%] p-4" onSubmit={handleSubmit}>
+                        <form className=" p-4 flex flex-col gap-5" onSubmit={handleSubmit}>
                             <p className="text-xs text-gray-400">Enter an Indian pincode to see product availability and delivery options for your location.</p>
                             <div className="flex justify-center" >
-                                <input type="text" maxLength={6} placeholder="Enter a 6-digit ZIP code" className="w-[65%] mt-5 border-[1px] border-[#a6a6a6] rounded p-1 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500"
-                                    onChange={(e) => {setUserZipCode(e.target.value);setWarning("")}} />
-                                <button className="w-[33%] border-[0.066rem] mt-5 border-gray-200 rounded-lg p-2 ml-2 cursor-pointer"> Apply</button>
+                                <input type="text" maxLength={6} placeholder="Enter a 6-digit ZIP code" className="w-[65%] border-[1px] border-[#a6a6a6] rounded p-1 font-medium"
+                                    onChange={(e) => { setUserZipCode(e.target.value); setWarning("") }} />
+                                <button className="w-[33%] p-2 ml-2 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500"> Apply</button>
                             </div>
                             {
                                 loading && <div className='flex justify-center mt-2'>
@@ -125,6 +125,14 @@ const Location = () => {
                                 <div className="text-zsm text-red-700 ">{warning}</div>
                             </div>
                         }
+                        <div className=" flex flex-row justify-between items-center px-4 ">
+                            <hr className="w-[45%]" />
+                            <p>or</p>
+                            <hr className="w-[45%]" />
+                        </div>
+                        <div className="p-2 m-4 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500">
+                            <p>Auto detect your location</p>
+                        </div>
                     </div>
                 </div>
             }

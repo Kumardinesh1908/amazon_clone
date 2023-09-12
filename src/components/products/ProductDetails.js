@@ -10,22 +10,17 @@ import { useCart } from '../../context/userCartContext';
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
-
   const authenticated = useSelector((state) => state.amazon.isAuthenticated);
   const userInfo = useSelector((state) => state.amazon.userInfo);
   const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
   const productsData = allProducts.products;
+  const { title } = useParams(); // Get the "title" parameter from the URL
 
-  const [cartButton, setCartButton] = useState(false);
-
-  // const data = useLoaderData(); // Load the data from the router context
-  // const productsData = data.data.products; //when productDetails open from products use this data
-
-  // Get the "title" parameter from the URL
-  const { title } = useParams();
   // Find the product based on the title from the URL parameters
   const product = productsData.find((product) =>
     product.title === title);
+
+  const [cartButton, setCartButton] = useState(false);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   // Automatically change images every 3 seconds
@@ -244,7 +239,7 @@ const ProductDetails = () => {
         </div>
         {cartButton
           ? <Link to="/cart">
-            <button className={`pt-2 w-full text-center text-blue-600 rounded-2xl  bg-gray-100 border-gray-200 p-[4px] mt-3 active:ring-2     active:ring-offset-1 active:ring-blue-600`}>
+            <button className={`pt-2 w-full text-center text-blue-600 rounded-2xl  bg-gray-100 border-gray-200 p-[4px] mt-3 active:ring-2 active:ring-offset-1 active:ring-blue-600`}>
               Go to Cart
             </button>
           </Link>
@@ -253,7 +248,7 @@ const ProductDetails = () => {
               handleAddToCart(product);
               setCartButton(true);
             }}
-            className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+            className={`pt-2 w-full text-center rounded-2xl bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3  active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
             Add to Cart
           </button>}
         {
@@ -261,13 +256,13 @@ const ProductDetails = () => {
             ? <Link to="/checkout">
               <button
                 onClick={() => handleBuyNow(product)}
-                className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+                className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3  active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
                 Buy Now
               </button>
             </Link>
             : <Link to="/signIn">
               <button
-                className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+                className={`pt-2 w-full text-center rounded-2xl bg-orange-400 hover:bg-orange-500 p-[4px] mt-3  active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
                 Buy Now
               </button>
             </Link>
@@ -276,7 +271,7 @@ const ProductDetails = () => {
         <p className='text-blue-500 pt-3'>Secure transaction</p>
         {userInfo &&
           <button
-            className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+            className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3  active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
             Add to Wish List
           </button>
         }

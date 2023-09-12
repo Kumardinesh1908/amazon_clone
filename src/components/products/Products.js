@@ -5,30 +5,21 @@ import Product from './Product';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+
 const Products = () => {
   const navigate = useNavigate();
-
-  // Function to handle the category filter
-  const handleCategoryClick = (category) => {
-    navigate(`/${category}`); // Navigate to the products page with the selected category as a URL parameter
-  };
-
-  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
+  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get allProducts from Redux store
   const productsData = allProducts.products;
-  
-  // const data = useLoaderData();
-  // const productsData = data.data.products;  // getting array of available products
-
-  const { category } = useParams(); // Get the category parameter from the URL
-  // Filter products based on the selected category
-  const categoryProducts = category ? productsData.filter((product) => product.category === category): productsData;
-
   const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
-
+  const { category } = useParams(); // Get the category parameter from the URL
   const [priceRange, setPriceRange] = useState(""); // State for the selected price range
   const [starRange, setStarRange] = useState(""); // State for the selected star range
   const [sortOrder, setSortOrder] = useState("default"); // "default", "lowToHigh", "highToLow", "avgReview"
 
+ // Filter products based on the selected category
+  const categoryProducts = category
+    ? productsData.filter((product) => product.category === category)
+    : productsData;
 
   // Function to handle the price range filter
   const handlePriceFilter = (selectedRange) => {
@@ -77,6 +68,11 @@ const Products = () => {
   } else if (sortOrder === "avgReview") {
     sortedProducts.sort((a, b) => b.rating - a.rating);
   }
+
+  // Function to handle the category filter
+  const handleCategoryClick = (category) => {
+    navigate(`/${category}`); // Navigate to the products page with the selected category as a URL parameter
+  };
 
   return (
     <div className='w-full relative my-6 flex flex-row bg-white'>
@@ -167,3 +163,4 @@ const Products = () => {
   )
 }
 export default Products;
+
