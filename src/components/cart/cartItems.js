@@ -2,15 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { correct } from '../../assets/index';
 import { deleteProduct, resetCart, increaseQuantity, decreaseQuantity } from '../../redux/amazonSlice';
-import { Link, ScrollRestoration } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLoaderData,Link, ScrollRestoration } from 'react-router-dom';
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase.config";
 import { useCart } from '../../context/userCartContext';
 
 const CartItems = () => {
-    const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
-    const productsData = allProducts.products;
+    const data = useLoaderData();
+    const productsData = data.data.products;
     const dispatch = useDispatch();
     const localCartProducts = useSelector((state) => state.amazon.localCartProducts);
     const userInfo = useSelector((state) => state.amazon.userInfo);

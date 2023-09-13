@@ -1,12 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link,useLoaderData } from 'react-router-dom';
 import './scrollbar.css';
 import { useRef } from 'react';
 
 const ProductsSlider = () => {
-  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get the allProducts from Redux store
-  const productsData = allProducts.products;
+
+  const data = useLoaderData();
+  const productsData = data.data.products;
 
   const sliderRef = useRef(null);
   

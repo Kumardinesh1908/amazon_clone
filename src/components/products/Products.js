@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { ScrollRestoration, useNavigate, Link } from 'react-router-dom';
 import { star } from "../../assets/index";
 import Product from './Product';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useParams,useLoaderData } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
 
 
 const Products = () => {
   const navigate = useNavigate();
-  const allProducts = useSelector((state) => state.amazon.allProducts);  // Get allProducts from Redux store
-  const productsData = allProducts.products;
+  const data = useLoaderData();
+  const productsData = data.data.products;
   const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
   const { category } = useParams(); // Get the category parameter from the URL
   const [priceRange, setPriceRange] = useState(""); // State for the selected price range

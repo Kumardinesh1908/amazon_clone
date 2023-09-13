@@ -1,20 +1,13 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   localCartProducts: [],
   userInfo: null,
   isAuthenticated: false,
   buyNowProduct: null,
-  allProducts:[],
   error:null,
 };
 
-// Action creator to get all products
-export const fetchProducts = createAsyncThunk('amazon/fetchProducts', async () => {
-  const response = await axios.get('https://dummyjson.com/products?limit=100');
-  return response.data;
-});
 
 export const amazonSlice = createSlice({
   name: 'amazon',
@@ -74,16 +67,6 @@ export const amazonSlice = createSlice({
       state.error = null;
     },
 
-  },
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.allProducts = action.payload;          // Set fetched products to products array if action fulfilled
-      })
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.error = action.error.message; // Set the error message in the state
-      });
   },
 })
 

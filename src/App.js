@@ -14,8 +14,9 @@ import Cart from "./components/cart/cart";
 import { UserCartProvider } from "./context/userCartContext";
 import { UserAddressProvider } from "./context/userAddressContext";
 import Checkout from "./components/checkout/Checkout";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch,useSelector} from "react-redux";
 import { fetchProducts } from "./redux/amazonSlice"; // Import your fetchProducts action
+import {productsData} from "./api/api";
 
 
 // Layout component to combine components for main path("/") of routers which has to be rendered when website opens for the first time 
@@ -36,40 +37,49 @@ function App() {
     {
       path: "/",
       element: <Layout />,
+      loader: productsData,
       errorElement: <ErrorPage />,
       children: [
         {
           index: true,
+          loader: productsData,
           element: <Home />,
         },
         {
           path: "/allProducts",
+          loader: productsData,
           children: [
             {
               index: true,
+              loader: productsData,
               element: <Products />,
             },
             {
               path: ":title",
+              loader: productsData,
               element: <ProductDetails />,
             },
           ]
         },
         {
           path: ':category',
+          loader: productsData,
           children: [
             {
               index: true,
+              loader: productsData,
               element: <Products />,
             },
             {
               path: ":title",
+              loader: productsData,
               element: <ProductDetails />,
             },
           ],
         },
         {
           path: "/cart",
+          loader: productsData,
           element: <Cart />
         },
       ],
@@ -97,11 +107,12 @@ function App() {
     },
   ]);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchProducts()); // Fetch products when the app loads
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchProducts()); // Fetch products when the app loads
+  // }, []);
+
 
   return (
 
