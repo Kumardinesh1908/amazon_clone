@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { logoBlack } from '../assets';
+import { logoBlack } from '../../assets';
 import { Link, useNavigate } from 'react-router-dom';
-import { i, right } from '../assets';
+import { i, right } from '../../assets';
 import { RotatingLines } from "react-loader-spinner";
 import { motion } from "framer-motion";
-import ScrollToTop from '../ScrollToTop';
+import ScrollToTop from '../../ScrollToTop';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
-import { db } from '../firebase/firebase.config';
+import { db } from '../../firebase/firebase.config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 
 const CreateAccount = () => {

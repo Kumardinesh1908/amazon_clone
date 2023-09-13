@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { logoBlack } from '../assets/index';
+import { logoBlack } from '../../assets/index';
 import { Link, useNavigate } from 'react-router-dom';
-import { right, down, required, google, facebook } from "../assets/index";
+import { right, down, required, google, facebook } from "../../assets/index";
 import { RotatingLines } from "react-loader-spinner";
 import { motion } from "framer-motion";
-import ScrollToTop from "../ScrollToTop";
+import ScrollToTop from "../../ScrollToTop";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, linkWithCredential, FacebookAuthProvider, fetchSignInMethodsForEmail } from "firebase/auth";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserInfo, setUserAuthentication, resetCart } from "../redux/amazonSlice";
-import { db } from '../firebase/firebase.config';
+import { setUserInfo, setUserAuthentication, resetCart } from "../../redux/amazonSlice";
+import { db } from '../../firebase/firebase.config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
-import { useCart } from "../context/userCartContext";
+import { useCart } from "../../context/userCartContext";
 
 const SignIn = () => {
     const dispatch = useDispatch();

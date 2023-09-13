@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
-import { logoBlack } from '../assets';
+import { logoBlack } from '../../assets';
 import { Link } from 'react-router-dom';
-import ScrollToTop from '../ScrollToTop';
+import ScrollToTop from '../../ScrollToTop';
 
 const ForgotPassword = () => {
 
