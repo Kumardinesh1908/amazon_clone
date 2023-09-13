@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React,{ useEffect } from "react";
 import { createBrowserRouter, RouterProvider, Outlet, ScrollRestoration } from "react-router-dom";
 import Header from "./components/header/header";
 import HeaderBottom from "./components/header/headerBottom";
@@ -14,7 +14,7 @@ import Cart from "./components/cart/cart";
 import { UserCartProvider } from "./context/userCartContext";
 import { UserAddressProvider } from "./context/userAddressContext";
 import Checkout from "./components/checkout/Checkout";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { fetchProducts } from "./redux/amazonSlice"; // Import your fetchProducts action
 
 
@@ -101,7 +101,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchProducts()); // Fetch products when the app loads
-  }, [dispatch]);
+  }, []);
 
   return (
 
