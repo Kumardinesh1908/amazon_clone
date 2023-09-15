@@ -5,7 +5,9 @@ const initialState = {
   userInfo: null,
   isAuthenticated: false,
   buyNowProduct: null,
-  error:null,
+  error: null,
+  orders: [],
+  cancelOrders: [],
 };
 
 
@@ -55,9 +57,9 @@ export const amazonSlice = createSlice({
     },
 
     // Buy Now Product Reducers
-    buyNow: (state,action)=>{
+    buyNow: (state, action) => {
       state.buyNowProduct = action.payload;
-    }, 
+    },
     resetBuyNowProduct: (state) => {
       state.buyNowProduct = null;
     },
@@ -67,11 +69,24 @@ export const amazonSlice = createSlice({
       state.error = null;
     },
 
+    // Order Reducers
+    addToOrders: (state, action) => {
+      state.orders = action.payload;
+      //  state.orders.push(action.payload);
+    },
+    cancelOrder: (state, action) => {
+      state.cancelOrders = state.cancelOrders.push(action.payload);
+      state.orders = state.orders.filter((product) => product.title !== action.payload);
+    },
+    resetOrders: (state) => {
+      state.orders = [];
+    }
+
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart, deleteProduct, resetCart, decreaseQuantity, increaseQuantity, setUserInfo, userSignOut, setUserAuthentication,buyNow,resetBuyNowProduct,categoryNotFoundError,clearError } = amazonSlice.actions;
+export const { addToCart, deleteProduct, resetCart, decreaseQuantity, increaseQuantity, setUserInfo, userSignOut, setUserAuthentication, buyNow, resetBuyNowProduct, categoryNotFoundError, clearError, addToOrders, cancelOrder, resetOrders } = amazonSlice.actions;
 // addToUserCart, resetUserCart
 
 export default amazonSlice.reducer;

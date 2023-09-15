@@ -1,14 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCart } from '../../context/userCartContext';
 import { useAddress } from '../../context/userAddressContext';
+import { useOrders } from '../../context/userOrderContext';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetBuyNowProduct } from '../../redux/amazonSlice';
-import { loadStripe } from "@stripe/stripe-js";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase.config";
+import { resetBuyNowProduct, addToOrders } from '../../redux/amazonSlice';
+import { useNavigate } from 'react-router-dom';
+// import { loadStripe } from "@stripe/stripe-js";
 
 const OrderSummary = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userCart} = useCart();
-
+  const orders = useSelector((state) => state.amazon.orders);
+  const { userCart } = useCart();
+  const { updateUserOrders } = useOrders();
+  const userInfo = useSelector((state) => state.amazon.userInfo);
   // getting product from BuyNow option in ProductDetails
   const product = useSelector((state) => state.amazon.buyNowProduct);
   if (product) {
@@ -17,7 +24,7 @@ const OrderSummary = () => {
     var productTotalPrice = productPrice * productQty;
   }
   // getting all cart products
-  const { cartTotalQty, cartTotalPrice } = useCart(); //userCart, updateUserCart,
+  const { cartTotalQty, cartTotalPrice, updateUserCart } = useCart(); //userCart, updateUserCart,
   const { selectedAddress, selectedPayment } = useAddress();
 
   let deliveryCharges = 0;
@@ -46,31 +53,78 @@ const OrderSummary = () => {
     };
   }, [dispatch]);
 
-  const makePayment = async()=>{
-    const stripe = await loadStripe("pk_test_51NefYoSHMpHOePln7WFD62vvDgxK75OtJUxQfJuBZc1aKbGnM0GaojpZedkDsSdVOqtbQsFYRG8WOQQAcowLnO7200IsUcX4Yi")
+  const generateOrderNumber = () => {
+    // Generate a timestamp-based order number (for example)
+    const timestamp = new Date().getTime();
+    const randomDigits = Math.floor(Math.random() * 1000);
+    return `ORD-${timestamp}-${randomDigits}`;
+  };
 
-    const body = {
-        products: userCart
+  const makePayment = async () => {
+    if (selectedPayment === "cash on Delivery") {
+      const orderNumber = generateOrderNumber(); // Generate a unique order number
+
+      if (product) {
+        const productOrderDetails = {
+          orderNumber,
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          category: product.category,
+          images: product.images,
+          thumbnail: product.thumbnail,
+          brand: product.brand,
+          discountPercentage: product.discountPercentage,
+          rating: product.rating,
+          stock: product.stock,
+          address: selectedAddress,
+          paymentMethod: selectedPayment,
+          quantity: product.quantity,
+          date: new Date().toISOString(),
+        };
+        dispatch(addToOrders([...orders, productOrderDetails])); // Append the new order to existing orders
+        updateUserOrders([...orders, productOrderDetails]); // Append the new order to existing orders
+        await saveOrderToFirebase([...orders, productOrderDetails]); // Save the updated orders to Firebase
+      } else {
+        const updatedCart = userCart.map((cartItem) => ({
+          ...cartItem,
+          address: selectedAddress,
+          paymentMethod: selectedPayment,
+          date: new Date().toISOString(),
+          orderNumber,
+        }));
+        // Append the new orders to existing orders
+        dispatch(addToOrders([...orders, ...updatedCart]));
+        updateUserOrders([...orders, ...updatedCart]);
+        await saveOrderToFirebase([...orders, ...updatedCart]);
+
+        const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
+        await setDoc(userCartRef, { cart: [] }, { merge: true }); // Clear the cart by setting an empty array
+        updateUserCart([]); // Clear the userCart state immediately
+      }
+
+      // You can also reset the buyNowProduct or perform other actions as needed
+      resetBuyNow();
+      navigate("/orders");
     }
-    const headers = {
-        "Content-Type": "application/json"
+  };
+
+  // Function to save an order to Firebase orders
+  const saveOrderToFirebase = async (order) => {
+    const usersCollectionRef = collection(db, "users");
+    const userRef = doc(usersCollectionRef, userInfo.email);
+    const userOrdersRef = collection(userRef, "orders");
+    const OrdersRef = doc(userOrdersRef, userInfo.id);
+    try {
+      // Update the Firebase document with the updated orders
+      await setDoc(OrdersRef, { orders: order }, { merge: true });
+    } catch (error) {
+      console.error('Error saving orders to Firebase:', error);
     }
-    const response = await fetch("http://localhost:7000/api/create-checkout-session",{
-        method:"POST",
-        headers:headers,
-        body:JSON.stringify(body)
-    });
+  };
 
-    const session = await response.json();
 
-    const result = stripe.redirectToCheckout({
-        sessionId:session.id 
-    });
-
-    if(result.error){
-        console.log(result.error);
-    }
-}
 
   return (
     <div>
@@ -120,7 +174,8 @@ const OrderSummary = () => {
         <div className='mx-[18px] border-t border-gray-400'>
           {(selectedAddress && selectedPayment) &&
             <button className="w-full text-center text-sm rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[7px] mt-2 active:ring-2 active:ring-offset-1 active:ring-blue-500"
-            onClick={makePayment}>
+              onClick={makePayment}
+            >
               Place your order
             </button>
           }

@@ -5,7 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth, signOut } from "firebase/auth";
-import { userSignOut, setUserAuthentication } from "../../redux/amazonSlice";
+import { userSignOut, setUserAuthentication, resetOrders } from "../../redux/amazonSlice";
 import { useCart } from "../../context/userCartContext";
 import Location from "./location";
 import Search from "./search";
@@ -41,6 +41,7 @@ export default function Header() {
             // Sign-out successful.
             dispatch(userSignOut());
             dispatch(setUserAuthentication(false));
+            dispatch(resetOrders());
         }).catch((error) => {
             // An error happened.
         });
@@ -93,10 +94,12 @@ export default function Header() {
                 {/* Orders starts here */}
                 {
                     authenticated
-                        ? <div className="headerHover flex flex-col items-start justify-center">
-                            <p className="text-xs font-semibold">Returns</p>
-                            <p className="text-sm font-bold -mt-1">& Orders</p>
-                        </div>
+                        ? <Link to="/orders">
+                            <div className="headerHover flex flex-col items-start justify-center">
+                                <p className="text-xs font-semibold">Returns</p>
+                                <p className="text-sm font-bold -mt-1">& Orders</p>
+                            </div>
+                        </Link>
                         : <Link to="/signIn">
                             <div className="headerHover flex flex-col items-start justify-center">
                                 <p className="text-xs font-semibold">Returns</p>

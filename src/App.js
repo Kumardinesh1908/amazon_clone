@@ -11,10 +11,12 @@ import ForgotPassword from "./components/logIn/ForgotPassword";
 import Products from "./components/products/Products";
 import ProductDetails from "./components/products/ProductDetails";
 import Cart from "./components/cart/cart";
+import Orders from "./components/orders/Orders";
 import { UserCartProvider } from "./context/userCartContext";
 import { UserAddressProvider } from "./context/userAddressContext";
+import { UserOrdersProvider } from "./context/userOrderContext";
 import Checkout from "./components/checkout/Checkout";
-import {productsData} from "./api/api";
+import { productsData } from "./api/api";
 
 
 // Layout component to combine components for main path("/") of routers which has to be rendered when website opens for the first time 
@@ -80,6 +82,11 @@ function App() {
           loader: productsData,
           element: <Cart />
         },
+        {
+          path: "/orders",
+          loader: productsData,
+          element: <Orders />,
+        }
       ],
     },
     {
@@ -107,13 +114,13 @@ function App() {
 
 
   return (
-
-    <UserCartProvider>
-      < UserAddressProvider>
-        <RouterProvider router={router} />
-      </UserAddressProvider>
-    </UserCartProvider>
-
+    <UserOrdersProvider>
+      <UserCartProvider>
+        < UserAddressProvider>
+          <RouterProvider router={router} />
+        </UserAddressProvider>
+      </UserCartProvider>
+    </UserOrdersProvider>
   );
 }
 

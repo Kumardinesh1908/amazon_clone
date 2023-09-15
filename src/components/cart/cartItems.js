@@ -41,6 +41,7 @@ const CartItems = () => {
         updateCartHeight();
     }, [localCartProducts, userCart]);
 
+
     const navigate = useNavigate();
     const handleCategoryClick = (category, title) => {
         navigate(`/${category}/${title}`); // Navigate to the products page with the selected category as a URL parameter

@@ -7,14 +7,15 @@ import { motion } from "framer-motion";
 import ScrollToTop from "../../ScrollToTop";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, linkWithCredential, FacebookAuthProvider, fetchSignInMethodsForEmail } from "firebase/auth";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserInfo, setUserAuthentication, resetCart } from "../../redux/amazonSlice";
+import { setUserInfo, setUserAuthentication, resetCart, addToOrders } from "../../redux/amazonSlice";
 import { db } from '../../firebase/firebase.config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { useCart } from "../../context/userCartContext";
+import { useOrders } from "../../context/userOrderContext";
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    const cartItems = useSelector((state) => state.amazon.products)
+    const cartItems = useSelector((state) => state.amazon.localCartProducts);
 
     const auth = getAuth();
     const googleProvider = new GoogleAuthProvider();
@@ -133,6 +134,25 @@ const SignIn = () => {
         dispatch(resetCart());
     };
 
+    const { userOrders,updateUserOrders } = useOrders();
+
+    const fetchOrdersFromFirebase = async(user)=>{
+        const usersCollectionRef = collection(db, "users");
+        const userRef = doc(usersCollectionRef, user.email);
+        const userOrdersRef = collection(userRef, "orders");
+        const OrdersRef = doc(userOrdersRef, user.uid);
+        const docSnapshot = await getDoc(OrdersRef);
+        const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [];
+        updateUserOrders(firebaseOrders);
+        dispatch(addToOrders(firebaseOrders));
+        // if(docSnapshot.exists()) {
+        //     const firebaseOrders =  docSnapshot.data().orders;
+        //     updateUserOrders(firebaseOrders);
+        //     dispatch(addToOrders(firebaseOrders));}
+    }
+
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
@@ -151,6 +171,7 @@ const SignIn = () => {
                 }));
                 dispatch(setUserAuthentication(true));
                 saveLocalCartToFirebase(user);
+                fetchOrdersFromFirebase(user);
                 setLoading(false);
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
@@ -189,6 +210,7 @@ const SignIn = () => {
                 }));
                 dispatch(setUserAuthentication(true));
                 saveLocalCartToFirebase(user);
+                fetchOrdersFromFirebase(user);
                 const userRef = doc(db, "users", user.email);
                 getDoc(userRef)
                     .then((docSnapshot) => {
