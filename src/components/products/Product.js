@@ -18,6 +18,7 @@ const Product = (props) => {
   // Get the userCart and updateUserCart function from the context
   const { userCart, updateUserCart } = useCart();
 
+
   // Function to save a product to Firebase cart
   const saveProductToFirsebase = async (product) => {
     const productWithDefaultQuantity = {
@@ -72,7 +73,7 @@ const Product = (props) => {
         quantity: 1,
         discountPercentage: product.discountPercentage,
         rating: product.rating,
-        stock: product.stock
+        stock: product.stock,
       }));
     } else {
       // If user is authenticated, save to Firebase cart

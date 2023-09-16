@@ -5,7 +5,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuth, signOut } from "firebase/auth";
-import { userSignOut, setUserAuthentication, resetOrders } from "../../redux/amazonSlice";
+import { userSignOut, setUserAuthentication, resetOrders, resetCancelOrders, resetReturnOrders } from "../../redux/amazonSlice";
 import { useCart } from "../../context/userCartContext";
 import Location from "./location";
 import Search from "./search";
@@ -42,6 +42,8 @@ export default function Header() {
             dispatch(userSignOut());
             dispatch(setUserAuthentication(false));
             dispatch(resetOrders());
+            dispatch(resetCancelOrders());
+            dispatch(resetReturnOrders());
         }).catch((error) => {
             // An error happened.
         });

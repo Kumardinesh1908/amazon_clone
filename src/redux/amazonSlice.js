@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   orders: [],
   cancelOrders: [],
+  returnOrders: [],
 };
 
 
@@ -74,19 +75,42 @@ export const amazonSlice = createSlice({
       state.orders = action.payload;
       //  state.orders.push(action.payload);
     },
-    cancelOrder: (state, action) => {
-      state.cancelOrders = state.cancelOrders.push(action.payload);
-      state.orders = state.orders.filter((product) => product.title !== action.payload);
-    },
     resetOrders: (state) => {
       state.orders = [];
-    }
+    },
 
+
+    addTocancelOrders: (state, action) => {
+      state.cancelOrders = action.payload;
+    },
+    // cancelOrder: (state, action) => {
+    //   const order = state.orders.find((order) => order.uniqueNumber === action.payload.uniqueNumber);
+    //   if (order) {
+    //     state.cancelOrders.push(action.payload);
+    //   }
+    // },
+    resetCancelOrders: (state) => {
+      state.cancelOrders = [];
+    },
+
+
+    addToreturnOrders: (state, action) => {
+      state.returnOrders = action.payload;
+    },
+    // returnOrder: (state, action) => {
+    //   const order = state.orders.find((order) => order.uniqueNumber === action.payload.uniqueNumber);
+    //   if (order) {
+    //     state.returnOrders.push(action.payload);
+    //   }
+    // },
+    resetReturnOrders: (state) => {
+      state.returnOrders = [];
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart, deleteProduct, resetCart, decreaseQuantity, increaseQuantity, setUserInfo, userSignOut, setUserAuthentication, buyNow, resetBuyNowProduct, categoryNotFoundError, clearError, addToOrders, cancelOrder, resetOrders } = amazonSlice.actions;
+export const { addToCart, deleteProduct, resetCart, decreaseQuantity, increaseQuantity, setUserInfo, userSignOut, setUserAuthentication, buyNow, resetBuyNowProduct, categoryNotFoundError, clearError, addToOrders, addTocancelOrders, addToreturnOrders, resetOrders, resetCancelOrders, resetReturnOrders } = amazonSlice.actions;
 // addToUserCart, resetUserCart
 
 export default amazonSlice.reducer;

@@ -19,7 +19,7 @@ const CartItems = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const cartRef = useRef(null);
     const [productDivHeight, setProductDivHeight] = useState(0);
-    
+
     useEffect(() => {
         let allPrice = 0;
         let allQty = 0;
@@ -39,8 +39,8 @@ const CartItems = () => {
         };
         // Call the function when cart items change
         updateCartHeight();
-    }, [localCartProducts, userCart]);
 
+    }, [localCartProducts, userCart]);
 
     const navigate = useNavigate();
     const handleCategoryClick = (category, title) => {

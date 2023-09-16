@@ -53,8 +53,8 @@ const OrderSummary = () => {
     };
   }, [dispatch]);
 
-  const generateOrderNumber = () => {
-    // Generate a timestamp-based order number (for example)
+  const generateUniqueNumber = () => {
+    // Generate a timestamp-based unique number (for example)
     const timestamp = new Date().getTime();
     const randomDigits = Math.floor(Math.random() * 1000);
     return `ORD-${timestamp}-${randomDigits}`;
@@ -62,11 +62,11 @@ const OrderSummary = () => {
 
   const makePayment = async () => {
     if (selectedPayment === "cash on Delivery") {
-      const orderNumber = generateOrderNumber(); // Generate a unique order number
+      const uniqueNumber = generateUniqueNumber(); // Generate a unique number
 
       if (product) {
         const productOrderDetails = {
-          orderNumber,
+          uniqueNumber,
           id: product.id,
           title: product.title,
           price: product.price,
@@ -83,6 +83,7 @@ const OrderSummary = () => {
           quantity: product.quantity,
           date: new Date().toISOString(),
         };
+
         dispatch(addToOrders([...orders, productOrderDetails])); // Append the new order to existing orders
         updateUserOrders([...orders, productOrderDetails]); // Append the new order to existing orders
         await saveOrderToFirebase([...orders, productOrderDetails]); // Save the updated orders to Firebase
@@ -92,9 +93,8 @@ const OrderSummary = () => {
           address: selectedAddress,
           paymentMethod: selectedPayment,
           date: new Date().toISOString(),
-          orderNumber,
+          uniqueNumber: generateUniqueNumber(),
         }));
-        // Append the new orders to existing orders
         dispatch(addToOrders([...orders, ...updatedCart]));
         updateUserOrders([...orders, ...updatedCart]);
         await saveOrderToFirebase([...orders, ...updatedCart]);
@@ -104,7 +104,7 @@ const OrderSummary = () => {
         updateUserCart([]); // Clear the userCart state immediately
       }
 
-      // You can also reset the buyNowProduct or perform other actions as needed
+      // Also reset the buyNowProduct
       resetBuyNow();
       navigate("/orders");
     }
@@ -124,12 +124,9 @@ const OrderSummary = () => {
     }
   };
 
-
-
   return (
     <div>
       <div className=" mx-auto border-[1px] border-gray-400 rounded-lg mt-3">
-
         <div className=" mt-2 px-[18px]">
           <h3 className=" text-xl font-semibold pt-2 mb-3">Order Summary</h3>
           <div className="flex justify-between mb-[2px] text-sm">
@@ -167,8 +164,6 @@ const OrderSummary = () => {
               </div>
             </div>
           }
-
-
         </div>
 
         <div className='mx-[18px] border-t border-gray-400'>
@@ -186,8 +181,6 @@ const OrderSummary = () => {
             <a href="https://www.amazon.in/gp/help/customer/display.html?nodeId=200545940" className='text-blue-500 hover:text-red-500 cursor-pointer'> conditions of use</a>.
           </p>
         </div>
-
-
 
         <div className="flex justify-between border-t border-gray-400 rounded-br-lg rounded-bl-lg bg-gray-200">
           <p onClick={toggleDeliveryInfo} className="pl-[18px] my-4 text-xs tracking-wide text-blue-500 hover:underline hover:text-red-700 hover:cursor-pointer">

@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import ScrollToTop from "../../ScrollToTop";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, linkWithCredential, FacebookAuthProvider, fetchSignInMethodsForEmail } from "firebase/auth";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserInfo, setUserAuthentication, resetCart, addToOrders } from "../../redux/amazonSlice";
+import { setUserInfo, setUserAuthentication, resetCart, addToOrders, addTocancelOrders, addToreturnOrders } from "../../redux/amazonSlice";
 import { db } from '../../firebase/firebase.config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { useCart } from "../../context/userCartContext";
@@ -87,7 +87,7 @@ const SignIn = () => {
                     }, { merge: true });
                     // console.log("User details saved to Firestore.");
                 } else {
-                    console.log("User details already exist in Firestore.");
+                    // console.log("User details already exist in Firestore.");
                 }
             } else {
                 console.log("User email already exists in Firestore.");
@@ -134,24 +134,60 @@ const SignIn = () => {
         dispatch(resetCart());
     };
 
-    const { userOrders,updateUserOrders } = useOrders();
+    const { updateUserOrders } = useOrders();
 
     const fetchOrdersFromFirebase = async(user)=>{
-        const usersCollectionRef = collection(db, "users");
-        const userRef = doc(usersCollectionRef, user.email);
-        const userOrdersRef = collection(userRef, "orders");
-        const OrdersRef = doc(userOrdersRef, user.uid);
+        const OrdersRef = doc(collection(db,'users',user.email,'orders'),user.uid);
         const docSnapshot = await getDoc(OrdersRef);
-        const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [];
+        const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [] ;
         updateUserOrders(firebaseOrders);
         dispatch(addToOrders(firebaseOrders));
-        // if(docSnapshot.exists()) {
-        //     const firebaseOrders =  docSnapshot.data().orders;
-        //     updateUserOrders(firebaseOrders);
-        //     dispatch(addToOrders(firebaseOrders));}
     }
 
+    // const fetchOrdersFromFirebase = async (user) => {
+    //     const usersCollectionRef = collection(db, "users");
+    //     const userRef = doc(usersCollectionRef, user.email);
+    //     const userOrdersRef = collection(userRef, "orders");
+    //     const OrdersRef = doc(userOrdersRef, user.uid);
+    //     const docSnapshot = await getDoc(OrdersRef);
+    //     const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [];
+    //     updateUserOrders(firebaseOrders);
+    //     dispatch(addToOrders(firebaseOrders));
+    // }
 
+    const fetchCancelOrdersFromFirebase = async (user) => {
+        const userCancelOrdersRef = doc(collection(db, 'users', user.email, 'cancelOrders'), user.uid);
+        const docSnapshot = await getDoc(userCancelOrdersRef);
+        const firebaseCancelOrders = docSnapshot.exists() ? docSnapshot.data().cancelOrders : [];
+        dispatch(addTocancelOrders(firebaseCancelOrders));
+    }
+
+    // const fetchCancelOrdersFromFirebase = async (user) => {
+    //     const usersCollectionRef = collection(db, "users");
+    //     const userRef = doc(usersCollectionRef, user.email);
+    //     const userCancelOrdersRef = collection(userRef, "cancelOrders");
+    //     const OrdersRef = doc(userCancelOrdersRef, user.uid);
+    //     const docSnapshot = await getDoc(OrdersRef);
+    //     const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().cancelOrders : [];
+    //     dispatch(addTocancelOrders(firebaseOrders));
+    // }
+
+    const fetchReturnOrdersFromFirebase = async (user) => {
+        const userReturnOrdersRef = doc(collection(db, 'users', user.email, 'returnOrders'), user.uid);
+        const docSnapshot = await getDoc(userReturnOrdersRef);
+        const firebaseReturnOrders = docSnapshot.exists() ? docSnapshot.data().returnOrders : [];
+        dispatch(addToreturnOrders(firebaseReturnOrders));
+    }
+
+    // const fetchReturnOrdersFromFirebase = async(user)=>{
+    //     const usersCollectionRef = collection(db, "users");
+    //     const userRef = doc(usersCollectionRef, user.email);
+    //     const userReturnOrdersRef = collection(userRef, "returnOrders");
+    //     const OrdersRef = doc(userReturnOrdersRef, user.uid);
+    //     const docSnapshot = await getDoc(OrdersRef);
+    //     const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().returnOrders : [];
+    //     dispatch(addToreturnOrders(firebaseOrders));
+    // }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -172,10 +208,12 @@ const SignIn = () => {
                 dispatch(setUserAuthentication(true));
                 saveLocalCartToFirebase(user);
                 fetchOrdersFromFirebase(user);
+                fetchCancelOrdersFromFirebase(user);
+                fetchReturnOrdersFromFirebase(user);
                 setLoading(false);
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
-                    navigate("/");
+                    navigate(-1);
                     setSuccessMsg("");
                 }, 2000);
             })
@@ -211,6 +249,8 @@ const SignIn = () => {
                 dispatch(setUserAuthentication(true));
                 saveLocalCartToFirebase(user);
                 fetchOrdersFromFirebase(user);
+                fetchCancelOrdersFromFirebase(user);
+                fetchReturnOrdersFromFirebase(user);
                 const userRef = doc(db, "users", user.email);
                 getDoc(userRef)
                     .then((docSnapshot) => {
@@ -227,7 +267,7 @@ const SignIn = () => {
                 setLoading(false);
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
-                    navigate("/");
+                    navigate(-1);
                     setSuccessMsg("");
                 }, 2000);
             }).catch((error) => {
@@ -252,6 +292,9 @@ const SignIn = () => {
                 }));
                 dispatch(setUserAuthentication(true));
                 saveLocalCartToFirebase(user);
+                fetchOrdersFromFirebase(user);
+                fetchCancelOrdersFromFirebase(user);
+                fetchReturnOrdersFromFirebase(user);
                 const userRef = doc(db, "users", user.email);
                 getDoc(userRef)
                     .then((docSnapshot) => {
@@ -266,7 +309,7 @@ const SignIn = () => {
                 setLoading(false);
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
-                    navigate("/");
+                    navigate(-1);
                     setSuccessMsg("");
                 }, 2000);
             })
@@ -294,6 +337,9 @@ const SignIn = () => {
                                                 }));
                                                 dispatch(setUserAuthentication(true));
                                                 saveLocalCartToFirebase(user);
+                                                fetchOrdersFromFirebase(user);
+                                                fetchCancelOrdersFromFirebase(user);
+                                                fetchReturnOrdersFromFirebase(user);
                                                 const userRef = doc(db, "users", user.email);
                                                 getDoc(userRef)
                                                     .then((docSnapshot) => {
@@ -308,7 +354,7 @@ const SignIn = () => {
                                                 setLoading(false);
                                                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                                                 setTimeout(() => {
-                                                    navigate("/");
+                                                    navigate(-1);
                                                     setSuccessMsg("");
                                                 }, 2000);
                                             });
@@ -332,10 +378,13 @@ const SignIn = () => {
                                                 dispatch(setUserAuthentication(true));
                                                 saveUserDataToFirebase(user);
                                                 saveLocalCartToFirebase(user);
+                                                fetchOrdersFromFirebase(user);
+                                                fetchCancelOrdersFromFirebase(user);
+                                                fetchReturnOrdersFromFirebase(user);
                                                 setLoading(false);
                                                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                                                 setTimeout(() => {
-                                                    navigate("/");
+                                                    navigate(-1);
                                                     setSuccessMsg("");
                                                 }, 2000);
                                             });
