@@ -4,8 +4,6 @@ import { location, required } from '../../assets';
 import axios from "axios";
 import { RotatingLines } from "react-loader-spinner";
 
-
-
 const Location = () => {
 
     const [selectedLocation, setSelectedLocation] = useState(false);
