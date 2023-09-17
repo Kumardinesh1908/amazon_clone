@@ -35,6 +35,7 @@ const Location = () => {
             if (e.target.contains(locationRef.current)) {
                 setSelectedLocation(false);
                 setWarning(false);
+                setAutoLocationWarning(false);
             };
         })
     }, [locationRef])
@@ -96,7 +97,6 @@ const Location = () => {
         setLoading(true);
         fetchLocationData(userZipCode);
         setUserZipCode("");
-
     }
 
     // function to auto detect your location
@@ -186,7 +186,7 @@ const Location = () => {
                             <p className="text-sm font-semibold">or</p>
                             <hr className="w-[45%]" />
                         </div>
-                        <div onClick={getLocation} className="p-2 m-4 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500">
+                        <div onClick={getLocation} className="p-2 m-4 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 cursor-pointer hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500">
                             <p>Auto detect your location</p>
                         </div>
                         {
