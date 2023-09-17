@@ -32,7 +32,7 @@ const ProductsSlider = () => {
       </div>
 
       <div  ref={sliderRef}
-        className=" bg-white w-[97%] h-[250px] mx-auto flex flex-row gap-5 custom-scrollbar overflow-x-hidden group-hover:overflow-x-scroll overflow-y-hidden">
+        className=" bg-white w-[97%] h-[250px] mx-auto flex flex-row gap-5 custom-scrollbar group-hover:overflow-x-scroll overflow-y-hidden">
         {
           productsData.map((product, index) => (
             <div key={index}  className='cursor-pointer'
@@ -49,14 +49,14 @@ const ProductsSlider = () => {
           ))
         }
       </div>
-      <div className="prev-btn text-[32px] bg-[rgba(245,245,245,0.3)] font-bold text-gray-700 w-12 h-24 ml-5 absolute bottom-[123px] 
-      flex justify-center items-center rounded shadow active:shadow-gray-500 active:shadow-sm active:border-[1px] active:border-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-700" onClick={() => handleScroll('left')} >
+      <div className="text-[32px] bg-[rgba(245,245,245,0.3)] font-bold text-gray-700 w-12 h-24 ml-5 absolute bottom-[123px] 
+      flex justify-center items-center rounded hover:border-[2px] hover:border-white opacity-0 group-hover:opacity-100 transition-opacity duration-700" onClick={() => handleScroll('left')} >
         <button >
           &lt;
         </button>
       </div>
-      <div className="prev-btn text-[32px] bg-[rgba(245,245,245,0.3)] font-bold text-gray-700 w-12 h-24  absolute bottom-[123px] left-[95%]
-      flex justify-center items-center rounded shadow active:shadow-gray-500 active:shadow-sm active:border-[1px] active:border-cyan-200 opacity-0 group-hover:opacity-100 transition-opacity duration-700" onClick={() => handleScroll('right')} >
+      <div className="text-[32px] bg-[rgba(245,245,245,0.3)] font-bold text-gray-700 w-12 h-24  absolute bottom-[123px] left-[94.8%]
+      flex justify-center items-center rounded  hover:border-[2px] hover:border-white opacity-0 group-hover:opacity-100 transition-opacity duration-700" onClick={() => handleScroll('right')} >
         <button >
           &gt;
         </button>
