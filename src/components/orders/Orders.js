@@ -86,7 +86,7 @@ const Orders = () => {
   }
 
   return (
-    <div className='w-full relative py-6 flex flex-col gap-5 bg-white pl-[15%]'>
+    <div className='w-full relative py-6 flex flex-col gap-5 bg-white pl-[17%]'>
       <div className='w-full h-10 flex gap-7'>
         <p className={`font-semibold text-2xl cursor-pointer ${showOrders ? "text-blue-500" : ""}`} onClick={() => {
           setShowOrders(true);

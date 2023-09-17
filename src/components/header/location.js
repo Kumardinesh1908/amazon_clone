@@ -8,16 +8,26 @@ import { RotatingLines } from "react-loader-spinner";
 
 const Location = () => {
 
-    // Ref for the location dropdown
-    const locationRef = useRef(null);
-
     const [selectedLocation, setSelectedLocation] = useState(false);
     const [userZipCode, setUserZipCode] = useState(''); // State for the user's entered ZIP code
     const [locationName, setLocationName] = useState(null);
-
     const [warning, setWarning] = useState("");
-
+    const [autoLocationWarning, setAutoLocationWarning] = useState("")
     const [loading, setLoading] = useState(false);
+    const [autoLocationLoading, setAutoLocationLoading] = useState(false);
+
+    useEffect(() => {
+        // Check local storage for existing values and set them in state
+        const storedLocationName = localStorage.getItem("locationName");
+        const storedUserZipCode = localStorage.getItem("userZipCode");
+        if (storedLocationName && storedUserZipCode) {
+            setLocationName(storedLocationName);
+            setUserZipCode(storedUserZipCode);
+        }
+    }, []);
+
+    // Ref for the location dropdown
+    const locationRef = useRef(null);
 
     // Effect to close the location when clicking outside
     useEffect(() => {
@@ -29,16 +39,22 @@ const Location = () => {
         })
     }, [locationRef])
 
-
     // Fetch location data from API based on user's ZIP code
     async function fetchLocationData(userZipCode) {
         try {
             const response = await axios.get(`https://api.postalpincode.in/pincode/${userZipCode}`);
             if (response.data[0].PostOffice != null) {
-                setLocationName(response.data);
+                const locationCity = response.data[0].PostOffice[0].District;
+                const locationPincode = response.data[0].PostOffice[0].Pincode;
+                setLocationName(locationCity);
+                setUserZipCode(locationPincode);
                 setWarning("");
                 setLoading(false);
                 setSelectedLocation(false);
+
+                // Store the values in local storage
+                localStorage.setItem("locationName", locationCity);
+                localStorage.setItem("userZipCode", locationPincode);
             } else {
                 setLoading(false);
                 setUserZipCode("");
@@ -83,6 +99,46 @@ const Location = () => {
 
     }
 
+    // function to auto detect your location
+    function getLocation() {
+        setWarning("");
+        setAutoLocationLoading(true);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    try {
+                        const response = await axios.get(
+                            `http://api.geonames.org/findNearbyPostalCodesJSON?lat=${latitude}&lng=${longitude}&username=kumardinesh1908`
+                        );
+                        if (response.data.postalCodes[0] != null) {
+                            const locationPincode = response.data.postalCodes[0].postalCode;
+                            const locationCity = response.data.postalCodes[0].placeName;
+                            setLocationName(locationCity);
+                            setUserZipCode(locationPincode);
+                            setAutoLocationLoading(false);
+                            setSelectedLocation(false);
+                            // Store the values in local storage
+                            localStorage.setItem("locationName", locationCity);
+                            localStorage.setItem("userZipCode", locationPincode);
+                        } else {
+                            setAutoLocationLoading(false);
+                            setAutoLocationWarning("Location not found");
+                        }
+                    } catch (error) {
+                        setAutoLocationLoading(false);
+                        setAutoLocationWarning(error.message);
+                    }
+                },
+                (error) => {
+                    setAutoLocationLoading(false);
+                    setAutoLocationWarning(error.message);
+                }
+            );
+        }
+    }
+
     return (
         <div>
             <div className="headerHover" onClick={() => setSelectedLocation(!selectedLocation)}>
@@ -90,7 +146,7 @@ const Location = () => {
                 <div className="text-xs text-lightText font-medium flex flex-col items-start">
                     {locationName ? 'Deliver to' : 'Hello'}
                     <span className="text-sm font-bold -mt-1 text-whiteText">
-                        {locationName ? <p>{locationName[0].PostOffice[0].District} {locationName[0].PostOffice[0].Pincode}</p> : 'Select your address'}
+                        {locationName ? <p>{locationName} {userZipCode}</p> : 'Select your address'}
                     </span>
                 </div>
             </div>
@@ -127,12 +183,29 @@ const Location = () => {
                         }
                         <div className=" flex flex-row justify-between items-center px-4 ">
                             <hr className="w-[45%]" />
-                            <p>or</p>
+                            <p className="text-sm font-semibold">or</p>
                             <hr className="w-[45%]" />
                         </div>
-                        <div className="p-2 m-4 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500">
+                        <div onClick={getLocation} className="p-2 m-4 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500">
                             <p>Auto detect your location</p>
                         </div>
+                        {
+                            autoLocationLoading && <div className='flex justify-center mt-2 pb-3'>
+                                <RotatingLines
+                                    strokeColor="#febd69"
+                                    strokeWidth="5"
+                                    animationDuration="0.75"
+                                    width="50"
+                                    visible={true}
+                                />
+                            </div>
+                        }
+                        {
+                            autoLocationWarning && <div className="flex flex-row gap-1 items-center pl-4 -mt-3 pb-2">
+                                <img src={required} className="w-4 h-4" alt="warning" />
+                                <div className="text-zsm text-red-700 ">{autoLocationWarning}</div>
+                            </div>
+                        }
                     </div>
                 </div>
             }

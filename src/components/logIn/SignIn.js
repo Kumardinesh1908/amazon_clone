@@ -214,7 +214,7 @@ const SignIn = () => {
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
                     navigate(-1);
-                    setSuccessMsg("");
+                    // setSuccessMsg("");
                 }, 2000);
             })
             .catch((error) => {
@@ -268,7 +268,7 @@ const SignIn = () => {
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
                     navigate(-1);
-                    setSuccessMsg("");
+                    // setSuccessMsg("");
                 }, 2000);
             }).catch((error) => {
                 const errorCode = error.code;
@@ -310,7 +310,7 @@ const SignIn = () => {
                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                 setTimeout(() => {
                     navigate(-1);
-                    setSuccessMsg("");
+                    // setSuccessMsg("");
                 }, 2000);
             })
             .catch((error) => {
@@ -355,7 +355,7 @@ const SignIn = () => {
                                                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                                                 setTimeout(() => {
                                                     navigate(-1);
-                                                    setSuccessMsg("");
+                                                    // setSuccessMsg("");
                                                 }, 2000);
                                             });
                                     })
@@ -385,7 +385,7 @@ const SignIn = () => {
                                                 setSuccessMsg("Successfully Logged-in! Welcome back.");
                                                 setTimeout(() => {
                                                     navigate(-1);
-                                                    setSuccessMsg("");
+                                                    // setSuccessMsg("");
                                                 }, 2000);
                                             });
                                     })

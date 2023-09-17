@@ -268,12 +268,7 @@ const ProductDetails = () => {
         }
 
         <p className='text-blue-500 pt-3'>Secure transaction</p>
-        {userInfo &&
-          <button
-            className={`pb-2  w-full text-center rounded-md bg-gray-100 hover:bg-gray-200 p-[4px] mt-3  active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
-            Add to Wish List
-          </button>
-        }
+        
       </div>
     </div>
   )

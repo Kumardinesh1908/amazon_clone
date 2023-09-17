@@ -77,20 +77,28 @@ export default function Header() {
                 {/* Language ends here */}
 
                 {/* Sign in starts here */}
-                <Link to="/signIn">
-                    <div className="headerHover flex flex-col items-start justify-center">
-                        {
-                            userInfo
-                                ? <p className="text-sm font-semibold">Hello, {userInfo.name}</p>
-                                : <p className="text-xs font-semibold">Hello, sign in</p>
-                        }
-                        <p className="text-sm font-bold -mt-1">Accounts & Lists
-                            <span>
-                                <ArrowDropDownIcon />
-                            </span>
-                        </p>
-                    </div>
-                </Link>
+                {
+                    userInfo
+                        ? <div className="headerHover flex flex-col items-start justify-center">
+                            <p className="text-sm font-semibold">Hello, {userInfo.name}</p>
+                            <p className="text-sm font-bold -mt-1">Accounts & Lists
+                                <span>
+                                    <ArrowDropDownIcon />
+                                </span>
+                            </p>
+                        </div>
+                        : <Link to="/signIn">
+                            <div className="headerHover flex flex-col items-start justify-center">
+                                <p className="text-xs font-semibold">Hello, sign in</p>
+                                <p className="text-sm font-bold -mt-1">Accounts & Lists
+                                    <span>
+                                        <ArrowDropDownIcon />
+                                    </span>
+                                </p>
+                            </div>
+                        </Link>
+                }
+
                 {/* Sign in ends here */}
 
                 {/* Orders starts here */}

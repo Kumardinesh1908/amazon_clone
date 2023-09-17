@@ -89,13 +89,6 @@ const Product = (props) => {
           <Link to={`${product.title}`} >
             <img className="w-full h-72" src={product.thumbnail} alt="productImage" />
           </Link>
-          <ul className='w-full h-32  bg-gray-100 flex flex-col items-end justify-center gap-2 px-2 absolute bottom-0 opacity-0 group-hover:opacity-100 transition-opacity  duration-700'>
-            <li className='productLi'>Compare <img src={compare} alt="compare" className='w-4 h-4' /></li>
-            <li
-              onClick={() => handleButton(product)}
-              className='productLi'>Add to Cart <img src={cart} alt="cart" className='w-4 h-4' /></li>
-            <li className='productLi '>Add to WishList <img src={wishlist} alt="wishlist" className='w-4 h-4' /></li>
-          </ul>
         </div>
         <div className='p-2 '>
           <Link to={`${product.title}`} >
