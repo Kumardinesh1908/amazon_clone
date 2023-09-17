@@ -158,7 +158,7 @@ const Location = () => {
                             <p className="text-xs text-gray-400">Enter an Indian pincode to see product availability and delivery options for your location.</p>
                             <div className="flex justify-center" >
                                 <input type="text" maxLength={6} placeholder="Enter a 6-digit ZIP code" className="w-[65%] border-[1px] border-[#a6a6a6] rounded p-1 font-medium"
-                                    onChange={(e) => { setUserZipCode(e.target.value); setWarning("") }} />
+                                    onChange={(e) => { setUserZipCode(e.target.value); setWarning("");setAutoLocationWarning("") }} />
                                 <button className="w-[33%] p-2 ml-2 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500"> Apply</button>
                             </div>
                             {
