@@ -23,12 +23,11 @@ const Search = () => {
 
     const handleSearch = useCallback(() => {
         if (searchInput.length > 2) {
-            // Perform the search using the API
             fetch(`https://dummyjson.com/products/search?q=${searchInput}`)
                 .then((response) => response.json())
                 .then((data) => {
-                    setSearchResults(data.products); // Update search results state
-                    setShowSearch(true); // Show the search dropdown
+                    setSearchResults(data.products);
+                    setShowSearch(true);
                 })
                 .catch((error) => {
                     console.error("Error fetching search results:", error);
@@ -47,7 +46,7 @@ const Search = () => {
                 setSearchResults([]);
             }
         })
-        // Add this useEffect to fetch results when searchInput.length > 2
+        // fetch results when searchInput.length > 2
         if (searchInput.length > 2) {
             handleSearch();
         }
@@ -77,7 +76,7 @@ const Search = () => {
                     </ul>
                 )}
             </span>
-            <div className="flex flex-col w-full  " ref={searchRef}>
+            <div className="flex flex-col w-full" ref={searchRef}>
                 <input
                     onClick={() => { setShowSearch(true) }}
                     onChange={(e) => setSearchInput(e.target.value)}
@@ -87,12 +86,11 @@ const Search = () => {
                 />
                 {showSearch && searchInput.length > 2 &&
                     <div >
-                        {searchResults.length === 0 ? (
-                            <p className=" w-[107.6%] pl-2 py-[6px] text-[#0f1111] text-[17px]  bg-white border-[1px] border-gray-400 z-50">
+                        {searchResults.length === 0 
+                        ? <p className="w-[108.5%] pl-2 py-[6px] text-[#0f1111] text-[17px]  bg-white border-[1px] border-gray-400 z-50">
                                 No results found.
-                            </p>
-                        ) : (
-                            <ul className="w-[107.6%] h-auto max-h-80 text-black bg-white border-[1px] border-gray-400 z-50 custom-scrollbar overflow-y-hidden hover:overflow-y-scroll">
+                            </p> 
+                        : <ul className="w-[108.5%] h-auto max-h-80 text-black bg-white border-[1px] border-gray-400 z-50 custom-scrollbar overflow-y-hidden hover:overflow-y-scroll">
                                 {searchResults.map((result, index) => (
                                     <li
                                         className="hover:bg-gray-100 pl-2 py-[6px] text-[#0f1111] text-[17px] font-bold cursor-pointer"
@@ -108,7 +106,7 @@ const Search = () => {
                                     </li>
                                 ))}
                             </ul>
-                        )}
+                            }
                     </div>
                 }
             </div>

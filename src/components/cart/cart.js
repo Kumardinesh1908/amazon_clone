@@ -6,16 +6,13 @@ import CartItems from './cartItems';
 import { useCart } from '../../context/userCartContext';
 
 const Cart = () => {
-    // Get the list of localCartProducts from the Redux store
-    const localCartProducts = useSelector((state) => state.amazon.localCartProducts);
-
-    // Use the useCart hook to access the userCart data
-    const { userCart } = useCart();
+    const localCartProducts = useSelector((state) => state.amazon.localCartProducts); // Get the list of localCartProducts from the Redux store
+    const { userCart } = useCart();  // Use the useCart hook to get the userCart data from userCartContext
 
     return (
         <div className='flex gap-5 w-full h-full bg-gray-200 '>
             <ScrollRestoration />
-             {/* Check if there are localCartProducts in the Redux store or user Firebasecart */}
+            {/* Check if there are Products in the Redux store or user Firebasecart then show <CartItem /> */}
             {
                 localCartProducts.length > 0 || userCart.length > 0
                     ? (<CartItems />)

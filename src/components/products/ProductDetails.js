@@ -13,6 +13,7 @@ const ProductDetails = () => {
   const userInfo = useSelector((state) => state.amazon.userInfo);
   const data = useLoaderData();
   const productsData = data.data.products;
+  const { userCart, updateUserCart } = useCart(); // Get the userCart and updateUserCart function from the userCartContext
   const { title } = useParams(); // Get the "title" parameter from the URL
 
   // Find the product based on the title from the URL parameters
@@ -22,6 +23,7 @@ const ProductDetails = () => {
   const [cartButton, setCartButton] = useState(false);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   // Automatically change images every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,9 +35,6 @@ const ProductDetails = () => {
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
-
-  // Get the userCart and updateUserCart function from the context
-  const { userCart, updateUserCart } = useCart();
 
   const [selectedQuantity, setSelectedQuantity] = useState(1);
 
@@ -51,35 +50,25 @@ const ProductDetails = () => {
       ...product,
       quantity: selectedQuantity,
     };
-    const usersCollectionRef = collection(db, "users");
-    const userRef = doc(usersCollectionRef, userInfo.email);
-    const userCartRef = collection(userRef, "cart");
-    const cartRef = doc(userCartRef, userInfo.id);
-    try {
-      const snap = await getDoc(cartRef);
-      if (snap.exists()) {
-        const cart = snap.data().cart || [];
-        const existingProductIndex = cart.findIndex(
-          (item) => item.title === product.title
-        );
-        if (existingProductIndex !== -1) {
-          // If the product already exists in the cart, increase its quantity
-          cart[existingProductIndex].quantity += selectedQuantity;
-        } else {
-          // If the product is not in the cart, add it to the cart
-          cart.push(productWithDefaultQuantity);
-        }
-        await setDoc(cartRef, { cart: cart }, { merge: true });
-        // Update the user's cart in context to reflect the change
-        updateUserCart(cart);
+    const cartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
+    const snap = await getDoc(cartRef);
+    if (snap.exists()) {
+      const cart = snap.data().cart || [];
+      const existingProductIndex = cart.findIndex(
+        (item) => item.title === product.title
+      );
+      if (existingProductIndex !== -1) {
+        cart[existingProductIndex].quantity += selectedQuantity;
+      } else {
+        cart.push(productWithDefaultQuantity);
       }
-      else {
-        await setDoc(cartRef, { cart: [productWithDefaultQuantity] }, { merge: true });
-        // Update the user's cart in context to reflect the change immeditely in our website
-        updateUserCart([...userCart, productWithDefaultQuantity]);
-      }
-    } catch (error) {
-      console.error('Error saving product to Firebase cart:', error);
+      await setDoc(cartRef, { cart: cart }, { merge: true });
+      updateUserCart(cart); // Update the user's cart in context to reflect the change
+    }
+    else {
+      await setDoc(cartRef, { cart: [productWithDefaultQuantity] }, { merge: true });
+      // Update the user's cart in context to reflect the change immeditely in our website
+      updateUserCart([...userCart, productWithDefaultQuantity]);
     }
   }
 
@@ -128,13 +117,10 @@ const ProductDetails = () => {
     }
   }
 
-  if (!product) {
-    return <h1>Details of this product available in its category page. please go back to this product's category page then select this product to see its details.</h1>
-  }
   return (
-    <div className='flex bg-white justify-between'>
+    <div className='py-5 flex bg-white justify-between'>
       <ScrollRestoration />
-      <div className='w-[5%] mt-10 ml-1'>
+      <div className='w-[5%] ml-1'>
         {product.images.map((item, index) => (
           <div key={index} className='border-[1px] border-black rounded-lg mb-5'
             onClick={() => handleImageClick(index)}>
@@ -143,9 +129,9 @@ const ProductDetails = () => {
         ))}
       </div>
 
-      <div className='w-[38%] mt-4 '><img src={product.images[currentImageIndex]} className='w-full h-[85%]' alt="productImage" /></div>
+      <div className='w-[38%]  '><img src={product.images[currentImageIndex]} className='w-full h-[85%]' alt="productImage" /></div>
 
-      <div className='w-[35%] mt-2 ' >
+      <div className='w-[35%] ' >
         <h1 className='text-[26px] font-bold'>{product.title}</h1>
         <p className='text-blue-500 capitalize '>Brand : {product.brand}</p>
         <div className='flex border-b-[1px] border-gray-200 pb-1'>
@@ -190,26 +176,26 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
-        <div className='w-full flex justify-between border-b-[1px] border-border-gray-200  pt-4 pb-2'>
-          <div className='w-[18%] flex flex-col  items-center '>
+        <div className='w-full flex items-center justify-around border-b-[1px] border-border-gray-200  pt-4 pb-2'>
+          <div className='w-[18%] flex flex-col gap-2 items-center'>
             <img src={delivery} alt="delivery" className='w-9 h-9' />
             <p className='text-blue-500 text-xs'>Free Delivery</p>
           </div>
-          <div className='w-[18%] flex flex-col  items-center '>
+          <div className='w-[18%] flex flex-col gap-2 items-center'>
             <img src={cod} alt="cod" className='w-9 h-9' />
             <p className='text-blue-500 text-xs'>Pay on Delivery</p>
           </div>
-          <div className='w-[18%] flex flex-col  items-center '>
+          <div className='w-[18%] flex flex-col gap-2 items-center'>
             <img src={exchange} alt="exchange" className='w-9 h-9' />
             <p className='text-blue-500 text-xs text-center'>7 days Replacement</p>
           </div>
-          <div className='w-[18%] flex flex-col  items-center justify-center '>
+          <div className='w-[18%] flex flex-col gap-2 items-center'>
             <img src={delivered} alt="delivered" className='w-9 h-9' />
-            <span className='text-blue-500 text-xs'>Amazon Delivered</span>
+            <span className='text-blue-500 text-xs text-center'>Amazon Delivered</span>
           </div>
-          <div className='w-[18%] flex flex-col  items-center '>
+          <div className='w-[18%] flex flex-col gap-2 items-center '>
             <img src={transaction} alt="transaction" className='w-9 h-9' />
-            <p className='text-blue-500 text-xs'>Secure transaction</p>
+            <p className='text-blue-500 text-xs text-center'>Secure Transaction</p>
           </div>
         </div>
         <div className='pt-2'>
@@ -218,7 +204,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <div className='w-[20%] h-[430px] border-[0.066rem] border-gray-200 rounded-lg p-5 mt-2 mr-1'>
+      <div className='w-[20%] h-[380px] border-[0.066rem] border-gray-200 rounded-lg p-5 mr-1'>
         <div className='flex items-center mt-1'>
           <span className='text-[26px] font-medium text-red-600'>₹&nbsp;{product.price}</span>
           <span>&nbsp;({product.discountPercentage}% Off)</span>
@@ -268,7 +254,6 @@ const ProductDetails = () => {
         }
 
         <p className='text-blue-500 pt-3'>Secure transaction</p>
-        
       </div>
     </div>
   )

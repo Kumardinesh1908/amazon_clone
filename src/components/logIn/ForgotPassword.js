@@ -1,24 +1,23 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { logoBlack } from '../../assets';
 import { Link } from 'react-router-dom';
-import ScrollToTop from '../../ScrollToTop';
 
 const ForgotPassword = () => {
-
-    const [input,setInput] = useState("");
-    const [error,setError] = useState("");
-    const validate=()=>{
+    const [input, setInput] = useState("");
+    const [error, setError] = useState("");
+    const validate = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const mobilePattern = /^[0-9]{10}$/;
-        if(!emailPattern.test(input) && !mobilePattern.test(input)){
-             setError("We're sorry. We weren't able to identify you given the information provided.")
+        if (!emailPattern.test(input) && !mobilePattern.test(input)) {
+            setError("We're sorry. We weren't able to identify you given the information provided.")
         }
     }
-    const handleSubmit=(e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
         validate();
         setInput("");
     }
+    
     return (
         <div className='bg-white'>
             <div className='flex flex-col justify-center items-center '>
@@ -40,7 +39,7 @@ const ForgotPassword = () => {
                         <form onSubmit={handleSubmit} className='my-3'>
                             <label className='text-sm font-semibold'>
                                 Email or mobile phone number
-                                <input type="text" value={input}  autoComplete="true" onChange={(e)=>{setInput(e.target.value);setError('')}} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                                <input type="text" value={input} autoComplete="true" onChange={(e) => { setInput(e.target.value); setError('') }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
                             </label>
                             <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-4 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
                             >Continue</button>
@@ -52,7 +51,7 @@ const ForgotPassword = () => {
                 </div>
                 <div className='w-80 mt-2 text-md leading-5 pl-3 font-medium'>Has your email address or mobile phone number changed?</div>
                 <div className='w-80 text-sm  mx-auto mt-1 pl-3 mb-8 '>
-                If you no longer use the e-mail address associated with your Amazon account, you may contact Customer Service for help restoring access to your account.
+                    If you no longer use the e-mail address associated with your Amazon account, you may contact Customer Service for help restoring access to your account.
                 </div>
 
             </div>
@@ -65,9 +64,6 @@ const ForgotPassword = () => {
             <div className='text-xs tracking-wider text-black flex justify-center mt-[4px] pb-16'>
                 © 1996-2023, Amazon.com, Inc. or its affiliates
             </div>
-            <ScrollToTop />
-
-
         </div>
     )
 }

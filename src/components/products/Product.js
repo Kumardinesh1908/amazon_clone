@@ -1,23 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { star, halfStar, emptyStar, compare, cart, wishlist } from "../../assets/index";
+import { star, halfStar, emptyStar } from "../../assets/index";
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../redux/amazonSlice';
 import { db } from '../../firebase/firebase.config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 import { useCart } from '../../context/userCartContext';
 
-
 const Product = (props) => {
   const { productsData } = props;
-
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.amazon.userInfo);
   const authenticated = useSelector((state) => state.amazon.isAuthenticated);
-
-  // Get the userCart and updateUserCart function from the context
-  const { userCart, updateUserCart } = useCart();
-
+  const { userCart, updateUserCart } = useCart(); // Get the userCart and updateUserCart function from the context
 
   // Function to save a product to Firebase cart
   const saveProductToFirsebase = async (product) => {
@@ -25,35 +20,25 @@ const Product = (props) => {
       ...product,
       quantity: 1,
     };
-    const usersCollectionRef = collection(db, "users");
-    const userRef = doc(usersCollectionRef, userInfo.email);
-    const userCartRef = collection(userRef, "cart");
-    const cartRef = doc(userCartRef, userInfo.id);
-    try {
-      const snap = await getDoc(cartRef);
-      if (snap.exists()) {
-        const cart = snap.data().cart || [];
-        const existingProductIndex = cart.findIndex(
-          (item) => item.title === product.title
-        );
-        if (existingProductIndex !== -1) {
-          // If the product already exists in the cart, increase its quantity
-          cart[existingProductIndex].quantity += 1;
-        } else {
-          // If the product is not in the cart, add it to the cart
-          cart.push(productWithDefaultQuantity);
-        }
-        await setDoc(cartRef, { cart: cart }, { merge: true });
-        // Update the user's cart in context to reflect the change
-        updateUserCart(cart);
+    const cartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
+    const snap = await getDoc(cartRef);
+    if (snap.exists()) {
+      const cart = snap.data().cart || [];
+      const existingProductIndex = cart.findIndex(
+        (item) => item.title === product.title
+      );
+      if (existingProductIndex !== -1) {
+        cart[existingProductIndex].quantity += 1;
+      } else {
+        cart.push(productWithDefaultQuantity);
       }
-      else {
-        await setDoc(cartRef, { cart: [productWithDefaultQuantity] }, { merge: true });
-        // Update the user's cart in context to reflect the change immeditely in our website
-        updateUserCart([...userCart, productWithDefaultQuantity]);
-      }
-    } catch (error) {
-      console.error('Error saving product to Firebase cart:', error);
+      await setDoc(cartRef, { cart: cart }, { merge: true });
+      updateUserCart(cart);
+    }
+    else {
+      await setDoc(cartRef, { cart: [productWithDefaultQuantity] }, { merge: true });
+      // Update the user's cart in context to reflect the change immeditely in our website
+      updateUserCart([...userCart, productWithDefaultQuantity]);
     }
   }
 
@@ -77,12 +62,11 @@ const Product = (props) => {
       }));
     } else {
       // If user is authenticated, save to Firebase cart
-     await saveProductToFirsebase(product);
+      await saveProductToFirsebase(product);
     }
   };
 
   return (
-    // Map through productsData and render product
     productsData.map((product, index) => (
       <div className='w-[30%] my-5 rounded border-[1px] border-gray-200 shadow-none hover:shadow-testShadow duration-200' key={index}>
         <div className=" bg-gray-100 border-b-[1px] border-gray-200 flex justify-center items-center cursor-pointer relative group" >

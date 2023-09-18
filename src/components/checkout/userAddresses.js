@@ -6,36 +6,24 @@ import { useAddress } from '../../context/userAddressContext';
 
 
 const UserAddresses = ({ setShowAddressForm }) => {
-
-    // state to hold userInfo from redustoolkit 
     const userInfo = useSelector((state) => state.amazon.userInfo);
-
-    // get updateSelectedAddress from userAddressContext to update Selected Address 
     const { userAddress, updateUserAddress, updateSelectedAddress } = useAddress();
 
     // Function to find the index of selected address
     const handleAddressSelect = (index) => {
-        // setSelectedAddressIndex(index);
-        const selectedAddress = userAddress[index]; // Get the updated selected address
-    updateSelectedAddress(selectedAddress); // Pass the updated selected address to the context
+        const selectedAddress = userAddress[index];   // Get the updated selected address
+        updateSelectedAddress(selectedAddress);       // Pass the updated selected address to the context
     };
 
     // function to delete selected address from Firebase
     const deleteAddressFromFirebase = async (addressIndex) => {
-        // Reference to the user's Addresses document in Firestore
         const addressesRef = doc(collection(db, 'users', userInfo.email, 'shippingAddresses'), userInfo.id);
-        // Get a snapshot of the user's Addresses document
         const docSnapshot = await getDoc(addressesRef);
-        // Check if the Addresses document exists
         if (docSnapshot.exists()) {
-            // Get the Addresses data from the snapshot
             const addresses = docSnapshot.data().Addresses;
-            // Filter out the addresss with the specified index from the Addresses
             const updatedAddresses = addresses.filter((address, index) => index !== addressIndex);
-            // Update the Addesses data in Firestore with the filtered address
             await updateDoc(addressesRef, { Addresses: updatedAddresses });
-            // Update the selected address to null after deletion
-            updateSelectedAddress(null);
+            updateSelectedAddress(null);  // Update the selected address to null after deletion
             // Update the userAddresses state to reflect the change immediately on the UI
             const updatedUserAddresses = userAddress.filter((address, index) => index !== addressIndex);
             updateUserAddress(updatedUserAddresses);
@@ -46,7 +34,7 @@ const UserAddresses = ({ setShowAddressForm }) => {
         <div >
             <p className='text-lg font-semibold text-red-700'>1 &nbsp; Select a delivery address</p>
             <div className='w-full flex justify-end'>
-                <div className='w-[96%] border-[1px] border-gray-400 rounded-lg mt-1 px-4 py-3'>
+                <div className='w-[96%] border-[1px] border-gray-400 rounded-lg mt-1 px-4 py-2'>
                     <div className='flex flex-row justify-between border-b border-gray-400'>
                         <p className='text-lg font-semibold '>Your addresses</p>
                         <button onClick={() => { setShowAddressForm(true) }} className='text-lg font-semibold text-blue-500 hover:text-red-700 hover:underline'>Add new address</button>
@@ -59,9 +47,8 @@ const UserAddresses = ({ setShowAddressForm }) => {
                                     name="selectedAddress"
                                     value={index}
                                     onChange={() => handleAddressSelect(index)}
-                                    className="mr-1"
                                 />
-                                <span className="text-sm capitalize -mt-1">
+                                <span className="text-sm capitalize -mt-1 ml-2">
                                     <span className='font-semibold'>{address.name}</span>
                                     <span> {address.address}</span>
                                     <span>, {address.area}</span>

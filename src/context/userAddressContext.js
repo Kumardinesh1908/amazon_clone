@@ -4,70 +4,53 @@ import { collection, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
 import { useSelector } from 'react-redux';
 
-// Create a new context for user address data
-const UserAddressContext = createContext();
+const UserAddressContext = createContext(); // Create a new context for user address data
 
 // Create a provider component that wraps its children with the context
 export const UserAddressProvider = ({ children }) => {
-    // State to hold the user's address information
-    const [userAddress, setUserAddress] = useState([]);
-    
-    // Get user info and authentication status from Redux store
     const userInfo = useSelector((state) => state.amazon.userInfo);
     const authenticated = useSelector((state) => state.amazon.isAuthenticated);
 
-    // Function to update the userAddress in the context
-    const updateUserAddress = (updatedAddress) => {
+    const [userAddress, setUserAddress] = useState([]); // State to hold the user's address information
+    const updateUserAddress = (updatedAddress) => {  // Function to update the userAddress in the context
         setUserAddress(updatedAddress);
+    };
+
+    const [selectedAddress, setSelectedAddress] = useState(null); // state to hold user's selected address 
+    const updateSelectedAddress = (updatedSelectedAddress) => { // Function to update the user Selected Address in the context
+        setSelectedAddress(updatedSelectedAddress);
+    };
+
+    const [selectedPayment, setSelectedPayment] = useState(""); // state to hold user's payment method
+    const updateSelectedPayment = (updatedSelectedPayment) => { // function to update user's payment method in the context
+        setSelectedPayment(updatedSelectedPayment);
     };
 
     // Effect to fetch user's address data from Firebase when authentication or user info changes
     useEffect(() => {
         if (authenticated && userInfo) {
-            // Function to fetch user's addresses from Firebase
             const getuserAddressesFromFirebase = async (userInfo) => {
-                try {
-                    // Create a reference to the user's address document in Firebase
-                    const userAddressesRef = doc(collection(db, 'users', userInfo.email, 'shippingAddresses'), userInfo.id);
-
-                    // Fetch the document snapshot
-                    const docSnapshot = await getDoc(userAddressesRef);
-
-                    // If the document exists, update the userAddress state
-                    if (docSnapshot.exists()) {
-                        setUserAddress(docSnapshot.data().Addresses);
-                    }
-                } catch (error) {
-                    console.error('Error fetching user address data:', error);
+                const userAddressesRef = doc(collection(db, 'users', userInfo.email, 'shippingAddresses'), userInfo.id);
+                const docSnapshot = await getDoc(userAddressesRef);
+                if (docSnapshot.exists()) {
+                    setUserAddress(docSnapshot.data().Addresses);
                 }
             };
-            // Call the function to fetch user's addresses from Firebase
-            getuserAddressesFromFirebase(userInfo);
+            getuserAddressesFromFirebase(userInfo); // Call the function to fetch user's addresses from Firebase
         } else {
-            // Reset userAddress state if user is not authenticated
-            setUserAddress([]);
+            setUserAddress([]); // Reset userAddress state if user is not authenticated
         }
     }, [authenticated, userInfo]);
 
-    // state to hold user's selected address
-    const [selectedAddress,setSelectedAddress] = useState(null); 
-
-    // Function to update the user Selected Address in the context
-    const updateSelectedAddress = (updatedSelectedAddress) => {
-        setSelectedAddress(updatedSelectedAddress);
-    };
-
-    // state to hold user's payment method
-    const [selectedPayment, setSelectedPayment] = useState("");
-
-    // function to update user' payment state in the context
-    const updateSelectedPayment = (updatedSelectedPayment) => {
-        setSelectedPayment(updatedSelectedPayment);
-    };
-
-    // Provide the userAddress state and the updateUserAddress function to children components
     return (
-        <UserAddressContext.Provider value={{ userAddress, updateUserAddress,selectedAddress,updateSelectedAddress,selectedPayment,updateSelectedPayment }}>
+        // Provide states and update functions to children components
+        <UserAddressContext.Provider
+            value={{
+                userAddress, updateUserAddress,
+                selectedAddress, updateSelectedAddress,
+                selectedPayment, updateSelectedPayment
+            }}
+        >
             {children}
         </UserAddressContext.Provider>
     );

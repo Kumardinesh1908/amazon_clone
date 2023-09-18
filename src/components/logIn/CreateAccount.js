@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { logoBlack } from '../../assets';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { i, right } from '../../assets';
 import { RotatingLines } from "react-loader-spinner";
-import { motion } from "framer-motion";
-import ScrollToTop from '../../ScrollToTop';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 import { db } from '../../firebase/firebase.config';
 import { collection, doc, setDoc, getDoc } from 'firebase/firestore';
 
 const CreateAccount = () => {
-    const navigate = useNavigate();
     // Initialize Firebase auth
     const auth = getAuth();
 
@@ -19,7 +16,7 @@ const CreateAccount = () => {
     const [emailInput, setEmailInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [loading, setLoading] = useState(false);
-    const [successMsg, setSuccessMsg] = useState("");
+    const [successMsg, setSuccessMsg] = useState(false);
 
     const [nameError, setNameError] = useState("");
     const [mobileError, setMobileError] = useState("");
@@ -68,34 +65,18 @@ const CreateAccount = () => {
 
     // Function to save user data to Firestore
     const saveUserDataToFirebase = async (user) => {
-        // Firestore collections and documents
-        const usersCollectionRef = collection(db, "users");
-        const userRef = doc(usersCollectionRef, user.email);
-        try {
-            const userRefSnapshot = await getDoc(userRef);
-            if (!userRefSnapshot.exists()) {
-                const userDetailsRef = doc(userRef, "details", user.uid);
-                const userDetailsSnapshot = await getDoc(userDetailsRef);
-                if (!userDetailsSnapshot.exists()) {
-                    // If the user details don't exist, save them to Firestore
-                    await setDoc(userDetailsRef, {
-                        id: user.uid,
-                        name: user.displayName,
-                        email: user.email,
-                        image: user.photoURL,
-                        mobile: user.phoneNumber,
-                        createdOn: new Date(),
-                    });
-                    // console.log("User details saved to Firestore.");
-                } else {
-                    console.log("User details already exist in Firestore.");
-                }
-            } else {
-                console.log("User email already exists in Firestore.");
-            }
-        } catch (error) {
-            console.error("Error fetching user details:", error);
-        }
+        const userDetailsRef = doc(collection(db, 'users', user.email, 'details'), user.uid);
+        const userDetailsSnapshot = await getDoc(userDetailsRef);
+        if (!userDetailsSnapshot.exists()) {
+            await setDoc(userDetailsRef, {
+                id: user.uid,
+                name: user.displayName,
+                email: user.email,
+                image: user.photoURL,
+                mobile: user.phoneNumber,
+                createdOn: new Date(),
+            }, { merge: true });
+        };
     };
 
     // Handle form submission
@@ -112,21 +93,14 @@ const CreateAccount = () => {
                 updateProfile(auth.currentUser, {
                     displayName: nameInput,
                 }).then(() => {
-                    // Save user data to Firestore here
                     const user = userCredential.user;
                     saveUserDataToFirebase(user);
-                    // Send mail to verify the user's email
                     sendEmailVerification(auth.currentUser).then(() => {
-                        // ...
+                        // Send mail to verify the user's email
                     })
                     setLoading(false);
-                    setSuccessMsg("Account Created Successfully!");
-                    setTimeout(() => {
-                        navigate("/signIn");
-                        setSuccessMsg("");
-                    }, 3000);
+                    setSuccessMsg(true);
                 }).catch((error) => {
-                    console.error("Error updating profile:", error);
                     setLoading(false);
                     setFirebaseError("Failed to create an account. Please try again later.");
                 });
@@ -160,88 +134,93 @@ const CreateAccount = () => {
                         <span className='text-[28px] font-semibold'>
                             Create Account
                         </span>
-                        <form className='my-3' onSubmit={handleSubmit}>
-                            <label className='text-sm font-semibold'>
-                                Your name
-                                <input type="text" placeholder="First and last name" autoComplete="true" value={nameInput} onChange={(e) => {
-                                    setNameInput(e.target.value);
-                                    setNameError("");
-                                }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1 ' />
-                            </label>
-                            {
-                                nameError && <div className='text-sm text-[#FF0000]'>{nameError}</div>
-                            }
-                            <label className='text-sm font-semibold mt-3'>
-                                Email
-                                <input type="text" value={emailInput} autoComplete="true" onChange={(e) => {
-                                    setEmailInput(e.target.value);
-                                    setEmailError("");
-                                    setFirebaseError("");
-                                }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                        {
+                            successMsg
+                                ? <div className=' my-2 flex flex-col gap-2'>
+                                    <p className='font-semibold text-green-600'>
+                                        Your account has been successfully created!
+                                    </p>
+                                    <p className='font-semibold '>
+                                        Please check your email for a verification link to confirm your email address.
+                                    </p>
+                                    <p className='font-semibold text-red-600'>
+                                        Remember, if you don't verify your email, your data may be lost.
+                                    </p>
+                                </div>
+                                : <form className='my-3' onSubmit={handleSubmit}>
+                                    <label className='text-sm font-semibold'>
+                                        Your name
+                                        <input type="text" placeholder="First and last name" autoComplete="true" value={nameInput} onChange={(e) => {
+                                            setNameInput(e.target.value);
+                                            setNameError("");
+                                        }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1 ' />
+                                    </label>
+                                    {
+                                        nameError && <div className='text-sm text-[#FF0000]'>{nameError}</div>
+                                    }
+                                    <label className='text-sm font-semibold mt-3'>
+                                        Email
+                                        <input type="text" value={emailInput} autoComplete="true" onChange={(e) => {
+                                            setEmailInput(e.target.value.toString().toLowerCase());
+                                            setEmailError("");
+                                            setFirebaseError("");
+                                        }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
 
-                            </label>
-                            {
-                                (emailError || firebaseError) && <div className='text-sm text-[#FF0000]'>{emailError || firebaseError}</div>
-                            }
-                            <label className='text-sm font-semibold my-3'>
-                                Mobile number (Optional)
-                                <div className='flex items-center justify-between mt-1'>
-                                    <div className='w-[22%] border-[1px] rounded-md border-[#a6a6a6] p-1'>IN +91</div>
-                                    <input type="tel" autoComplete="true" maxLength="10" placeholder="Mobile number" value={mobileInput} onChange={(e) => {
-                                        setMobileInput(e.target.value);
-                                        setMobileError("");
-                                    }} className='w-[74%] border-[1px] border-[#a6a6a6] rounded p-1' />
-                                </div>
-                            </label>
-                            {
-                                mobileError && <div className='text-sm text-[#FF0000]  pl-20'>{mobileError}</div>
-                            }
-                            <label className='text-sm font-semibold mt-3'>
-                                Password
-                                <input type="password" autoComplete="true" value={passwordInput} onChange={(e) => {
-                                    setPasswordInput(e.target.value);
-                                    setPasswordError("");
-                                }} placeholder="At least 6 characters" className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
-                            </label>
-                            {
-                                passwordError && <div className='text-sm text-[#FF0000]'>{passwordError}</div>
-                            }
-                            {!passwordError && <div className='flex items-center justify-start mt-1' >
-                                <img src={i} alt='i' className='w-4 h-4' />
-                                <span className='text-xs'>Passwords must be at least 6 characters.</span>
-                            </div>}
-                            <div className='text-[12px] tracking-wide mt-4 '>
-                                By enrolling your mobile phone number, you consent to receive automated security notifications via text message from Amazon. Message and data rates may apply.
-                            </div>
-                            <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-5 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
-                            >Continue</button>
-                            {
-                                loading && <div className='flex justify-center mt-4'>
-                                    <RotatingLines
-                                        strokeColor="#febd69"
-                                        strokeWidth="5"
-                                        animationDuration="0.75"
-                                        width="50"
-                                        visible={true}
-                                    />
-                                </div>
-                            }
-                            {
-                                successMsg && <div className=''>
-                                    <motion.p
-                                        initial={{ y: 10, opacity: 0 }}
-                                        animate={{ y: 10, opacity: 1 }}
-                                        transition={{ duration: 0.5 }}
-                                        className='text-base font-semibold text-green-600 border-[1px] px-2 text-center'
-                                    >
-                                        {successMsg}
-                                    </motion.p>
-                                </div>
-                            }
-                        </form>
+                                    </label>
+                                    {
+                                        (emailError || firebaseError) && <div className='text-sm text-[#FF0000]'>{emailError || firebaseError}</div>
+                                    }
+                                    <label className='text-sm font-semibold my-3'>
+                                        Mobile number (Optional)
+                                        <div className='flex items-center justify-between mt-1'>
+                                            <div className='w-[22%] border-[1px] rounded-md border-[#a6a6a6] p-1'>IN +91</div>
+                                            <input type="tel" autoComplete="true" maxLength="10" placeholder="Mobile number" value={mobileInput} onChange={(e) => {
+                                                setMobileInput(e.target.value);
+                                                setMobileError("");
+                                            }} className='w-[74%] border-[1px] border-[#a6a6a6] rounded p-1' />
+                                        </div>
+                                    </label>
+                                    {
+                                        mobileError && <div className='text-sm text-[#FF0000]  pl-20'>{mobileError}</div>
+                                    }
+                                    <label className='text-sm font-semibold mt-3'>
+                                        Password
+                                        <input type="password" autoComplete="true" value={passwordInput} onChange={(e) => {
+                                            setPasswordInput(e.target.value);
+                                            setPasswordError("");
+                                        }} placeholder="At least 6 characters" className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
+                                    </label>
+                                    {
+                                        passwordError && <div className='text-sm text-[#FF0000]'>{passwordError}</div>
+                                    }
+                                    {!passwordError && <div className='flex items-center justify-start mt-1' >
+                                        <img src={i} alt='i' className='w-4 h-4' />
+                                        <span className='text-xs'>Passwords must be at least 6 characters.</span>
+                                    </div>}
+                                    <div className='text-[12px] tracking-wide mt-4 '>
+                                        By enrolling your mobile phone number, you consent to receive automated security notifications via text message from Amazon. Message and data rates may apply.
+                                    </div>
+                                    <button className={`text-sm w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[6px] mt-5 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}
+                                    >Continue</button>
+                                    {
+                                        loading && <div className='flex justify-center mt-4'>
+                                            <RotatingLines
+                                                strokeColor="#febd69"
+                                                strokeWidth="5"
+                                                animationDuration="0.75"
+                                                width="50"
+                                                visible={true}
+                                            />
+                                        </div>
+                                    }
+                                </form>
+                        }
                         <div className='flex items-center gap-2 mt-7 '>
                             <div className=' text-xs'>
-                                Already have an account?&nbsp;
+                                {
+                                    successMsg
+                                        ? "You can now sign-in "
+                                        : "Already have an account? "}
                                 <Link to="/signIn" >
                                     <span className='text-blue-500 hover:underline hover:text-red-500 cursor-pointer'>
                                         Sign in
@@ -252,7 +231,6 @@ const CreateAccount = () => {
                                 <img src={right} alt='right' />
                             </div>
                         </div>
-
                         <div className='text-xs tracking-wide mt-5 '>
                             <span className=''>
                                 By creating an account or logging in, you agree to Amazon’s
@@ -261,7 +239,6 @@ const CreateAccount = () => {
                                 <a href='https://www.amazon.in/gp/help/customer/display.html/ref=ap_signin_notification_privacy_notice?ie=UTF8&nodeId=200534380' className='text-blue-500 hover:text-red-500 cursor-pointer'> Privacy Notice</a>.
                             </span>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -274,7 +251,6 @@ const CreateAccount = () => {
             <div className='text-xs tracking-wider text-black flex justify-center mt-[4px] pb-16'>
                 © 1996-2023, Amazon.com, Inc. or its affiliates
             </div>
-            <ScrollToTop />
         </div>
     )
 }

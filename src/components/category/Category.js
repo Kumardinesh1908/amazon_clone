@@ -20,13 +20,13 @@ const Category = () => {
                         </div>
                         {item.subcategories
                             ? <div className='w-[270px] h-[330px] mx-auto flex  flex-row flex-wrap  justify-between'>
-                                   { item.subcategories.map((item, index) => (
+                                {item.subcategories.map((item, index) => (
                                     <div key={index} className='w-[45%] h-[40%] group cursor-pointer' onClick={() => handleCategoryClick(item.category)}>
-                                            <img className='w-full h-full ' src={item.img} alt='img' />
+                                        <img className='w-full h-full ' src={item.img} alt='img' />
                                         <h4 className='text-xs font-semibold ml-5 mt-1 mb-2 group-hover:text-red-400'>{item.title}</h4>
                                     </div>
-                                    ))}
-                                </div>
+                                ))}
+                            </div>
                             : <div className='group cursor-pointer' onClick={() => handleCategoryClick(item.category)}>
                                 <div className='w-[270px]  mx-auto'>
                                     <img className='w-[270px] h-[270px] ' src={item.img} alt='img' />

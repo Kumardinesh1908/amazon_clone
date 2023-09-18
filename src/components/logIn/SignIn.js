@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { right, down, required, google, facebook } from "../../assets/index";
 import { RotatingLines } from "react-loader-spinner";
 import { motion } from "framer-motion";
-import ScrollToTop from "../../ScrollToTop";
 import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, linkWithCredential, FacebookAuthProvider, fetchSignInMethodsForEmail } from "firebase/auth";
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserInfo, setUserAuthentication, resetCart, addToOrders, addTocancelOrders, addToreturnOrders } from "../../redux/amazonSlice";
@@ -14,23 +13,26 @@ import { useCart } from "../../context/userCartContext";
 import { useOrders } from "../../context/userOrderContext";
 
 const SignIn = () => {
-    const dispatch = useDispatch();
-    const cartItems = useSelector((state) => state.amazon.localCartProducts);
-
     const auth = getAuth();
     const googleProvider = new GoogleAuthProvider();
     const facebookProvider = new FacebookAuthProvider();
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
+    const cartItems = useSelector((state) => state.amazon.localCartProducts);
+    const { updateUserCart } = useCart(); // get the updateUserCart function from custom hook created in userCartContext.js
+    const { updateUserOrders } = useOrders(); // get the updateUserOrders function from custom hook created in userOrdersContext.js
     const [isClicked, setIsClicked] = useState(false);
     const [needHelp, setNeedHelp] = useState(false);
+
     const handleNeedHelp = () => {
         setNeedHelp(!needHelp);
     };
+
     const handleNewClickEffect = (e) => {
         e.stopPropagation();
         setIsClicked(true);
     };
+
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (!e.target.classList.contains("clicked")) {
@@ -47,6 +49,9 @@ const SignIn = () => {
     const [inputValue, setInputValue] = useState("");
     const [passwordValue, setPasswordValue] = useState("");
     const [userEmailError, setUserEmailError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [successMsg, setSuccessMsg] = useState("");
+
     const validate = () => {
         let isValid = true;
         if (inputValue === "") {
@@ -60,100 +65,46 @@ const SignIn = () => {
         return isValid;
     }
 
-    const [loading, setLoading] = useState(false);
-    const [successMsg, setSuccessMsg] = useState("");
-
     const saveUserDataToFirebase = async (user) => {
-        const usersCollectionRef = collection(db, "users");
-        const userRef = doc(usersCollectionRef, user.email);
-        try {
-            const userRefSnapshot = await getDoc(userRef);
-            // console.log(userRefSnapshot.exists())       
-            // console.log(userRefSnapshot)           
-            if (!userRefSnapshot.exists()) {
-                const userDetailsRef = doc(userRef, "details", user.uid);
-                const userDetailsSnapshot = await getDoc(userDetailsRef);
-                // console.log(userDetailsSnapshot.exists())       
-                // console.log(userDetailsSnapshot)            
-                if (!userDetailsSnapshot.exists()) {
-                    // If the user details don't exist, save them to Firestore
-                    await setDoc(userDetailsRef, {
-                        id: user.uid,
-                        name: user.displayName,
-                        email: user.email,
-                        image: user.photoURL,
-                        mobile: user.phoneNumber,
-                        createdOn: new Date(),
-                    }, { merge: true });
-                    // console.log("User details saved to Firestore.");
-                } else {
-                    // console.log("User details already exist in Firestore.");
-                }
-            } else {
-                console.log("User email already exists in Firestore.");
-            }
-        } catch (error) {
-            console.error("Error fetching user details:", error);
-        }
+        const userDetailsRef = doc(collection(db, 'users', user.email, 'details'), user.uid);
+        const userDetailsSnapshot = await getDoc(userDetailsRef);
+        if (!userDetailsSnapshot.exists()) {
+            await setDoc(userDetailsRef, {
+                id: user.uid,
+                name: user.displayName,
+                email: user.email,
+                image: user.photoURL,
+                mobile: user.phoneNumber,
+                createdOn: new Date(),
+            }, { merge: true });
+        };
     };
 
-    // Use the updateUserCart function from custom hook created in userCartContext.js
-    const { updateUserCart } = useCart();
-
     const saveLocalCartToFirebase = async (user) => {
-        const usersCollectionRef = collection(db, "users");
-        const userRef = doc(usersCollectionRef, user.email);
-        const userCartRef = collection(userRef, "cart");
-        const cartRef = doc(userCartRef, user.uid);
-        const docSnapshot = await getDoc(cartRef);
+        const userCartRef = doc(collection(db, 'users', user.email, 'cart'), user.uid);
+        const docSnapshot = await getDoc(userCartRef);
         const firebaseCartItems = docSnapshot.exists() ? docSnapshot.data().cart : [];
         const localCartItems = cartItems;
-        // Create a map to track items using their unique identifiers (e.g., product title)
-        const mergedItemsMap = new Map();
-        // Add Firebase cart items to the mergedItemsMap using set function
-        firebaseCartItems.forEach((item) => {
-            mergedItemsMap.set(item.title, item);
-        });
-        localCartItems.forEach((item) => {
-            if (mergedItemsMap.has(item.title)) {
-                // If the item already exists in the Firebase cart, update its quantity
-                const existingItem = mergedItemsMap.get(item.title);
-                existingItem.quantity += item.quantity; // Update the quantity
+        localCartItems.forEach((localItem) => {
+            const existingItemIndex = firebaseCartItems.findIndex((item) => item.title === localItem.title);
+            if (existingItemIndex !== -1) {
+                firebaseCartItems[existingItemIndex].quantity += localItem.quantity;
             } else {
-                // If the item doesn't exist in the Firebase cart, add it to the mergedItemsMap
-                mergedItemsMap.set(item.title, item);
+                firebaseCartItems.push(localItem);
             }
         });
-        // Convert the mergedItemsMap back to an array of items
-        const mergedCartItems = Array.from(mergedItemsMap.values());
-        // Update the cart in Firestore with the merged cart items
-        await setDoc(cartRef, { cart: mergedCartItems });
-        // Update the cart context with the merged cart items
-        updateUserCart(mergedCartItems);
-        // After successfully saving to Firebase, clear the local cart
+        await setDoc(userCartRef, { cart: [...firebaseCartItems] }); //Update the Firestore cart with mergedCartItems
+        updateUserCart([...firebaseCartItems]); // Update the cart context with the mergedCartItems
         dispatch(resetCart());
     };
 
-    const { updateUserOrders } = useOrders();
-
-    const fetchOrdersFromFirebase = async(user)=>{
-        const OrdersRef = doc(collection(db,'users',user.email,'orders'),user.uid);
+    const fetchOrdersFromFirebase = async (user) => {
+        const OrdersRef = doc(collection(db, 'users', user.email, 'orders'), user.uid);
         const docSnapshot = await getDoc(OrdersRef);
-        const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [] ;
+        const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [];
         updateUserOrders(firebaseOrders);
         dispatch(addToOrders(firebaseOrders));
     }
-
-    // const fetchOrdersFromFirebase = async (user) => {
-    //     const usersCollectionRef = collection(db, "users");
-    //     const userRef = doc(usersCollectionRef, user.email);
-    //     const userOrdersRef = collection(userRef, "orders");
-    //     const OrdersRef = doc(userOrdersRef, user.uid);
-    //     const docSnapshot = await getDoc(OrdersRef);
-    //     const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().orders : [];
-    //     updateUserOrders(firebaseOrders);
-    //     dispatch(addToOrders(firebaseOrders));
-    // }
 
     const fetchCancelOrdersFromFirebase = async (user) => {
         const userCancelOrdersRef = doc(collection(db, 'users', user.email, 'cancelOrders'), user.uid);
@@ -162,16 +113,6 @@ const SignIn = () => {
         dispatch(addTocancelOrders(firebaseCancelOrders));
     }
 
-    // const fetchCancelOrdersFromFirebase = async (user) => {
-    //     const usersCollectionRef = collection(db, "users");
-    //     const userRef = doc(usersCollectionRef, user.email);
-    //     const userCancelOrdersRef = collection(userRef, "cancelOrders");
-    //     const OrdersRef = doc(userCancelOrdersRef, user.uid);
-    //     const docSnapshot = await getDoc(OrdersRef);
-    //     const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().cancelOrders : [];
-    //     dispatch(addTocancelOrders(firebaseOrders));
-    // }
-
     const fetchReturnOrdersFromFirebase = async (user) => {
         const userReturnOrdersRef = doc(collection(db, 'users', user.email, 'returnOrders'), user.uid);
         const docSnapshot = await getDoc(userReturnOrdersRef);
@@ -179,15 +120,25 @@ const SignIn = () => {
         dispatch(addToreturnOrders(firebaseReturnOrders));
     }
 
-    // const fetchReturnOrdersFromFirebase = async(user)=>{
-    //     const usersCollectionRef = collection(db, "users");
-    //     const userRef = doc(usersCollectionRef, user.email);
-    //     const userReturnOrdersRef = collection(userRef, "returnOrders");
-    //     const OrdersRef = doc(userReturnOrdersRef, user.uid);
-    //     const docSnapshot = await getDoc(OrdersRef);
-    //     const firebaseOrders = docSnapshot.exists() ? docSnapshot.data().returnOrders : [];
-    //     dispatch(addToreturnOrders(firebaseOrders));
-    // }
+    const handleUser = (user) => {
+        dispatch(setUserInfo({
+            id: user.uid,
+            name: user.displayName,
+            email: user.email,
+            image: user.photoURL
+        }));
+        dispatch(setUserAuthentication(true));
+        saveUserDataToFirebase(user);
+        saveLocalCartToFirebase(user);
+        fetchOrdersFromFirebase(user);
+        fetchCancelOrdersFromFirebase(user);
+        fetchReturnOrdersFromFirebase(user);
+        setLoading(false);
+        setSuccessMsg("Successfully Logged-in! Welcome back.");
+        setTimeout(() => {
+            navigate(-1);
+        }, 2000);
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -199,23 +150,7 @@ const SignIn = () => {
         signInWithEmailAndPassword(auth, inputValue, passwordValue)
             .then((userCredential) => {
                 const user = userCredential.user;
-                dispatch(setUserInfo({
-                    id: user.uid,
-                    name: user.displayName,
-                    email: user.email,
-                    image: user.photoURL
-                }));
-                dispatch(setUserAuthentication(true));
-                saveLocalCartToFirebase(user);
-                fetchOrdersFromFirebase(user);
-                fetchCancelOrdersFromFirebase(user);
-                fetchReturnOrdersFromFirebase(user);
-                setLoading(false);
-                setSuccessMsg("Successfully Logged-in! Welcome back.");
-                setTimeout(() => {
-                    navigate(-1);
-                    // setSuccessMsg("");
-                }, 2000);
+                handleUser(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -229,54 +164,17 @@ const SignIn = () => {
                 if (errorCode.includes("auth/wrong-password")) {
                     setWarningPassword("There was a problem.Your password is incorrect");
                 }
-                console.log("Something is up ", errorCode);
             });
         setInputValue("");
         setPasswordValue("");
     }
 
-    const handleGoogle = (e) => {
-        e.preventDefault();
+    const handleGoogle = () => {
         signInWithPopup(auth, googleProvider)
             .then((result) => {
                 const user = result.user;
-                dispatch(setUserInfo({
-                    id: user.uid,
-                    name: user.displayName,
-                    email: user.email,
-                    image: user.photoURL
-                }));
-                dispatch(setUserAuthentication(true));
-                saveLocalCartToFirebase(user);
-                fetchOrdersFromFirebase(user);
-                fetchCancelOrdersFromFirebase(user);
-                fetchReturnOrdersFromFirebase(user);
-                const userRef = doc(db, "users", user.email);
-                getDoc(userRef)
-                    .then((docSnapshot) => {
-                        // console.log(docSnapshot);
-                        // console.log("!docSnapshot.exists()",!docSnapshot.exists());
-                        if (!docSnapshot.exists()) {
-                            // If the user data doesn't exist, save it to Firestore
-                            saveUserDataToFirebase(user);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error checking user data:", error);
-                    });
-                setLoading(false);
-                setSuccessMsg("Successfully Logged-in! Welcome back.");
-                setTimeout(() => {
-                    navigate(-1);
-                    // setSuccessMsg("");
-                }, 2000);
-            }).catch((error) => {
-                const errorCode = error.code;
-                console.log("error", errorCode)
-                // The email of the user's account used.
-                const email = error.customData.email;
-                console.log(email)
-            });
+                handleUser(user);
+            })
     }
 
     const handleFacebook = () => {
@@ -284,34 +182,7 @@ const SignIn = () => {
             .then((result) => {
                 const user = result.user;
                 user.emailVerified = true;
-                dispatch(setUserInfo({
-                    id: user.uid,
-                    name: user.displayName,
-                    email: user.email,
-                    image: user.photoURL
-                }));
-                dispatch(setUserAuthentication(true));
-                saveLocalCartToFirebase(user);
-                fetchOrdersFromFirebase(user);
-                fetchCancelOrdersFromFirebase(user);
-                fetchReturnOrdersFromFirebase(user);
-                const userRef = doc(db, "users", user.email);
-                getDoc(userRef)
-                    .then((docSnapshot) => {
-                        if (!docSnapshot.exists()) {
-                            // If the user data doesn't exist, save it to Firestore
-                            saveUserDataToFirebase(user);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error checking user data:", error);
-                    });
-                setLoading(false);
-                setSuccessMsg("Successfully Logged-in! Welcome back.");
-                setTimeout(() => {
-                    navigate(-1);
-                    // setSuccessMsg("");
-                }, 2000);
+                handleUser(user);
             })
             .catch((error) => {
                 // Check if the error is due to account linking
@@ -320,7 +191,6 @@ const SignIn = () => {
                     const email = error.customData.email;
                     fetchSignInMethodsForEmail(auth, email)
                         .then((methods) => {
-                            console.log(methods)
                             if (methods[0] === 'google.com') {
                                 signInWithPopup(auth, googleProvider)
                                     .then((userCredential) => {
@@ -329,34 +199,7 @@ const SignIn = () => {
                                             .then((result) => {
                                                 const user = result.user;
                                                 user.emailVerified = true;
-                                                dispatch(setUserInfo({
-                                                    id: user.uid,
-                                                    name: user.displayName,
-                                                    email: user.email,
-                                                    image: user.photoURL
-                                                }));
-                                                dispatch(setUserAuthentication(true));
-                                                saveLocalCartToFirebase(user);
-                                                fetchOrdersFromFirebase(user);
-                                                fetchCancelOrdersFromFirebase(user);
-                                                fetchReturnOrdersFromFirebase(user);
-                                                const userRef = doc(db, "users", user.email);
-                                                getDoc(userRef)
-                                                    .then((docSnapshot) => {
-                                                        if (!docSnapshot.exists()) {
-                                                            // If the user data doesn't exist, save it to Firestore
-                                                            saveUserDataToFirebase(user);
-                                                        }
-                                                    })
-                                                    .catch((error) => {
-                                                        console.error("Error checking user data:", error);
-                                                    });
-                                                setLoading(false);
-                                                setSuccessMsg("Successfully Logged-in! Welcome back.");
-                                                setTimeout(() => {
-                                                    navigate(-1);
-                                                    // setSuccessMsg("");
-                                                }, 2000);
+                                                handleUser(user);
                                             });
                                     })
                             }
@@ -369,24 +212,7 @@ const SignIn = () => {
                                             .then((result) => {
                                                 const user = result.user;
                                                 user.emailVerified = true;
-                                                dispatch(setUserInfo({
-                                                    id: user.uid,
-                                                    name: user.displayName,
-                                                    email: user.email,
-                                                    image: user.photoURL
-                                                }));
-                                                dispatch(setUserAuthentication(true));
-                                                saveUserDataToFirebase(user);
-                                                saveLocalCartToFirebase(user);
-                                                fetchOrdersFromFirebase(user);
-                                                fetchCancelOrdersFromFirebase(user);
-                                                fetchReturnOrdersFromFirebase(user);
-                                                setLoading(false);
-                                                setSuccessMsg("Successfully Logged-in! Welcome back.");
-                                                setTimeout(() => {
-                                                    navigate(-1);
-                                                    // setSuccessMsg("");
-                                                }, 2000);
+                                                handleUser(user);
                                             });
                                     })
                             }
@@ -438,9 +264,9 @@ const SignIn = () => {
                                     </div>
                                     <form className='mt-2 mb-3' onSubmit={handleSubmit}>
                                         <label className='text-sm font-semibold'>
-                                            Email or mobile number
+                                            Email address
                                             <input type="text" autoComplete="true" value={inputValue} onChange={(e) => {
-                                                setInputValue(e.target.value);
+                                                setInputValue(e.target.value.toString().toLowerCase());
                                                 setUserEmailError("");
                                             }} className='w-full border-[1px] border-[#a6a6a6] rounded p-1' />
                                         </label>
@@ -476,11 +302,9 @@ const SignIn = () => {
                                                 />
                                             </div>
                                         }
-
                                     </form>
                                 </div>
                         }
-
                         <div className='text-xs tracking-wide '>
                             <span className=''>
                                 By continuing, you agree to Amazon's
@@ -515,8 +339,6 @@ const SignIn = () => {
                 <div className='text-sm text-gray-500 my-4'>
                     New to Amazon?
                 </div>
-
-
                 <div className='w-80 text-[12px] font-medium tracking-wide text-center border-[1px] rounded-lg p-[5px] hover:bg-gray-100 mb-7 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500'>
                     <Link to="/createAccount">
                         <div>Create your Amazon account</div>
@@ -532,7 +354,6 @@ const SignIn = () => {
             <div className='text-xs tracking-wider text-black flex justify-center mt-[4px] pb-16'>
                 © 1996-2023, Amazon.com, Inc. or its affiliates
             </div>
-            <ScrollToTop />
         </div>
     )
 };

@@ -3,8 +3,6 @@ import { ScrollRestoration, useNavigate, Link } from 'react-router-dom';
 import { star } from "../../assets/index";
 import Product from './Product';
 import { useParams,useLoaderData } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-
 
 const Products = () => {
   const navigate = useNavigate();
@@ -42,8 +40,7 @@ const Products = () => {
   // Function to handle the star rating filter
   const handleStarFilter = (selectedRating) => {
     if (starRange === selectedRating) {
-      // Clicking on the same rating again, unselect
-      setStarRange("");
+      setStarRange(""); // Clicking on the same rating again, unselect
     } else {
       setStarRange(selectedRating);
     }

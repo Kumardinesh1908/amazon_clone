@@ -6,14 +6,7 @@ export const sidebarData = [
   },
   {
     category: 'Digital Content And Devices',
-    subcategories: [
-      'Echo & Alexa',
-      'Fire TV',
-      'Kindle E-Readers & eBooks',
-      'Audible AudioBooks',
-      'Amazon Prime Video',
-      'Amazon Prime Music',
-    ],
+    subcategories: ['Echo & Alexa','Fire TV','Kindle E-Readers & eBooks','Audible AudioBooks','Amazon Prime Video','Amazon Prime Music',],
   },
   {
     category: 'Shop By Category',

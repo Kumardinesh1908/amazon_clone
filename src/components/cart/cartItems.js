@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { correct } from '../../assets/index';
 import { deleteProduct, resetCart, increaseQuantity, decreaseQuantity } from '../../redux/amazonSlice';
-import { useNavigate,useLoaderData,Link, ScrollRestoration } from 'react-router-dom';
+import { useNavigate, useLoaderData, Link, ScrollRestoration } from 'react-router-dom';
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase.config";
 import { useCart } from '../../context/userCartContext';
+import CartProduct from './cartProduct';
 
 const CartItems = () => {
+    const navigate = useNavigate();
     const data = useLoaderData();
     const productsData = data.data.products;
     const dispatch = useDispatch();
@@ -42,27 +44,21 @@ const CartItems = () => {
 
     }, [localCartProducts, userCart]);
 
-    const navigate = useNavigate();
     const handleCategoryClick = (category, title) => {
         navigate(`/${category}/${title}`); // Navigate to the products page with the selected category as a URL parameter
     };
 
     // Function to decrease the quantity of a product in the user's Firebase cart
     const handleDecreaseQuantity = async (productTitle) => {
-        // Fetch the user's cart from Firebase
         const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
         const docSnapshot = await getDoc(userCartRef);
         if (docSnapshot.exists()) {
             const userCartData = docSnapshot.data().cart;
-            // Find the index of the product in the cart
             const productIndex = userCartData.findIndex(product => product.title === productTitle);
             if (productIndex !== -1) {
-                // Ensure that the quantity doesn't go below 1
                 if (userCartData[productIndex].quantity > 1) {
                     userCartData[productIndex].quantity -= 1;
-                    // Update the cart data in Firebase
                     await setDoc(userCartRef, { cart: userCartData }, { merge: true });
-                    // Update the userCart using the prop function to reflect the change immediately
                     const updatedUserCart = userCart.map(product =>
                         product.title === productTitle
                             ? { ...product, quantity: product.quantity - 1 }
@@ -76,19 +72,14 @@ const CartItems = () => {
 
     // Function to increase the quantity of a product in the user's Firebase cart
     const handleIncreaseQuantity = async (productTitle) => {
-        // Fetch the user's cart from Firebase
         const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
         const docSnapshot = await getDoc(userCartRef);
         if (docSnapshot.exists()) {
             const userCartData = docSnapshot.data().cart;
-            // Find the index of the product in the cart
             const productIndex = userCartData.findIndex(product => product.title === productTitle);
             if (productIndex !== -1) {
-                // Increase the quantity of the product
                 userCartData[productIndex].quantity += 1;
-                // Update the cart data in Firebase
                 await setDoc(userCartRef, { cart: userCartData }, { merge: true });
-                // Update the userCart using the prop function to reflect the change immediately
                 const updatedUserCart = userCart.map(product =>
                     product.title === productTitle
                         ? { ...product, quantity: product.quantity + 1 }
@@ -101,19 +92,12 @@ const CartItems = () => {
 
     // Function to delete a product from the user's Firebase cart
     const handleDeleteProduct = async (productTitle) => {
-        // Reference to the user's cart document in Firestore
         const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
-        // Get a snapshot of the user's cart document
         const docSnapshot = await getDoc(userCartRef);
-        // Check if the cart document exists
         if (docSnapshot.exists()) {
-            // Get the cart data from the snapshot
             const userCartData = docSnapshot.data().cart;
-            // Filter out the product with the specified title from the cart
             const updatedCart = userCartData.filter(product => product.title !== productTitle);
-            // Update the cart data in Firestore with the filtered cart
             await updateDoc(userCartRef, { cart: updatedCart });
-            // Update the userCart state to reflect the change immediately on the UI
             const updatedUserCart = userCart.filter(product => product.title !== productTitle);
             updateUserCart(updatedUserCart);
         }
@@ -122,14 +106,9 @@ const CartItems = () => {
     // Function to clear the cartItem
     const handleClearCart = async () => {
         if (authenticated) {
-            // If user is signed in and clear the Firebase cart 
-            try {
-                const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
-                await setDoc(userCartRef, { cart: [] }, { merge: true }); // Clear the cart by setting an empty array
-                updateUserCart([]); // Clear the userCart state immediately
-            } catch (error) {
-                console.error("Error clearing Firebase cart:", error);
-            }
+            const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
+            await setDoc(userCartRef, { cart: [] }, { merge: true });
+            updateUserCart([]);
         } else {
             // If user is not signed in, only clear the Redux cart
             dispatch(resetCart());
@@ -148,33 +127,14 @@ const CartItems = () => {
                         <div ref={cartRef}>
                             {
                                 userCart.map((product, index) => (
-                                    <div key={index} className='w-full border-b-[1px] border-b-gray-200 p-4 flex gap-6' >
-                                        <div className='w-1/5 cursor-pointer' onClick={() => handleCategoryClick(product.category, product.title)}>
-                                            <img className='w-48 h-48' src={product.thumbnail} alt="productImage" />
-                                        </div>
-                                        <div className='w-4/5 flex flex-col gap-2 -mt-2'>
-                                            <h2 className='text-[23px] font-medium cursor-pointer' onClick={() => handleCategoryClick(product.category, product.title)}>{product.title}</h2>
-                                            <p className=''>{product.description}</p>
-                                            <div className='flex items-center '>
-                                                <p className='font-medium text-[20px] '>₹&nbsp;</p>
-                                                <span className='text-[26px] font-medium'>{product.price}.00</span>
-                                            </div>
-                                            <p className='text-green-700'>In stock</p>
-                                            <div className='flex flex-row gap-5'>
-                                                <p className='capitalize'>Sold by : {product.brand}</p>
-                                                <p className='border-l-[1px] pl-5 border-gray-200 capitalize'>Category : {product.category}</p>
-                                            </div>
-                                            <div className='flex flex-row justify-between gap-5 mt-2'>
-                                                <div className='flex items-center justify-center  '>
-                                                    Qty :&nbsp;&nbsp;
-                                                    <p onClick={() => handleDecreaseQuantity(product.title)} className='px-2 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-400 duration'>-</p>
-                                                    <p className='font-semibold text-[20px]'>&nbsp;{product.quantity}&nbsp;</p>
-                                                    <p onClick={() => handleIncreaseQuantity(product.title)} className='px-2 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-400 duration'>+</p>
-                                                </div>
-                                                <button onClick={() => handleDeleteProduct(product.title)} className='text-blue-600 '>Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <CartProduct
+                                        key={index}
+                                        product={product}
+                                        handleCategoryClick={handleCategoryClick}
+                                        handleDecreaseQuantity={() => handleDecreaseQuantity(product.title)}
+                                        handleIncreaseQuantity={() => handleIncreaseQuantity(product.title)}
+                                        handleDeleteProduct={() => handleDeleteProduct(product.title)}
+                                      />
                                 ))
                             }
                         </div>
@@ -182,33 +142,14 @@ const CartItems = () => {
                         <div ref={cartRef}>
                             {
                                 localCartProducts.map((product, index) => (
-                                    <div key={index} className='w-full border-b-[1px] border-b-gray-200 p-4 flex gap-6' >
-                                        <div className='w-1/5 cursor-pointer' onClick={() => handleCategoryClick(product.category, product.title)}>
-                                            <img className='w-48 h-48' src={product.thumbnail} alt="productImage" />
-                                        </div>
-                                        <div className='w-4/5 flex flex-col gap-2 -mt-2'>
-                                            <h2 className='text-[23px] font-medium cursor-pointer' onClick={() => handleCategoryClick(product.category, product.title)}>{product.title}</h2>
-                                            <p className=''>{product.description}</p>
-                                            <div className='flex items-center '>
-                                                <p className='font-medium text-[20px] '>₹&nbsp;</p>
-                                                <span className='text-[26px] font-medium'>{product.price}.00</span>
-                                            </div>
-                                            <p className='text-green-700'>In stock</p>
-                                            <div className='flex flex-row gap-5'>
-                                                <p className='capitalize'>Sold by : {product.brand}</p>
-                                                <p className='border-l-[1px] pl-5 border-gray-200 capitalize'>Category : {product.category}</p>
-                                            </div>
-                                            <div className='flex flex-row justify-between gap-5 mt-2'>
-                                                <div className='flex items-center justify-center  '>
-                                                    Qty :&nbsp;&nbsp;
-                                                    <p onClick={() => dispatch(decreaseQuantity(product.title))} className='px-2 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-400 duration'>-</p>
-                                                    <p className='font-semibold text-[20px]'>&nbsp;{product.quantity}&nbsp;</p>
-                                                    <p onClick={() => dispatch(increaseQuantity(product.title))} className='px-2 cursor-pointer bg-gray-200 rounded-md hover:bg-gray-400 duration'>+</p>
-                                                </div>
-                                                <button onClick={() => dispatch(deleteProduct(product.title))} className='text-blue-600 '>Delete</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <CartProduct
+                                        key={index}
+                                        product={product}
+                                        handleCategoryClick={handleCategoryClick}
+                                        handleDecreaseQuantity={() => dispatch(decreaseQuantity(product.title))}
+                                        handleIncreaseQuantity={() => dispatch(increaseQuantity(product.title))}
+                                        handleDeleteProduct={() => dispatch(deleteProduct(product.title))}
+                                      />
                                 ))
                             }
                         </div>
@@ -250,12 +191,12 @@ const CartItems = () => {
                     {
                         authenticated
                             ? <Link to="/checkout">
-                                <button className={`pt-2 w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+                                <button className={`pt-2 w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
                                     Proceed to Buy
                                 </button>
                             </Link>
                             : <Link to="/signIn">
-                                <button className={`pt-2 w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 shadow active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
+                                <button className={`pt-2 w-full text-center rounded-lg bg-yellow-300 hover:bg-yellow-400 p-[4px] mt-3 active:ring-2 active:ring-offset-1 active:ring-blue-500`}>
                                     Proceed to Buy
                                 </button>
                             </Link>

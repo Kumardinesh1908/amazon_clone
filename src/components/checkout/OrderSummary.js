@@ -61,9 +61,7 @@ const OrderSummary = () => {
   };
 
   const makePayment = async () => {
-    if (selectedPayment === "cash on Delivery") {
       const uniqueNumber = generateUniqueNumber(); // Generate a unique number
-
       if (product) {
         const productOrderDetails = {
           uniqueNumber,
@@ -83,10 +81,9 @@ const OrderSummary = () => {
           quantity: product.quantity,
           date: new Date().toISOString(),
         };
-
-        dispatch(addToOrders([...orders, productOrderDetails])); // Append the new order to existing orders
-        updateUserOrders([...orders, productOrderDetails]); // Append the new order to existing orders
-        await saveOrderToFirebase([...orders, productOrderDetails]); // Save the updated orders to Firebase
+        dispatch(addToOrders([...orders, productOrderDetails]));
+        updateUserOrders([...orders, productOrderDetails]);
+        await saveOrderToFirebase([...orders, productOrderDetails]);
       } else {
         const updatedCart = userCart.map((cartItem) => ({
           ...cartItem,
@@ -98,16 +95,12 @@ const OrderSummary = () => {
         dispatch(addToOrders([...orders, ...updatedCart]));
         updateUserOrders([...orders, ...updatedCart]);
         await saveOrderToFirebase([...orders, ...updatedCart]);
-
         const userCartRef = doc(collection(db, 'users', userInfo.email, 'cart'), userInfo.id);
-        await setDoc(userCartRef, { cart: [] }, { merge: true }); // Clear the cart by setting an empty array
-        updateUserCart([]); // Clear the userCart state immediately
+        await setDoc(userCartRef, { cart: [] }, { merge: true });
+        updateUserCart([]);
       }
-
-      // Also reset the buyNowProduct
       resetBuyNow();
       navigate("/orders");
-    }
   };
 
   // Function to save an order to Firebase orders
@@ -116,12 +109,7 @@ const OrderSummary = () => {
     const userRef = doc(usersCollectionRef, userInfo.email);
     const userOrdersRef = collection(userRef, "orders");
     const OrdersRef = doc(userOrdersRef, userInfo.id);
-    try {
-      // Update the Firebase document with the updated orders
       await setDoc(OrdersRef, { orders: order }, { merge: true });
-    } catch (error) {
-      console.error('Error saving orders to Firebase:', error);
-    }
   };
 
   return (

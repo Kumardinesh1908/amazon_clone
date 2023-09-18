@@ -8,15 +8,11 @@ import { useSelector } from "react-redux";
 import { useAddress } from '../../context/userAddressContext';
 
 
-const AddressForm = ({setShowAddressForm}) => {
-
-    // state to hold userInfo from redustoolkit 
+const AddressForm = ({ setShowAddressForm }) => {
     const userInfo = useSelector((state) => state.amazon.userInfo);
+    const { updateUserAddress } = useAddress();
 
-    // Get the userAddress and updateUserAddress function from the context
-    const {  updateUserAddress } = useAddress();
-
-    //  State to hold user addresses
+    //  States to hold user addresses
     const [nameInput, setNameInput] = useState("");
     const [addressInput, setAddressInput] = useState("");
     const [mobileInput, setMobileInput] = useState("");
@@ -27,7 +23,7 @@ const AddressForm = ({setShowAddressForm}) => {
     const [stateInput, setStateInput] = useState("");
     const countryInput = "India";
 
-    //  states to show error during form submistion
+    //  states to show error during form submission
     const [nameError, setNameError] = useState("");
     const [mobileError, setMobileError] = useState("");
     const [pincodeError, setPincodeError] = useState("");
@@ -48,7 +44,7 @@ const AddressForm = ({setShowAddressForm}) => {
         const reqPincode = /^[0-9]{6}$/;
         let isValid = true;
 
-        // Validate name -1
+        // Validate name - 1
         if (nameInput === "") {
             setNameError("Please enter a name.");
             isValid = false;
@@ -60,7 +56,7 @@ const AddressForm = ({setShowAddressForm}) => {
                 isValid = false;
             }
         }
-        // Validate mobile number -1 
+        // Validate mobile number - 1 
         if (mobileInput === "") {
             setMobileError("Please enter a phone number so we can call if there are any issues with delivery.");
             isValid = false;
@@ -102,7 +98,7 @@ const AddressForm = ({setShowAddressForm}) => {
             isValid = false;
         }
         // validate state
-        if(stateInput === ""){
+        if (stateInput === "") {
             setStateError("please select your state");
             isValid = false;
         }
@@ -110,42 +106,27 @@ const AddressForm = ({setShowAddressForm}) => {
         return isValid;
     }
 
-    // This is a function to save a user's shipping address to Firebase.
+    // function to save a user's shipping address to Firebase.
     const saveShippingAddressToFirebase = async (userInfo, shippingAddress) => {
-        // Get a reference to the "users" collection in Firebase.
-        const usersCollectionRef = collection(db, "users");
-        // Get a reference to the document (user) using the user's email.
-        const userRef = doc(usersCollectionRef, userInfo.email);
+        const addressRef = doc(collection(db, 'users', userInfo.email, 'shippingAddresses'), userInfo.id);
         try {
-            // Get a reference to the "shippingAddresses" subcollection within the user's document.
-            const shippingAddressesCollectionRef = collection(userRef, "shippingAddresses");// Get a reference to the specific address document using the user's ID.
-            const addressRef = doc(shippingAddressesCollectionRef, userInfo.id);
-            // Retrieve the current data (snapshot) of the address document.
             const addressRefSnapshot = await getDoc(addressRef);
-            // Check if the address document already exists.
             if (!addressRefSnapshot.exists()) {
-                // If it doesn't exist, create a new document with the provided shipping address.
                 await setDoc(addressRef, { Addresses: [shippingAddress] }, { merge: true });
-                // Update the userAddress context with the new shipping address
                 updateUserAddress([shippingAddress]);
-                setLoading(false); // Update loading status
-                setSuccessMsg("Shipping address saved successfully"); // Set success message
-                setShowAddressForm(false); // to show userAddresses after saving the address
+                setLoading(false);
+                setSuccessMsg("Shipping address saved successfully");
+                setShowAddressForm(false);
             } else {
-                // If the address document exists, get the existing addresses from the snapshot.
                 const firebaseAddresses = addressRefSnapshot.data().Addresses || [];
-                // Add the new shipping address to the existing addresses.
                 const updatedAddresses = [...firebaseAddresses, shippingAddress];
-                // Update the document with the updated addresses.
                 await setDoc(addressRef, { Addresses: updatedAddresses }, { merge: true });
-                // Update the userAddress context with the updated addresses
                 updateUserAddress(updatedAddresses);
-                setLoading(false); // Update loading status
-                setSuccessMsg("Shipping address saved successfully"); // Set success message
-                setShowAddressForm(false); // to show userAddresses after saving the address
+                setLoading(false);
+                setSuccessMsg("Shipping address saved successfully");
+                setShowAddressForm(false);
             }
         } catch (error) {
-            // If an error occurs, update the loading status and set the error message.
             setLoading(false);
             setErrorMsg(error.message);
         }

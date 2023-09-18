@@ -1,12 +1,8 @@
-// yxyY3BFdEwIuNn8wwH5YgZlr
-
 import React, { useState } from "react";
-// import CardDetails from "./cardDetails";
 import { useAddress } from '../../context/userAddressContext';
-// import { CardElement, useStripe } from "react-stripe-js";
+// import CardDetails from "./cardDetails";
 
 const PaymentMethod = () => {
-
     const { updateSelectedPayment } = useAddress();
 
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -22,7 +18,7 @@ const PaymentMethod = () => {
             <div className="w-full flex justify-end">
                 <div className="w-[96%] border-[1px] border-gray-400 rounded-lg mt-1 px-4 py-3">
                     <p className="text-lg font-semibold border-b border-gray-400">Payment methods</p>
-                    <div className="flex flex-col gap-4 mt-2 font-semibold">
+                    <div className="flex flex-col gap-4 mt-2 font-semibold px-4">
                         <label className="inline-flex items-center">
                             <input type="radio" name="paymentMethod" value="Credit/Debit Card" onChange={handleSelectPaymentMethod} />
                             <span className="ml-2">Credit or debit card</span>

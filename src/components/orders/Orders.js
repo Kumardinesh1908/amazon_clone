@@ -86,19 +86,19 @@ const Orders = () => {
   }
 
   return (
-    <div className='w-full relative py-6 flex flex-col gap-5 bg-white pl-[17%]'>
-      <div className='w-full h-10 flex gap-7'>
-        <p className={`font-semibold text-2xl cursor-pointer ${showOrders ? "text-blue-500" : ""}`} onClick={() => {
+    <div className='w-full relative py-6 flex flex-col gap-5 bg-white '>
+      <div className='w-full h-10 flex gap-7 pl-[8%] mdl:pl-[15%] text-base mdl:text-2xl'>
+        <p className={`font-semibold cursor-pointer border-r-2 pr-3 mdl:pr-6 ${showOrders ? "text-blue-500" : ""}`} onClick={() => {
           setShowOrders(true);
           setShowCancelOrders(false);
           setShowReturnOrders(false);
         }}>Your Orders</p>
-        <p className={`font-semibold text-2xl cursor-pointer ${showCancelOrders ? "text-blue-500" : ""}`} onClick={() => {
+        <p className={`font-semibold cursor-pointer border-r-2 pr-3 mdl:pr-6 ${showCancelOrders ? "text-blue-500" : ""}`} onClick={() => {
           setShowOrders(false);
           setShowCancelOrders(true);
           setShowReturnOrders(false);
         }}>Cancelled Orders</p>
-        <p className={`font-semibold text-2xl cursor-pointer ${showReturnOrders ? "text-blue-500" : ""}`} onClick={() => {
+        <p className={`font-semibold cursor-pointer ${showReturnOrders ? "text-blue-500" : ""}`} onClick={() => {
           setShowOrders(false);
           setShowCancelOrders(false);
           setShowReturnOrders(true);
@@ -106,8 +106,8 @@ const Orders = () => {
       </div>
 
       {showOrders && <OrderDetails ordersData={reversedOrders} reversedOrders={reversedOrders} handleCancelOrder={handleCancelOrder} handleReturnOrder={handleReturnOrder} />}
-      {showCancelOrders && <OrderDetails ordersData={reversedCancelOrders}/>}
-      {showReturnOrders && <OrderDetails ordersData={reversedReturnOrders}/>}
+      {showCancelOrders && <OrderDetails ordersData={reversedCancelOrders} />}
+      {showReturnOrders && <OrderDetails ordersData={reversedReturnOrders} />}
 
     </div >
   )

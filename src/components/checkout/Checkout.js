@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 import { logoBlack } from '../../assets/index';
@@ -14,6 +14,11 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const { userAddress } = useAddress();
   const [showAddressForm, setShowAddressForm] = useState(userAddress.length === 0);
+
+  // Use useEffect to update showAddressForm when userAddress changes
+  useEffect(() => {
+    setShowAddressForm(userAddress.length === 0);
+  }, [userAddress]);
 
   return (
     <div className='w-full h-full '>
