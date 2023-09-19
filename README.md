@@ -34,6 +34,7 @@ Check out the live demo (https://amazon-clone-kumardinesh1908.vercel.app).
 - Framer Motion
 
 ## Folder Structure
+```
 amazon-clone/
 ├── node_modules/
 ├── public/
@@ -104,3 +105,4 @@ amazon-clone/
 │   └── index.css
 ├── tailwind.config.js
 └── README.md
+```
