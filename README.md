@@ -13,20 +13,6 @@ The Amazon Clone is a feature-rich, fully functional e-commerce web application 
 - **Animations:** Engage with stunning animations and transitions powered by Framer Motion.
 - **Redux State Management:** Efficiently manage app state with Redux Toolkit.
 
-## Installation
-1. Clone this repository: `git clone https://github.com/kumardinesh1908/amazon-clone.git`
-2. Install dependencies: `npm install`
-3. Start the development server: `npm start`
-
-## Usage
-1. Visit the live demo or run the app locally.
-2. Browse products, add items to your cart, and proceed to checkout.
-3. Sign in or create an account for a personalized experience.
-4. Enjoy a smooth and intuitive shopping experience!
-
-## Demo
-Check out the live demo (https://amazon-clone-kumardinesh1908.vercel.app).
-
 ## Technologies Used
 - React
 - Tailwind CSS
@@ -106,3 +92,17 @@ amazon-clone/
 ├── tailwind.config.js
 └── README.md
 ```
+
+## Installation
+1. Clone this repository: `git clone https://github.com/kumardinesh1908/amazon-clone.git`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
+
+## Usage
+1. Visit the live demo or run the app locally.
+2. Browse products, add items to your cart, and proceed to checkout.
+3. Sign in or create an account for a personalized experience.
+4. Enjoy a smooth and intuitive shopping experience!
+
+## Demo
+Check out the live demo (https://amazon-clone-kumardinesh1908.vercel.app).
