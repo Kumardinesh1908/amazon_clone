@@ -1,70 +1,106 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Amazon Clone
+A fully functional Amazon clone built with React, Tailwind CSS, Redux Toolkit, Framer Motion, and more!
 
-## Available Scripts
+## Features
+- **Product Listings:** Browse a wide range of products with detailed descriptions and prices.
+- **User Authentication:** Sign in with your Amazon account or create a new one.
+- **Add to Cart:** Easily add products to your cart for a seamless shopping experience.
+- **Real-Time Updates:** See live updates to your cart and totals as you shop.
+- **Secure Checkout:** Safely complete your purchase with payment processing.
+- **Loading Spinner:** Enjoy smooth user interactions with loading spinners for enhanced UX.
+- **Responsive Design:** The app is optimized for various screen sizes and devices.
+- **Animations:** Engage with stunning animations and transitions powered by Framer Motion.
+- **Redux State Management:** Efficiently manage app state with Redux Toolkit.
 
-In the project directory, you can run:
+## Installation
+1. Clone this repository: `git clone https://github.com/kumardinesh1908/amazon-clone.git`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm start`
 
-### `npm start`
+## Usage
+1. Visit the live demo or run the app locally.
+2. Browse products, add items to your cart, and proceed to checkout.
+3. Sign in or create an account for a personalized experience.
+4. Enjoy a smooth and intuitive shopping experience!
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Demo
+Check out the live demo (https://amazon-clone-kumardinesh1908.vercel.app).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies Used
+- React
+- Tailwind CSS
+- Redux Toolkit
+- Framer Motion
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Folder Structure
+amazon-clone/
+├── node_modules/
+├── public/
+│   ├── index.html
+│   └── ... (other public assets)
+├── src/
+│   ├── api/
+│   │   └── api.js
+│   ├── assets/
+│   │   └── index.js
+│   ├── components/
+│   │   ├── cart/
+│   │   │   ├── cart.js
+│   │   │   ├── cartItems.js
+│   │   │   ├── cartProduct.js
+│   │   │   └── emptyCart.js
+│   │   ├── checkout/
+│   │   │   ├── addressForm.js
+│   │   │   ├── cardDetails.js
+│   │   │   ├── checkout.js
+│   │   │   ├── OrderSummary.js
+│   │   │   ├── PaymentMethods.js
+│   │   │   └── userAddresses.js
+│   │   ├── error/
+│   │   │   └── error.js
+│   │   ├── footer/
+│   │   │   ├── footer.js
+│   │   │   ├── footerTop.js
+│   │   │   ├── footerMiddle.js
+│   │   │   ├── footerMiddleList.js
+│   │   │   └── footerBottom.js
+│   │   ├── header/
+│   │   │   ├── header.js
+│   │   │   ├── headerBottom.js
+│   │   │   ├── location.js
+│   │   │   ├── search.js
+│   │   │   └── sideNavContent.js
+│   │   ├── home/
+│   │   │   ├── Category.js
+│   │   │   ├── Home.js
+│   │   │   ├── ProductsSlider.js
+│   │   │   ├── scrollBar.css
+│   │   │   └── slider.js
+│   │   ├── login/
+│   │   │   ├── createAccount.js
+│   │   │   ├── forgotPassword.js
+│   │   │   └── signIn.js
+│   │   ├── orders/
+│   │   │   ├── orderDetails.js
+│   │   │   └── Orders.js
+│   │   └── products/
+│   │       ├── Product.js
+│   │       ├── ProductDetails.js
+│   │       └── Products.js
+│   ├── constants/
+│   │   └── index.js
+│   ├── contexts/
+│   │   ├── userAddressContext.js
+│   │   ├── userCartContext.js
+│   │   └── userAddressContext.js
+│   ├── firebase/
+│   │   └── firebase.config.js
+│   ├── redux/
+│   │   ├── amazonSlice.js
+│   │   └── store.js
+│   ├── app.js
+│   ├── index.js
+│   └── index.css
+├── tailwind.config.js
+└── README.md
