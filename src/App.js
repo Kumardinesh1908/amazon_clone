@@ -86,7 +86,7 @@ function App() {
           path: "/orders",
           loader: productsData,
           element: <Orders />,
-        }
+        },
       ],
     },
     {

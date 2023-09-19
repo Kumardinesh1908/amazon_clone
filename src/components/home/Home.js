@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from './slider';
-import Category from "../category/Category";
+import Category from "./Category";
 import ProductsSlider from "./ProductsSlider";
 import { ScrollRestoration } from 'react-router-dom';
 

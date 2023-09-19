@@ -87,10 +87,10 @@ const Search = () => {
                 {showSearch && searchInput.length > 2 &&
                     <div >
                         {searchResults.length === 0 
-                        ? <p className="w-[108.5%] pl-2 py-[6px] text-[#0f1111] text-[17px]  bg-white border-[1px] border-gray-400 z-50">
+                        ? <p className="w-[107.6%] pl-2 py-[6px] text-[#0f1111] text-[17px]  bg-white border-[1px] border-gray-400 z-50">
                                 No results found.
                             </p> 
-                        : <ul className="w-[108.5%] h-auto max-h-80 text-black bg-white border-[1px] border-gray-400 z-50 custom-scrollbar overflow-y-hidden hover:overflow-y-scroll">
+                        : <ul className="w-[107.6%] h-auto max-h-80 text-black bg-white border-[1px] border-gray-400 z-50 custom-scrollbar overflow-y-hidden hover:overflow-y-scroll">
                                 {searchResults.map((result, index) => (
                                     <li
                                         className="hover:bg-gray-100 pl-2 py-[6px] text-[#0f1111] text-[17px] font-bold cursor-pointer"

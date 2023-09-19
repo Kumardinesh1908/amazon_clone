@@ -100,6 +100,7 @@ const Location = () => {
     // function to auto detect your location
     function getLocation() {
         setWarning("");
+        setAutoLocationWarning("");
         setAutoLocationLoading(true);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -108,7 +109,7 @@ const Location = () => {
                     const longitude = position.coords.longitude;
                     try {
                         const response = await axios.get(
-                            `http://api.geonames.org/findNearbyPostalCodesJSON?lat=${latitude}&lng=${longitude}&username=kumardinesh1908`
+                            `https://secure.geonames.org/findNearbyPostalCodesJSON?lat=${latitude}&lng=${longitude}&username=kumardinesh1908`
                         );
                         if (response.data.postalCodes[0] != null) {
                             const locationPincode = response.data.postalCodes[0].postalCode;
@@ -157,7 +158,7 @@ const Location = () => {
                         <form className=" p-4 flex flex-col gap-5" onSubmit={handleSubmit}>
                             <p className="text-xs text-gray-400">Enter an Indian pincode to see product availability and delivery options for your location.</p>
                             <div className="flex justify-center" >
-                                <input type="text" maxLength={6} placeholder="Enter a 6-digit ZIP code" className="w-[65%] border-[1px] border-[#a6a6a6] rounded p-1 font-medium"
+                                <input type="text" maxLength={6} placeholder="Enter 6-digit ZIP code" className="w-[65%] border-[1px] border-[#a6a6a6] rounded p-1 font-medium"
                                     onChange={(e) => { setUserZipCode(e.target.value); setWarning("");setAutoLocationWarning("") }} />
                                 <button className="w-[33%] p-2 ml-2 text-center font-medium rounded-md bg-gray-200 border-[0.066rem] border-gray-300 hover:bg-gray-300 active:ring-2 active:ring-offset-1 active:ring-blue-500"> Apply</button>
                             </div>
