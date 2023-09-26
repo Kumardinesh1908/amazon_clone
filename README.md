@@ -3,22 +3,24 @@
 The Amazon Clone is a feature-rich, fully functional e-commerce web application developed using cutting-edge technologies. It faithfully replicates the shopping experience found on the popular Amazon platform. This project leverages React, Tailwind CSS, Redux Toolkit, Firebase, Framer Motion, and other modern tools to create a seamless and user-friendly shopping environment.
 
 ## Features
-- **Product Listings:** Browse a wide range of products with detailed descriptions and prices.
-- **User Authentication:** Sign in with your Amazon account or create a new one.
-- **Add to Cart:** Easily add products to your cart for a seamless shopping experience.
-- **Real-Time Updates:** See live updates to your cart and totals as you shop.
-- **Secure Checkout:** Safely complete your purchase with payment processing.
-- **Loading Spinner:** Enjoy smooth user interactions with loading spinners for enhanced UX.
-- **Responsive Design:** The app is optimized for various screen sizes and devices.
-- **Animations:** Engage with stunning animations and transitions powered by Framer Motion.
-- **Redux State Management:** Efficiently manage app state with Redux Toolkit.
+- **Product Listings:** Explore a vast array of products with comprehensive details, including high-quality images, detailed descriptions, prices, and customer rating, making it easy to make informed choices.
+- **Product Search:** Effortlessly find your desired items by using intuitive search functionality, allowing you to discover products via keywords, names, or even barcodes.
+- **User Registration and Login:** Create a personalized shopping experience by registering an account, where you can save preferences, track orders, and access exclusive offers.
+- **Add, Delete, and Edit Cart:** Seamlessly manage your shopping cart, allowing you to add, remove, or adjust the quantity of items as you shop, ensuring a hassle-free checkout process.
+- **Filter based on Rating, Price, and Category:** Enhance your shopping efficiency by applying filters to refine search results, making it simple to find products that match your specific criteria.
+- **Sort based on High, Low, and Rating:** Tailor your shopping experience by sorting products based on various parameters such as price (high to low or low to high) and customer ratings.
+- **Order History, Cancel, and Return Order:** Keep track of your past orders, and if necessary, easily manage order cancellations and returns, ensuring a stress-free shopping journey..
+- **Save Multiple Addresses:** Enjoy the convenience of saving multiple shipping addresses for different locations, such as home, work, or gift destinations.
+- **Responsive Design:** Experience a user-friendly interface that adapts seamlessly to various devices, ensuring a consistent and visually pleasing shopping experience on smartphones, tablets, and computers.
 - **Firebase Integration:** Harness the power of Firebase to store and retrieve data with Firestore, Firebase's real-time NoSQL database. Firebase Authentication ensures secure user registration and login.
 
 ## Technologies Used
 - React
 - Tailwind CSS
 - Redux Toolkit
+- Firebase
 - Framer Motion
+- Loading Spinner
 
 ## Folder Structure
 ```
