@@ -1,5 +1,5 @@
 # Amazon Clone :tv:
-The Amazon Clone is a feature-rich, fully functional e-commerce web application developed using React,  Redux Toolkit, Firebase,Tailwind CSS, Framer Motion, and other modern tools to create a seamless and user-friendly shopping environment. It faithfully replicates the shopping experience found on the popular Amazon platform.</br>
+A web application that allows users to browse, search, and purchase products from a variety of categories, offering a wide range of features and functionalities similar to the original Amazon app.</br>
 </br>
 <img src="/screenshots/amazon homepage.png">
 </br>
