@@ -30,8 +30,6 @@ The Amazon Clone is a feature-rich, fully functional e-commerce web application 
 </br>
 <img src="/screenshots/orders page.png"></br>
 </br>
-</br>
-:tv:  Efficiently manage app state with Redux Toolkit.</br>
 
 ## Tech Stack :computer:
 :bulb: **Front-end** React, Redux Toolkit, Tailwind-CSS, Framer Motion, Loading Spinner</br>
