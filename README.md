@@ -14,7 +14,7 @@ The Amazon Clone is a feature-rich, fully functional e-commerce web application 
 </br>
 <img src="/screenshots/details page.png"></br>
 </br>
-:tv:  Cart Page with Quantity increase/decrease, Delate Product and Clear Cart.</br>
+:tv:  Cart Page with Quantity increase/decrease, Delete Product and Clear Cart.</br>
 </br>
 <img src="/screenshots/cart page.png"></br>
 </br>
@@ -129,5 +129,7 @@ npm start
 ```
 
 ## Live Demo
-Check out the live demo of Amazon Clone: https://amazon-clone-kumardinesh1908.vercel.app
+```
+ https://amazon-clone-kumardinesh1908.vercel.app
+```
 
