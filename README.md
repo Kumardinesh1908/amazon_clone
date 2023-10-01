@@ -6,22 +6,33 @@ The Amazon Clone is a feature-rich, fully functional e-commerce web application 
 :tv: 1. Product Listings, Product Search and Product Details.</br>
 :tv: 2. Filter based on Rating, Price and Category.</br>
 :tv: 3. Sort based on High Price, Low Price and Rating.</br>
+</br>
 <img src="/screenshots/Filter page.png">
+</br>
 :tv: 4. Add to cart and Buy Now.
+</br>
 <img src="/screenshots/details page.png">
+</br>
 :tv: 5. Cart Page with Quantity increase/decrease, Delate Product and Clear Cart.</br>
 <img src="/screenshots/cart page.png">
+</br>
 :tv: 6. User Registration and Login.</br>
+</br>
 <img src="/screenshots/login page.png">
+</br>
 :tv: 7. Save Multiple Addresses.</br>
+</br>
 <img src="/screenshots/address page.png">
+</br>
 :tv: 8. Order History, Cancel and Return Order.</br>
+</br>
 <img src="/screenshots/orders page.png">
+</br>
 :tv: 9. Efficiently manage app state with Redux Toolkit.</br>
 
 ## Tech Stack :computer:
-:bulb: **Front-end** React, Redux Toolkit, Tailwind-CSS, Framer Motion, Loading Spinner
-:bulb: **Back-end** Firebase
+:bulb: **Front-end** React, Redux Toolkit, Tailwind-CSS, Framer Motion, Loading Spinner</br>
+:bulb: **Back-end** Firebase</br>
 
 ## Usage :pencil:
 :zap: 1. Visit the live demo or run the app locally.<br>
