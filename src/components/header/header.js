@@ -45,7 +45,7 @@ export default function Header() {
             dispatch(resetCancelOrders());
             dispatch(resetReturnOrders());
         }).catch((error) => {
-            // An error happened.
+            alert(error.message);
         });
     }
 

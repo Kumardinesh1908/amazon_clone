@@ -1,24 +1,34 @@
+# Amazon Clone :tv:
+The Amazon Clone is a feature-rich, fully functional e-commerce web application developed using React,  Redux Toolkit, Firebase,Tailwind CSS, Framer Motion, and other modern tools to create a seamless and user-friendly shopping environment.It faithfully replicates the shopping experience found on the popular Amazon platform.
+<img src="/screenshots/amazon homepage.png">
 
-# Amazon Clone
-The Amazon Clone is a feature-rich, fully functional e-commerce web application developed using cutting-edge technologies. It faithfully replicates the shopping experience found on the popular Amazon platform. This project leverages React, Tailwind CSS, Redux Toolkit, Firebase, Framer Motion, and other modern tools to create a seamless and user-friendly shopping environment.
+## Features :fire:
+:tv: 1. Product Listings, Product Search and Product Details.</br>
+:tv: 2. Filter based on Rating, Price and Category.</br>
+:tv: 3. Sort based on High Price, Low Price and Rating.</br>
+<img src="/screenshots/Filter page.png">
+:tv: 4. Add to cart and Buy Now.
+<img src="/screenshots/details page.png">
+:tv: 5. Cart Page with Quantity increase/decrease, Delate Product and Clear Cart.</br>
+<img src="/screenshots/cart page.png">
+:tv: 6. User Registration and Login.</br>
+<img src="/screenshots/login page.png">
+:tv: 7. Save Multiple Addresses.</br>
+<img src="/screenshots/address page.png">
+:tv: 8. Order History, Cancel and Return Order.</br>
+<img src="/screenshots/orders page.png">
+:tv: 9. Efficiently manage app state with Redux Toolkit.</br>
 
-## Features
-- **Product Listings:** Browse a wide range of products with detailed descriptions and prices.
-- **User Authentication:** Sign in with your Amazon account or create a new one.
-- **Add to Cart:** Easily add products to your cart for a seamless shopping experience.
-- **Real-Time Updates:** See live updates to your cart and totals as you shop.
-- **Secure Checkout:** Safely complete your purchase with payment processing.
-- **Loading Spinner:** Enjoy smooth user interactions with loading spinners for enhanced UX.
-- **Responsive Design:** The app is optimized for various screen sizes and devices.
-- **Animations:** Engage with stunning animations and transitions powered by Framer Motion.
-- **Redux State Management:** Efficiently manage app state with Redux Toolkit.
-- **Firebase Integration:** Harness the power of Firebase to store and retrieve data with Firestore, Firebase's real-time NoSQL database. Firebase Authentication ensures secure user registration and login.
+## Tech Stack :computer:
+:bulb: **Front-end** React, Redux Toolkit, Tailwind-CSS, Framer Motion, Loading Spinner
+:bulb: **Back-end** Firebase
 
-## Technologies Used
-- React
-- Tailwind CSS
-- Redux Toolkit
-- Framer Motion
+## Usage :pencil:
+:zap: 1. Visit the live demo or run the app locally.<br>
+:zap: 2. Browse products, add items to your cart, and proceed to checkout.<br>
+:zap: 3. Sign in or create an account for a personalized experience.<br>
+:zap: 4. Enjoy a smooth and intuitive shopping experience!<br>
+
 
 ## Folder Structure
 ```
@@ -93,17 +103,21 @@ amazon-clone/
 ├── tailwind.config.js
 └── README.md
 ```
+## Installation :notebook:
+1. To install the Todo List app, use git:
+```
+git clone https://github.com/kumardinesh1908/amazon-clone.git
+```
+To deploy this project, simply open the index.html file in your browser.
+2. Install dependencies: 
+```
+npm install
+```
+3. Start the development server: 
+```
+npm start
+```
 
-## Installation
-1. Clone this repository: `git clone https://github.com/kumardinesh1908/amazon-clone.git`
-2. Install dependencies: `npm install`
-3. Start the development server: `npm start`
+## Live Demo
+Check out the live demo of Amazon Clone: https://amazon-clone-kumardinesh1908.vercel.app
 
-## Usage
-1. Visit the live demo or run the app locally.
-2. Browse products, add items to your cart, and proceed to checkout.
-3. Sign in or create an account for a personalized experience.
-4. Enjoy a smooth and intuitive shopping experience!
-
-## Demo
-Check out the live demo (https://amazon-clone-kumardinesh1908.vercel.app).
