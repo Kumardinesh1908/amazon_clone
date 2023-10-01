@@ -1,5 +1,5 @@
 # Amazon Clone :tv:
-The Amazon Clone is a feature-rich, fully functional e-commerce web application developed using React,  Redux Toolkit, Firebase,Tailwind CSS, Framer Motion, and other modern tools to create a seamless and user-friendly shopping environment.It faithfully replicates the shopping experience found on the popular Amazon platform.
+The Amazon Clone is a feature-rich, fully functional e-commerce web application developed using React,  Redux Toolkit, Firebase,Tailwind CSS, Framer Motion, and other modern tools to create a seamless and user-friendly shopping environment.It faithfully replicates the shopping experience found on the popular Amazon platform.</br>
 </br>
 <img src="/screenshots/amazon homepage.png">
 </br>
@@ -8,26 +8,28 @@ The Amazon Clone is a feature-rich, fully functional e-commerce web application 
 :tv: 2. Filter based on Rating, Price and Category.</br>
 :tv: 3. Sort based on High Price, Low Price and Rating.</br>
 </br>
-<img src="/screenshots/Filter page.png">
+<img src="/screenshots/Filter page.png"></br>
 </br>
-:tv: 4. Add to cart and Buy Now.
+:tv: 4. Add to cart and Buy Now.</br>
 </br>
-<img src="/screenshots/details page.png">
+<img src="/screenshots/details page.png"></br>
 </br>
 :tv: 5. Cart Page with Quantity increase/decrease, Delate Product and Clear Cart.</br>
-<img src="/screenshots/cart page.png">
+</br>
+<img src="/screenshots/cart page.png"></br>
 </br>
 :tv: 6. User Registration and Login.</br>
 </br>
-<img src="/screenshots/login page.png">
+<img src="/screenshots/login page.png"></br>
 </br>
 :tv: 7. Save Multiple Addresses.</br>
 </br>
-<img src="/screenshots/address page.png">
+<img src="/screenshots/address page.png"></br>
 </br>
 :tv: 8. Order History, Cancel and Return Order.</br>
 </br>
-<img src="/screenshots/orders page.png">
+<img src="/screenshots/orders page.png"></br>
+</br>
 </br>
 :tv: 9. Efficiently manage app state with Redux Toolkit.</br>
 
